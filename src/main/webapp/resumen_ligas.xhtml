@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Resumen de registros</title>
+</h:head>
+<h:body>
+
+	<p:panel id="panel1" header="Resumen de registros"
+		style="margin-bottom:10px;">
+		<h:form id="form">
+
+			<p:messages id="messages" showDetail="true" autoUpdate="true"
+				closable="true" />
+
+			<p:dataTable id="ligas" var="liga" value="#{LigaMB.listLigas}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="ID" />
+					</f:facet>
+					<h:outputText value="#{liga.id}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Nombre" />
+					</f:facet>
+					<h:outputText value="#{liga.nom_liga}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Fecha de inicio" />
+					</f:facet>
+					<h:outputText value="#{liga.f_ini}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Fecha de termino" />
+					</f:facet>
+					<h:outputText value="#{liga.f_fin}" />
+				</p:column>
+
+				<p:column style="width:4%">
+					<f:facet name="header">
+						<h:outputText value="Opciones" />
+					</f:facet>
+
+					<h:panelGroup style="white-space: nowrap">
+						<p:commandButton icon="ui-icon-pencil" title="Editar liga"
+							action="#{LigaMB.editarLiga}" update="ligas">
+							<f:setPropertyActionListener value="#{liga}"
+								target="#{LigaMB.selectedLiga}" />
+						</p:commandButton>
+						<p:commandButton icon="ui-icon-trash" title="Borrar Liga"
+							action="#{LigaMB.eliminarLiga}" update="ligas">
+							<f:setPropertyActionListener value="#{liga}"
+								target="#{LigaMB.selectedLiga}" />
+						</p:commandButton>
+					</h:panelGroup>
+
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+
+		<f:facet name="footer">
+			<h:link value="Volver" outcome="index" />
+		</f:facet>
+	</p:panel>
+
+</h:body>
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<context:component-scan base-package="com.thefieldpanama" />
+	<context:annotation-config />
+	<context:spring-configured />
+
+	<bean id="Liga" class="com.thefieldpanama.beans.Liga" />
+	<bean id="LigaServicio" class="com.thefieldpanama.services.LigaServiceImpl">
+		<property name="ligaDAO" ref="LigaDAO" />
+	</bean>
+	<bean id="LigaDAO" class="com.thefieldpanama.dao.LigaDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+
+	<bean id="Categoria" class="com.thefieldpanama.beans.Categoria" />
+	<bean id="CategoriaServicio" class="com.thefieldpanama.services.CategoriaServiceImpl">
+		<property name="categoriaDAO" ref="CategoriaDAO" />
+	</bean>
+	<bean id="CategoriaDAO" class="com.thefieldpanama.dao.CategoriaDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
+	<bean id="Equipo" class="com.thefieldpanama.beans.Equipo" />
+	<bean id="EquipoServicio" class="com.thefieldpanama.services.EquipoServiceImpl">
+		<property name="equipoDAO" ref="EquipoDAO" />
+	</bean>
+	<bean id="EquipoDAO" class="com.thefieldpanama.dao.EquipoDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+
+	<!-- Configuracion externa de parametros del DataSource -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>file:c:/jdbc.properties</value>
+		</property>
+	</bean>
+
+	<bean id="DataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.databaseurl}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+	</bean>
+
+	<!-- Session Factory Declaration -->
+	<bean id="SessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="DataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>com.thefieldpanama.beans</value>
+			</list>
+		</property>
+		<!-- <property name="annotatedClasses"> -->
+		<!-- <list> -->
+		<!-- <value>com.thefieldpanama.beans.Liga</value> -->
+		<!-- </list> -->
+		<!-- </property> -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${jdbc.dialect}</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- Transaction Manager is defined -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+
+</beans>

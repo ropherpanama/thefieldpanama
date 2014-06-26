@@ -1,79 +1,119 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>Resumen de registros</title>
 </h:head>
 <h:body>
 
-	<p:panel id="panel1" header="Resumen de registros"
-		style="margin-bottom:10px;">
-		<h:form id="form">
+	<ui:include src="/public/menu.xhtml"></ui:include>
 
-			<p:messages id="messages" showDetail="true" autoUpdate="true"
-				closable="true" />
+	<p:panel header="Mantenimiento de Ligas" style="margin-bottom:10px;">
+		<p:accordionPanel>
+			<p:tab title="Agregar nueva liga">
+				<h:form>
+					<table>
+						<!-- 			Campo para ingresar el nombre de la liga -->
+						<tr>
+							<td><h:outputLabel for="nombre" value="Nombre de la liga" /></td>
+							<td><p:inputText id="nombre" value="#{LigaMB.nom_liga}">
+									<f:validateLength minimum="5" />
+								</p:inputText> <h:message for="nombre" style="color:red" /></td>
+						</tr>
+						<!-- 			Campo para ingresar el nombre de la liga -->
 
-			<p:dataTable id="ligas" var="liga" value="#{LigaMB.listLigas}"
-				paginator="true" rows="10"
-				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15">
+						<tr>
+							<td><h:outputLabel for="f_ini" value="Fecha de inicio " /></td>
+							<td><p:calendar id="f_ini" pattern="dd-MM-yyyy" mode="popup"
+									value="#{LigaMB.f_ini}" /></td>
+						</tr>
 
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="ID" />
-					</f:facet>
-					<h:outputText value="#{liga.id}" />
-				</p:column>
+						<tr>
+							<td><h:outputLabel for="f_fin" value="Fecha de termino " /></td>
+							<td><p:calendar id="f_fin" pattern="dd-MM-yyyy" mode="popup"
+									value="#{LigaMB.f_fin}" /></td>
+						</tr>
 
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Nombre" />
-					</f:facet>
-					<h:outputText value="#{liga.nom_liga}" />
-				</p:column>
+						<!-- Botones del formulario -->
+						<tr>
+							<td><p:commandButton id="agregarLiga" value="Registrar liga"
+									action="#{LigaMB.agregarLiga}" ajax="false" /></td>
+							<td><p:commandButton id="reset" value="Limpiar campos"
+									action="#{LigaMB.reset}" ajax="false" /></td>
+						</tr>
+						<!-- Botones del formulario -->
+					</table>
+				</h:form>
+			</p:tab>
+			<p:tab title="Ligas disponibles">
+				<h:form id="form">
 
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Fecha de inicio" />
-					</f:facet>
-					<h:outputText value="#{liga.f_ini}" />
-				</p:column>
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
 
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Fecha de termino" />
-					</f:facet>
-					<h:outputText value="#{liga.f_fin}" />
-				</p:column>
+					<p:dataTable id="ligas" var="liga" value="#{LigaMB.listLigas}"
+						paginator="true" rows="10"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15">
 
-				<p:column style="width:4%">
-					<f:facet name="header">
-						<h:outputText value="Opciones" />
-					</f:facet>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="ID" />
+							</f:facet>
+							<h:outputText value="#{liga.id}" />
+						</p:column>
 
-					<h:panelGroup style="white-space: nowrap">
-						<p:commandButton icon="ui-icon-pencil" title="Editar liga"
-							action="#{LigaMB.editarLiga}" update="ligas">
-							<f:setPropertyActionListener value="#{liga}"
-								target="#{LigaMB.selectedLiga}" />
-						</p:commandButton>
-						<p:commandButton icon="ui-icon-trash" title="Borrar Liga"
-							action="#{LigaMB.eliminarLiga}" update="ligas">
-							<f:setPropertyActionListener value="#{liga}"
-								target="#{LigaMB.selectedLiga}" />
-						</p:commandButton>
-					</h:panelGroup>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Nombre" />
+							</f:facet>
+							<h:outputText value="#{liga.nom_liga}" />
+						</p:column>
 
-				</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Fecha de inicio" />
+							</f:facet>
+							<h:outputText value="#{liga.f_ini}" />
+						</p:column>
 
-			</p:dataTable>
-		</h:form>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Fecha de termino" />
+							</f:facet>
+							<h:outputText value="#{liga.f_fin}" />
+						</p:column>
 
-		<f:facet name="footer">
-			<h:link value="Volver" outcome="index" />
-		</f:facet>
+						<p:column style="width:4%">
+							<f:facet name="header">
+								<h:outputText value="Opciones" />
+							</f:facet>
+
+							<h:panelGroup style="white-space: nowrap">
+								<p:commandButton icon="ui-icon-pencil" title="Editar liga"
+									action="#{LigaMB.editarLiga}" update="ligas">
+									<f:setPropertyActionListener value="#{liga}"
+										target="#{LigaMB.selectedLiga}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-trash" title="Borrar Liga"
+									action="#{LigaMB.eliminarLiga}" update="ligas">
+									<f:setPropertyActionListener value="#{liga}"
+										target="#{LigaMB.selectedLiga}" />
+								</p:commandButton>
+							</h:panelGroup>
+
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+		</p:accordionPanel>
+
 	</p:panel>
+
+	<ui:include src="/public/footer.xhtml"></ui:include>
 
 </h:body>
 </html>

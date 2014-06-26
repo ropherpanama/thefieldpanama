@@ -1,0 +1,189 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Registro de partidos</title>
+</h:head>
+<h:body>
+
+	<ui:include src="/public/menu.xhtml"></ui:include>
+
+	<p:panel id="panel1" header="Mantenimiento de partidos"
+		style="margin-bottom:10px;">
+		<p:accordionPanel>
+			<p:tab title="Registrar nuevo partido">
+				<h:form prependId="false" styleClass="cmxform">
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
+					<fieldset>
+						<legend>Por favor llene todos los campos necesarios</legend>
+						<table>
+							<tr>
+								<td><h:outputLabel value="Liga del partido" /></td>
+								<td><h:selectOneMenu id="selectLiga"
+										value="#{PartidoMB.form_filter_id_liga}">
+										<p:ajax listener="#{PartidoMB.onLigasChange}"
+											update="selectCategoria" />
+										<f:selectItems value="#{PartidoMB.listLigas}" var="model"
+											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
+									</h:selectOneMenu></td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Categoria de la liga" /></td>
+								<td><h:selectOneMenu id="selectCategoria"
+										value="#{PartidoMB.form_filter_id_categoria}">
+										<p:ajax listener="#{PartidoMB.onCategoriasChange}"
+											update="selectEquipo1" />
+										<f:selectItems value="#{PartidoMB.listCategoriasFiltradas}"
+											var="model" itemLabel="#{model.nom_categoria}"
+											itemValue="#{model.id_categoria}" />
+									</h:selectOneMenu></td>
+							</tr>
+
+							<tr>
+								<td><h:outputLabel value="Equipo 1" /></td>
+								<td><h:selectOneMenu id="selectEquipo1"
+										value="#{PartidoMB.form_filter_eq1}">
+										<p:ajax listener="#{PartidoMB.onPrimerEquipoElegido}"
+											update="selectEquipo2" />
+										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
+											var="model" itemLabel="#{model.nom_equipo}"
+											itemValue="#{model.id_equipo}" />
+									</h:selectOneMenu></td>
+
+								<td><h:outputLabel value="Equipo 2" /></td>
+								<td><h:selectOneMenu id="selectEquipo2"
+										value="#{PartidoMB.form_filter_eq2}">
+										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
+											var="model" itemLabel="#{model.nom_equipo}"
+											itemValue="#{model.id_equipo}" />
+									</h:selectOneMenu></td>
+							</tr>
+
+							<tr>
+								<td><h:outputLabel for="fecha" value="Fecha del partido " /></td>
+								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
+										mode="popup" value="#{PartidoMB.form_fecha}" /></td>
+							</tr>
+
+							<tr>
+								<td><h:outputLabel value="Hora del partido" /></td>
+								<td><p:inputText id="hora" value="#{PartidoMB.form_hora}">
+									</p:inputText> <h:message for="hora" style="color:red" /></td>
+							</tr>
+
+							<tr>
+								<td><h:outputLabel value="Lugar del partido" /></td>
+								<td><p:inputText id="lugar" value="#{PartidoMB.form_lugar}">
+										<f:validateLength minimum="5" />
+									</p:inputText> <h:message for="lugar" style="color:red" /></td>
+							</tr>
+
+							<tr>
+								<td><p:commandButton id="agregarPartido"
+										value="Registrar partido" action="#{PartidoMB.agregarPartido}"
+										ajax="false" /></td>
+							</tr>
+						</table>
+					</fieldset>
+				</h:form>
+			</p:tab>
+			<p:tab title="Partidos registrados">
+				<h:form id="form">
+
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
+
+					<p:dataTable id="partidos" var="p"
+						value="#{PartidoMB.listPartidos}" paginator="true" rows="10"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15">
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="ID" />
+							</f:facet>
+							<h:outputText value="#{p.id_partido}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Liga" />
+							</f:facet>
+							<h:outputText value="#{p.equipo1.categoria.liga.nom_liga}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Categoria" />
+							</f:facet>
+							<h:outputText value="#{p.equipo1.categoria.nom_categoria}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Equipo 1" />
+							</f:facet>
+							<h:outputText value="#{p.equipo1.nom_equipo}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Equipo 2" />
+							</f:facet>
+							<h:outputText value="#{p.equipo2.nom_equipo}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Lugar" />
+							</f:facet>
+							<h:outputText value="#{p.lugar}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Fecha del partido" />
+							</f:facet>
+							<h:outputText value="#{p.fecha}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Hora" />
+							</f:facet>
+							<h:outputText value="#{p.hora}" />
+						</p:column>
+
+						<p:column style="width:4%">
+							<f:facet name="header">
+								<h:outputText value="Opciones" />
+							</f:facet>
+
+							<h:panelGroup style="white-space: nowrap">
+								<p:commandButton icon="ui-icon-pencil" title="Editar partido"
+									action="#{PartidoMB.editarPartido}" update="partidos">
+									<f:setPropertyActionListener value="#{p}"
+										target="#{PartidoMB.selectedPartido}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-trash" title="Borrar partido"
+									action="#{PartidoMB.eliminarPartido}" update="partidos">
+									<f:setPropertyActionListener value="#{p}"
+										target="#{PartidoMB.selectedPartido}" />
+								</p:commandButton>
+							</h:panelGroup>
+
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+		</p:accordionPanel>
+	</p:panel>
+
+	<ui:include src="/public/footer.xhtml"></ui:include>
+
+</h:body>
+</html>

@@ -53,7 +53,6 @@ public class LigaManagedBean implements Serializable {
 			ligaService.addLiga(l);
 			return SUCCESS;
 		} catch (DataAccessException d) {
-			d.printStackTrace();
 			return ERROR;
 		}
 	}
@@ -70,7 +69,10 @@ public class LigaManagedBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Registro eliminado", selectedLiga.getNom_liga()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
 		}
 	}
 
@@ -84,7 +86,10 @@ public class LigaManagedBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Registro editado", selectedLiga.getNom_liga()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
 		}
 	}
 

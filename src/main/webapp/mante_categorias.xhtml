@@ -1,103 +1,103 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>Resumen de categorias</title>
 </h:head>
 <h:body>
 
-	<p:accordionPanel>
-		<p:tab title="Agregar nueva categoria">
-			<h:form prependId="false" styleClass="cmxform">
-				<p:messages id="messages" showDetail="true" autoUpdate="true"
-					closable="true" />
-				<fieldset>
-					<legend>Por favor llene todos los campos necesarios</legend>
-					<table>
-						<tr>
-							<td><h:outputLabel value="Liga elegida" /></td>
-							<td><h:selectOneMenu id="selectOneCb"
-									value="#{CategoriaMB.form_id_liga}">
-									<f:selectItems value="#{CategoriaMB.listLigas}" var="model"
-										itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
-								</h:selectOneMenu></td>
-						</tr>
-						<tr>
-							<td><h:outputLabel value="Nombre de la categoria" /></td>
-							<td><p:inputText id="nombre"
-									value="#{CategoriaMB.form_nom_categoria}">
-									<f:validateLength minimum="5" />
-								</p:inputText> <h:message for="nombre" style="color:red" /></td>
-						</tr>
-						<tr>
-							<td><p:commandButton id="agregarCategoria"
-									value="Registrar categoria"
-									action="#{CategoriaMB.agregarCategoria}" ajax="false" /></td>
-						</tr>
-					</table>
-				</fieldset>
-			</h:form>
-		</p:tab>
-		<p:tab title="Ver categorias disponibles">
-			<h:form id="form">
+	<ui:include src="/public/menu.xhtml"></ui:include>
+	<p:panel header="Mantenimiento de categorias" style="margin-bottom:10px;">
+		<p:accordionPanel>
+			<p:tab title="Agregar nueva categoria">
+				<h:form prependId="false" styleClass="cmxform">
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
+					<fieldset>
+						<legend>Por favor llene todos los campos necesarios</legend>
+						<table>
+							<tr>
+								<td><h:outputLabel value="Liga elegida" /></td>
+								<td><h:selectOneMenu id="selectOneCb"
+										value="#{CategoriaMB.form_id_liga}">
+										<f:selectItems value="#{CategoriaMB.listLigas}" var="model"
+											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
+									</h:selectOneMenu></td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Nombre de la categoria" /></td>
+								<td><p:inputText id="nombre"
+										value="#{CategoriaMB.form_nom_categoria}">
+										<f:validateLength minimum="5" />
+									</p:inputText> <h:message for="nombre" style="color:red" /></td>
+							</tr>
+							<tr>
+								<td><p:commandButton id="agregarCategoria"
+										value="Registrar categoria"
+										action="#{CategoriaMB.agregarCategoria}" ajax="false" /></td>
+							</tr>
+						</table>
+					</fieldset>
+				</h:form>
+			</p:tab>
+			<p:tab title="Ver categorias disponibles">
+				<h:form id="form">
 
-				<p:messages id="messages" showDetail="true" autoUpdate="true"
-					closable="true" />
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
 
-				<p:dataTable id="categorias" var="cat" widgetVar="catsForm"
-					value="#{CategoriaMB.listCategorias}" paginator="true" rows="10"
-					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					rowsPerPageTemplate="5,10,15">
+					<p:dataTable id="categorias" var="cat" widgetVar="catsForm"
+						value="#{CategoriaMB.listCategorias}" paginator="true" rows="10"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15">
 
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="ID" />
-						</f:facet>
-						<h:outputText value="#{cat.id_categoria}" />
-					</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="ID" />
+							</f:facet>
+							<h:outputText value="#{cat.id_categoria}" />
+						</p:column>
 
-					<p:column headerText="Liga">
-						<h:outputText value="#{cat.liga.nom_liga}" />
-					</p:column>
+						<p:column headerText="Liga">
+							<h:outputText value="#{cat.liga.nom_liga}" />
+						</p:column>
 
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Categoria" />
-						</f:facet>
-						<h:outputText value="#{cat.nom_categoria}" />
-					</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Categoria" />
+							</f:facet>
+							<h:outputText value="#{cat.nom_categoria}" />
+						</p:column>
 
-					<p:column style="width:4%">
-						<f:facet name="header">
-							<h:outputText value="Opciones" />
-						</f:facet>
+						<p:column style="width:4%">
+							<f:facet name="header">
+								<h:outputText value="Opciones" />
+							</f:facet>
 
-						<h:panelGroup style="white-space: nowrap">
-							<p:commandButton icon="ui-icon-pencil" title="Editar liga"
-								action="#{CategoriaMB.editarCategoria}" update="categorias">
-								<f:setPropertyActionListener value="#{cat}"
-									target="#{CategoriaMB.selectedCategoria}" />
-							</p:commandButton>
-							<p:commandButton icon="ui-icon-trash" title="Borrar Categoria"
-								action="#{CategoriaMB.eliminarCategoria}" update="categorias">
-								<f:setPropertyActionListener value="#{cat}"
-									target="#{CategoriaMB.selectedCategoria}" />
-							</p:commandButton>
-						</h:panelGroup>
+							<h:panelGroup style="white-space: nowrap">
+								<p:commandButton icon="ui-icon-pencil" title="Editar liga"
+									action="#{CategoriaMB.editarCategoria}" update="categorias">
+									<f:setPropertyActionListener value="#{cat}"
+										target="#{CategoriaMB.selectedCategoria}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-trash" title="Borrar Categoria"
+									action="#{CategoriaMB.eliminarCategoria}" update="categorias">
+									<f:setPropertyActionListener value="#{cat}"
+										target="#{CategoriaMB.selectedCategoria}" />
+								</p:commandButton>
+							</h:panelGroup>
 
-					</p:column>
+						</p:column>
 
-				</p:dataTable>
-			</h:form>
-		</p:tab>
-	</p:accordionPanel>
-
-	<br></br>
-
-	<p:panel>
-		<h:link value="Volver" outcome="index" />
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+		</p:accordionPanel>
 	</p:panel>
+	
+	<ui:include src="/public/footer.xhtml"></ui:include>
 
 </h:body>
 </html>

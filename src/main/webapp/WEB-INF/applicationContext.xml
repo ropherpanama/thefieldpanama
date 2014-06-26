@@ -36,6 +36,16 @@
 	<bean id="EquipoDAO" class="com.thefieldpanama.dao.EquipoDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
+	
+	<bean id="Partido" class="com.thefieldpanama.beans.Partido" />
+	
+	<bean id="PartidoServicio" class="com.thefieldpanama.services.PartidoServiceImpl">
+		<property name="partidoDAO" ref="PartidoDAO" />
+	</bean>
+	
+	<bean id="PartidoDAO" class="com.thefieldpanama.dao.PartidoDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
 
 	<!-- Configuracion externa de parametros del DataSource -->
 	<bean id="propertyConfigurer"

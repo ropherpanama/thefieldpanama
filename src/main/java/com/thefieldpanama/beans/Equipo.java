@@ -1,5 +1,8 @@
 package com.thefieldpanama.beans;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +21,8 @@ public class Equipo {
 	private String nom_equipo;
 	private Categoria categoria;
 	private String localidad;
+	//Un equipo tiene varios partidos (One to Many)
+	private Set<Partido> partidos = new HashSet<Partido>();
 
 	@Id
 	@Column(name = "ID_EQUIPO")
@@ -55,5 +61,14 @@ public class Equipo {
 
 	public void setLocalidad(String localidad) {
 		this.localidad = localidad;
+	}
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "equipo1")
+	public Set<Partido> getPartidos() {
+		return partidos;
+	}
+
+	public void setPartidos(Set<Partido> partidos) {
+		this.partidos = partidos;
 	}
 }

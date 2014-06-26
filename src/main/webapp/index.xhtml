@@ -1,62 +1,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Mantenimiento de ligas</title>
+	<title>The Field PTY</title>
 </h:head>
 
 <h:body>
 
-	<h:form>
-		<p:menu styleClass="ui-menubar" style="width: auto;">
-			<p:submenu label="Navigations">
-				<p:menuitem value="Ligas" outcome="resumen_ligas"
-					icon="ui-icon-home" />
-				<p:menuitem value="Categorias" outcome="mante_categorias"
-					icon="ui-icon-star" />
-				<p:menuitem value="Equipos" outcome="mante_equipos"
-					icon="ui-icon-star" />
-			</p:submenu>
-		</p:menu>
-	</h:form>
-
-	<p:panel id="panel1" header="Registro de Ligas"
-		style="margin-bottom:10px;">
-		<h:form>
-			<table>
-				<!-- 			Campo para ingresar el nombre de la liga -->
-				<tr>
-					<td><h:outputLabel for="nombre" value="Nombre de la liga" /></td>
-					<td><p:inputText id="nombre" value="#{LigaMB.nom_liga}">
-							<f:validateLength minimum="5" />
-						</p:inputText> <h:message for="nombre" style="color:red" /></td>
-				</tr>
-				<!-- 			Campo para ingresar el nombre de la liga -->
-
-				<tr>
-					<td><h:outputLabel for="f_ini" value="Fecha de inicio " /></td>
-					<td><p:calendar id="f_ini" pattern="dd-MM-yyyy" mode="popup"
-							value="#{LigaMB.f_ini}" /></td>
-				</tr>
-
-				<tr>
-					<td><h:outputLabel for="f_fin" value="Fecha de termino " /></td>
-					<td><p:calendar id="f_fin" pattern="dd-MM-yyyy" mode="popup"
-							value="#{LigaMB.f_fin}" /></td>
-				</tr>
-
-				<!-- Botones del formulario -->
-				<tr>
-					<td><p:commandButton id="agregarLiga" value="Registrar liga"
-							action="#{LigaMB.agregarLiga}" ajax="false" /></td>
-					<td><p:commandButton id="reset" value="Limpiar campos"
-							action="#{LigaMB.reset}" ajax="false" /></td>
-				</tr>
-				<!-- Botones del formulario -->
-			</table>
-		</h:form>
-
-	</p:panel>
+	<ui:include src="/public/menu.xhtml"></ui:include>
+	
+	<ui:include src="/public/footer.xhtml"></ui:include>
+	
 </h:body>
 </html>

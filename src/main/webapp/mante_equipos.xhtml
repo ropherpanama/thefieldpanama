@@ -1,131 +1,134 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>Resumen de categorias</title>
 </h:head>
 <h:body>
 
-	<p:accordionPanel>
-		<p:tab title="Agregar nuevo equipo">
-			<h:form prependId="false" styleClass="cmxform">
-				<p:messages id="messages" showDetail="true" autoUpdate="true"
-					closable="true" />
-				<fieldset>
-					<legend>Por favor llene todos los campos necesarios</legend>
-					<table>
-						<tr>
-							<td><h:outputLabel value="Liga elegida" /></td>
-							<td><h:selectOneMenu id="selectLiga" value="#{EquipoMB.form_filter_id_liga}">
-							<p:ajax listener="#{EquipoMB.onLigasChange}" update="selectCategoria" />
-									<f:selectItems value="#{EquipoMB.listLigas}" var="model"
-										itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
-								</h:selectOneMenu></td>
-						</tr>
-						<tr>
-							<td><h:outputLabel value="Categoria elegida" /></td>
-							<td><h:selectOneMenu id="selectCategoria"
-									value="#{EquipoMB.form_id_categoria}">
-									<f:selectItems value="#{EquipoMB.listCategoriasFiltradas}" var="model"
-										itemLabel="#{model.nom_categoria}" 
-										itemValue="#{model.id_categoria}" />
-								</h:selectOneMenu></td>
-						</tr>
-						<tr>
-							<td><h:outputLabel value="Nombre del equipo" /></td>
-							<td><p:inputText id="nombre"
-									value="#{EquipoMB.form_nom_equipo}">
-									<f:validateLength minimum="5" />
-								</p:inputText> <h:message for="nombre" style="color:red" /></td>
-						</tr>
+	<ui:include src="/public/menu.xhtml"></ui:include>
 
-						<tr>
-							<td><h:outputLabel value="Localidad del equipo" /></td>
-							<td><p:inputText id="localidad"
-									value="#{EquipoMB.form_localidad}">
-									<f:validateLength minimum="5" />
-								</p:inputText> <h:message for="localidad" style="color:red" /></td>
-						</tr>
-						<tr>
-							<td><p:commandButton id="agregarEquipo"
-									value="Registrar equipo" action="#{EquipoMB.agregarEquipo}"
-									ajax="false" /></td>
-						</tr>
-					</table>
-				</fieldset>
-			</h:form>
-		</p:tab>
-		<p:tab title="Ver equipos disponibles">
-			<h:form id="form">
+	<p:panel header="Mantenimiento de equipos" style="margin-bottom:10px;">
+		<p:accordionPanel>
+			<p:tab title="Agregar nuevo equipo">
+				<h:form prependId="false" styleClass="cmxform">
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
+					<fieldset>
+						<legend>Por favor llene todos los campos necesarios</legend>
+						<table>
+							<tr>
+								<td><h:outputLabel value="Liga elegida" /></td>
+								<td><h:selectOneMenu id="selectLiga"
+										value="#{EquipoMB.form_filter_id_liga}">
+										<p:ajax listener="#{EquipoMB.onLigasChange}"
+											update="selectCategoria" />
+										<f:selectItems value="#{EquipoMB.listLigas}" var="model"
+											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
+									</h:selectOneMenu></td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Categoria elegida" /></td>
+								<td><h:selectOneMenu id="selectCategoria"
+										value="#{EquipoMB.form_id_categoria}">
+										<f:selectItems value="#{EquipoMB.listCategoriasFiltradas}"
+											var="model" itemLabel="#{model.nom_categoria}"
+											itemValue="#{model.id_categoria}" />
+									</h:selectOneMenu></td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Nombre del equipo" /></td>
+								<td><p:inputText id="nombre"
+										value="#{EquipoMB.form_nom_equipo}">
+										<f:validateLength minimum="5" />
+									</p:inputText> <h:message for="nombre" style="color:red" /></td>
+							</tr>
 
-				<p:messages id="messages" showDetail="true" autoUpdate="true"
-					closable="true" />
+							<tr>
+								<td><h:outputLabel value="Localidad del equipo" /></td>
+								<td><p:inputText id="localidad"
+										value="#{EquipoMB.form_localidad}">
+										<f:validateLength minimum="5" />
+									</p:inputText> <h:message for="localidad" style="color:red" /></td>
+							</tr>
+							<tr>
+								<td><p:commandButton id="agregarEquipo"
+										value="Registrar equipo" action="#{EquipoMB.agregarEquipo}"
+										ajax="false" /></td>
+							</tr>
+						</table>
+					</fieldset>
+				</h:form>
+			</p:tab>
+			<p:tab title="Ver equipos disponibles">
+				<h:form id="form">
 
-				<p:dataTable id="equipos" var="equipo" widgetVar="equiposForm"
-					value="#{EquipoMB.listEquipos}" paginator="true" rows="10"
-					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					rowsPerPageTemplate="5,10,15">
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
 
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="ID" />
-						</f:facet>
-						<h:outputText value="#{equipo.id_equipo}" />
-					</p:column>
+					<p:dataTable id="equipos" var="equipo" widgetVar="equiposForm"
+						value="#{EquipoMB.listEquipos}" paginator="true" rows="10"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15">
 
-					<p:column headerText="Liga">
-						<h:outputText value="#{equipo.categoria.liga.nom_liga}" />
-					</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="ID" />
+							</f:facet>
+							<h:outputText value="#{equipo.id_equipo}" />
+						</p:column>
 
-					<p:column headerText="Categoria">
-						<h:outputText value="#{equipo.categoria.nom_categoria}" />
-					</p:column>
+						<p:column headerText="Liga">
+							<h:outputText value="#{equipo.categoria.liga.nom_liga}" />
+						</p:column>
 
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Equipo" />
-						</f:facet>
-						<h:outputText value="#{equipo.nom_equipo}" />
-					</p:column>
+						<p:column headerText="Categoria">
+							<h:outputText value="#{equipo.categoria.nom_categoria}" />
+						</p:column>
 
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Localidad" />
-						</f:facet>
-						<h:outputText value="#{equipo.localidad}" />
-					</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Equipo" />
+							</f:facet>
+							<h:outputText value="#{equipo.nom_equipo}" />
+						</p:column>
 
-					<p:column style="width:4%">
-						<f:facet name="header">
-							<h:outputText value="Opciones" />
-						</f:facet>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Localidad" />
+							</f:facet>
+							<h:outputText value="#{equipo.localidad}" />
+						</p:column>
 
-						<h:panelGroup style="white-space: nowrap">
-							<p:commandButton icon="ui-icon-pencil" title="Editar liga"
-								action="#{EquipoMB.editarEquipo}" update="equipos">
-								<f:setPropertyActionListener value="#{equipo}"
-									target="#{EquipoMB.selectedEquipo}" />
-							</p:commandButton>
-							<p:commandButton icon="ui-icon-trash" title="Borrar Equipo"
-								action="#{EquipoMB.eliminarEquipo}" update="equipos">
-								<f:setPropertyActionListener value="#{equipo}"
-									target="#{EquipoMB.selectedEquipo}" />
-							</p:commandButton>
-						</h:panelGroup>
+						<p:column style="width:4%">
+							<f:facet name="header">
+								<h:outputText value="Opciones" />
+							</f:facet>
 
-					</p:column>
+							<h:panelGroup style="white-space: nowrap">
+								<p:commandButton icon="ui-icon-pencil" title="Editar liga"
+									action="#{EquipoMB.editarEquipo}" update="equipos">
+									<f:setPropertyActionListener value="#{equipo}"
+										target="#{EquipoMB.selectedEquipo}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-trash" title="Borrar Equipo"
+									action="#{EquipoMB.eliminarEquipo}" update="equipos">
+									<f:setPropertyActionListener value="#{equipo}"
+										target="#{EquipoMB.selectedEquipo}" />
+								</p:commandButton>
+							</h:panelGroup>
 
-				</p:dataTable>
-			</h:form>
-		</p:tab>
-	</p:accordionPanel>
+						</p:column>
 
-	<br></br>
-
-	<p:panel>
-		<h:link value="Volver" outcome="index" />
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+		</p:accordionPanel>
 	</p:panel>
+	
+	<ui:include src="/public/footer.xhtml"></ui:include>
 
 </h:body>
 </html>

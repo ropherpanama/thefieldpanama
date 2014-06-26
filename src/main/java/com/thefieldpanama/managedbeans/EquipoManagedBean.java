@@ -101,7 +101,10 @@ public class EquipoManagedBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Registro insertado", this.getForm_nom_equipo()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
 		}
 	}
 
@@ -114,7 +117,10 @@ public class EquipoManagedBean implements Serializable {
 									"Registro editado", selectedEquipo
 											.getNom_equipo()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
 		}
 	}
 
@@ -127,7 +133,10 @@ public class EquipoManagedBean implements Serializable {
 							"Registro eliminado", selectedEquipo
 									.getNom_equipo()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
 		}
 	}
 

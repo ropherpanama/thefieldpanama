@@ -43,16 +43,25 @@ public class CategoriaManagedBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Registro insertado", this.getForm_nom_categoria()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
 		}
 	}
 
 	public void editarCategoria() {
-		FacesContext.getCurrentInstance().addMessage(
+		try{FacesContext.getCurrentInstance().addMessage(
 				null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO,
 						"Registro editado", selectedCategoria
 								.getNom_categoria() + " de " + selectedCategoria.getLiga().getNom_liga()));
+		}catch(Exception e){
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
+		}
 	}
 
 	public void eliminarCategoria() {
@@ -65,7 +74,10 @@ public class CategoriaManagedBean implements Serializable {
 							"Registro eliminado", selectedCategoria
 									.getNom_categoria()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
 		}
 	}
 

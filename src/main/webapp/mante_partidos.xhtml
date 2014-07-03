@@ -15,8 +15,7 @@
 		<p:accordionPanel>
 			<p:tab title="Registrar nuevo partido">
 				<h:form prependId="false" styleClass="cmxform">
-					<p:messages id="messages" showDetail="true" autoUpdate="true"
-						closable="true" />
+					<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 					<fieldset>
 						<legend>Por favor llene todos los campos necesarios</legend>
 						<table>
@@ -26,6 +25,8 @@
 										value="#{PartidoMB.form_filter_id_liga}">
 										<p:ajax listener="#{PartidoMB.onLigasChange}"
 											update="selectCategoria" />
+										<f:selectItem itemLabel="Seleccione una liga disponible"
+											itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listLigas}" var="model"
 											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
 									</h:selectOneMenu></td>
@@ -36,6 +37,8 @@
 										value="#{PartidoMB.form_filter_id_categoria}">
 										<p:ajax listener="#{PartidoMB.onCategoriasChange}"
 											update="selectEquipo1" />
+										<f:selectItem itemLabel="Seleccione una categoria de la liga"
+											itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listCategoriasFiltradas}"
 											var="model" itemLabel="#{model.nom_categoria}"
 											itemValue="#{model.id_categoria}" />
@@ -48,6 +51,7 @@
 										value="#{PartidoMB.form_filter_eq1}">
 										<p:ajax listener="#{PartidoMB.onPrimerEquipoElegido}"
 											update="selectEquipo2" />
+										<f:selectItem itemLabel="Seleccione un equipo" itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
 											var="model" itemLabel="#{model.nom_equipo}"
 											itemValue="#{model.id_equipo}" />
@@ -56,6 +60,8 @@
 								<td><h:outputLabel value="Equipo 2" /></td>
 								<td><h:selectOneMenu id="selectEquipo2"
 										value="#{PartidoMB.form_filter_eq2}">
+										<f:selectItem itemLabel="Seleccione un equipo"
+											itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
 											var="model" itemLabel="#{model.nom_equipo}"
 											itemValue="#{model.id_equipo}" />
@@ -64,20 +70,20 @@
 
 							<tr>
 								<td><h:outputLabel for="fecha" value="Fecha del partido " /></td>
-								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
+								<td><p:calendar id="fecha" pattern="dd-MM-yyyy" effect="fold"
 										mode="popup" value="#{PartidoMB.form_fecha}" /></td>
 							</tr>
 
 							<tr>
 								<td><h:outputLabel value="Hora del partido" /></td>
-								<td><p:inputText id="hora" value="#{PartidoMB.form_hora}">
-									</p:inputText> <h:message for="hora" style="color:red" /></td>
+								<td>
+									<p:calendar id="hora" value="#{PartidoMB.form_hora}" pattern="hh:mm a" timeOnly="true" effect="fold" />
+								</td>
 							</tr>
 
 							<tr>
 								<td><h:outputLabel value="Lugar del partido" /></td>
 								<td><p:inputText id="lugar" value="#{PartidoMB.form_lugar}">
-										<f:validateLength minimum="5" />
 									</p:inputText> <h:message for="lugar" style="color:red" /></td>
 							</tr>
 
@@ -93,8 +99,7 @@
 			<p:tab title="Partidos registrados">
 				<h:form id="form">
 
-					<p:messages id="messages" showDetail="true" autoUpdate="true"
-						closable="true" />
+					<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 
 					<p:dataTable id="partidos" var="p"
 						value="#{PartidoMB.listPartidos}" paginator="true" rows="10"
@@ -147,7 +152,7 @@
 							<f:facet name="header">
 								<h:outputText value="Fecha del partido" />
 							</f:facet>
-							<h:outputText value="#{p.fecha}" />
+							<h:outputText value="#{p.fecha}"/>
 						</p:column>
 
 						<p:column>

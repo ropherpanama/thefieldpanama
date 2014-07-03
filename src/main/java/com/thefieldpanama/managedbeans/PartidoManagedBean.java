@@ -1,15 +1,19 @@
 package com.thefieldpanama.managedbeans;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Liga;
@@ -18,6 +22,7 @@ import com.thefieldpanama.services.CategoriaService;
 import com.thefieldpanama.services.EquipoService;
 import com.thefieldpanama.services.LigaService;
 import com.thefieldpanama.services.PartidoService;
+import com.thefieldpanama.utilities.Utilities;
 
 @ManagedBean(name = "PartidoMB")
 @ViewScoped
@@ -48,8 +53,9 @@ public class PartidoManagedBean implements Serializable {
 	private int form_filter_eq1;
 	private int form_filter_eq2;
 	private Date form_fecha;
-	private String form_hora;
+	private Date form_hora;
 	private String form_lugar;
+	private Format formatter;
 
 	@PostConstruct
 	public void init() {
@@ -58,16 +64,18 @@ public class PartidoManagedBean implements Serializable {
 		this.getListEquipos();
 		listEquiposFiltrados = new ArrayList<Equipo>();
 		listCategoriasFiltradas = new ArrayList<Categoria>();
+		formatter = new SimpleDateFormat("HH:mm:ss");
 	}
 
-	public String agregarPartido() {
+	public void agregarPartido() {
 		try {
 			Partido p = new Partido();
 			p.setEquipo1(equipoService.getEquipoById(this.getForm_filter_eq1()));
 			p.setEquipo2(equipoService.getEquipoById(this.getForm_filter_eq2()));
 			p.setFecha(this.getForm_fecha());
-			p.setHora(this.getForm_hora());
+			p.setHora(formatter.format(this.getForm_hora()));
 			p.setLugar(this.getForm_lugar());
+			this.reset();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -76,9 +84,11 @@ public class PartidoManagedBean implements Serializable {
 									+ " vs "
 									+ p.getEquipo2().getNom_equipo()));
 			partidoService.addPartido(p);
-			return "calendario";
 		} catch (Exception e) {
-			return "error";
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							"Error de sistema", e.getMessage()));
 		}
 	}
 
@@ -87,7 +97,8 @@ public class PartidoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro editado", "ID: " + selectedPartido.getId_partido()));
+							"Registro editado", "ID: "
+									+ selectedPartido.getId_partido()));
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -102,7 +113,8 @@ public class PartidoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro eliminado", "ID: " + selectedPartido.getId_partido()));
+							"Registro eliminado", "ID: "
+									+ selectedPartido.getId_partido()));
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -254,11 +266,11 @@ public class PartidoManagedBean implements Serializable {
 		this.form_fecha = form_fecha;
 	}
 
-	public String getForm_hora() {
+	public Date getForm_hora() {
 		return form_hora;
 	}
 
-	public void setForm_hora(String form_hora) {
+	public void setForm_hora(Date form_hora) {
 		this.form_hora = form_hora;
 	}
 
@@ -279,7 +291,7 @@ public class PartidoManagedBean implements Serializable {
 	public void setListPartidos(List<Partido> listPartidos) {
 		this.listPartidos = listPartidos;
 	}
-	
+
 	public List<Equipo> getListEquiposSegundoFiltro() {
 		return listEquiposSegundoFiltro;
 	}
@@ -343,19 +355,32 @@ public class PartidoManagedBean implements Serializable {
 	}
 
 	/**
-	 * Implementar filtro para el segundo list de equipos, no debe aparecer el equipo seleccionado
-	 * en el primer list de equipos
+	 * Implementar filtro para el segundo list de equipos, no debe aparecer el
+	 * equipo seleccionado en el primer list de equipos
 	 */
 	public void onPrimerEquipoElegido() {
-//		listEquiposSegundoFiltro = new ArrayList<Equipo>();
-//		listEquiposSegundoFiltro = listEquiposFiltrados;
-//		System.out.println("SE FILTRO ALGO " + listEquiposSegundoFiltro.size() + " le meto " + listEquiposFiltrados.size());
-//		int index = 0;
-//		
-//		for (int i = 0; i < listEquiposSegundoFiltro.size(); i++) {
-//			if (listEquiposSegundoFiltro.get(i).getId_equipo() == this.getForm_filter_eq1())
-//				index = i;
-//		}
-//		listEquiposSegundoFiltro.remove(index);
+		// listEquiposSegundoFiltro = new ArrayList<Equipo>();
+		// listEquiposSegundoFiltro = listEquiposFiltrados;
+		// System.out.println("SE FILTRO ALGO " +
+		// listEquiposSegundoFiltro.size() + " le meto " +
+		// listEquiposFiltrados.size());
+		// int index = 0;
+		//
+		// for (int i = 0; i < listEquiposSegundoFiltro.size(); i++) {
+		// if (listEquiposSegundoFiltro.get(i).getId_equipo() ==
+		// this.getForm_filter_eq1())
+		// index = i;
+		// }
+		// listEquiposSegundoFiltro.remove(index);
+	}
+	
+	public void reset() {
+		this.setForm_fecha(Utilities.fechahoy());
+		this.setForm_hora(Utilities.fechahoy());
+		this.setForm_lugar("");
+		this.setForm_filter_eq1(-1);
+		this.setForm_filter_eq2(-1);
+		this.setForm_filter_id_categoria(-1);
+		this.setForm_filter_id_liga(-1);
 	}
 }

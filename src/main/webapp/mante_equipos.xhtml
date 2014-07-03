@@ -25,6 +25,7 @@
 										value="#{EquipoMB.form_filter_id_liga}">
 										<p:ajax listener="#{EquipoMB.onLigasChange}"
 											update="selectCategoria" />
+										<f:selectItem itemLabel="Seleccione una liga disponible" itemValue="-1" />
 										<f:selectItems value="#{EquipoMB.listLigas}" var="model"
 											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
 									</h:selectOneMenu></td>
@@ -33,6 +34,7 @@
 								<td><h:outputLabel value="Categoria elegida" /></td>
 								<td><h:selectOneMenu id="selectCategoria"
 										value="#{EquipoMB.form_id_categoria}">
+										<f:selectItem itemLabel="Seleccione una categoria de la liga" itemValue="-1" />
 										<f:selectItems value="#{EquipoMB.listCategoriasFiltradas}"
 											var="model" itemLabel="#{model.nom_categoria}"
 											itemValue="#{model.id_categoria}" />

@@ -22,6 +22,7 @@
 								<td><h:outputLabel value="Liga elegida" /></td>
 								<td><h:selectOneMenu id="selectOneCb"
 										value="#{CategoriaMB.form_id_liga}">
+										<f:selectItem itemLabel="Seleccione una liga disponible" itemValue="-1" />
 										<f:selectItems value="#{CategoriaMB.listLigas}" var="model"
 											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
 									</h:selectOneMenu></td>

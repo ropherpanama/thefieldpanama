@@ -19,7 +19,6 @@
 						<tr>
 							<td><h:outputLabel for="nombre" value="Nombre de la liga" /></td>
 							<td><p:inputText id="nombre" value="#{LigaMB.nom_liga}">
-									<f:validateLength minimum="5" />
 								</p:inputText> <h:message for="nombre" style="color:red" /></td>
 						</tr>
 						<!-- 			Campo para ingresar el nombre de la liga -->
@@ -27,13 +26,13 @@
 						<tr>
 							<td><h:outputLabel for="f_ini" value="Fecha de inicio " /></td>
 							<td><p:calendar id="f_ini" pattern="dd-MM-yyyy" mode="popup"
-									value="#{LigaMB.f_ini}" /></td>
+									value="#{LigaMB.f_ini}" effect="fold"/></td>
 						</tr>
 
 						<tr>
 							<td><h:outputLabel for="f_fin" value="Fecha de termino " /></td>
 							<td><p:calendar id="f_fin" pattern="dd-MM-yyyy" mode="popup"
-									value="#{LigaMB.f_fin}" /></td>
+									value="#{LigaMB.f_fin}" effect="fold"/></td>
 						</tr>
 
 						<!-- Botones del formulario -->

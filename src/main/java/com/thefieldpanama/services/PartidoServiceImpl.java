@@ -1,5 +1,6 @@
 package com.thefieldpanama.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -47,5 +48,10 @@ public class PartidoServiceImpl implements PartidoService {
 	@Transactional(readOnly = false)
 	public Partido getPartidoById(int id) {
 		return partidoDAO.getPartidoById(id);
+	}
+
+	@Override
+	public List<Partido> getPartidosByCategoryAndDate(int cat_id, Date f) {
+		return partidoDAO.getPartidosByCategoryAndDate(cat_id, f);
 	}
 }

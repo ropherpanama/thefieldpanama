@@ -47,6 +47,16 @@
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
 
+	<bean id="Periodo" class="com.thefieldpanama.beans.Periodo" />
+	
+	<bean id="PeriodoServicio" class="com.thefieldpanama.services.PeriodoServiceImpl">
+		<property name="periodoDAO" ref="PeriodoDAO" />
+	</bean>
+	
+	<bean id="PeriodoDAO" class="com.thefieldpanama.dao.PeriodoDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
 	<!-- Configuracion externa de parametros del DataSource -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

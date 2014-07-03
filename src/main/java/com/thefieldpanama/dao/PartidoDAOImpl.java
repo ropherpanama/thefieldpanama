@@ -1,5 +1,6 @@
 package com.thefieldpanama.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -50,5 +51,15 @@ public class PartidoDAOImpl implements PartidoDAO {
 				.createQuery("from Partido  where id_partido = ?")
 				.setParameter(0, id).list();
 		return (Partido) list.get(0);
+	}
+
+	@Override
+	public List<Partido> getPartidosByCategoryAndDate(int cat_id, Date f) {
+		@SuppressWarnings("unchecked")
+		List<Partido> list = getSessionFactory().getCurrentSession()
+				.createQuery("from Partido as p where p.fecha = ? and p.equipo1.categoria.id_categoria = ?")
+				.setParameter(0, f)
+				.setParameter(1, cat_id).list(); 
+		return list;
 	}
 }

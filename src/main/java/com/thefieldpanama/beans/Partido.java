@@ -1,6 +1,9 @@
 package com.thefieldpanama.beans;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +25,16 @@ public class Partido {
 	private Date fecha;
 	private String hora;
 	private String lugar;
+	private Set<Periodo> periodosPartido = new HashSet<Periodo>(0);
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "partido")
+	public Set<Periodo> getPeriodosPartido() {
+		return periodosPartido;
+	}
+
+	public void setPeriodosPartido(Set<Periodo> periodosPartido) {
+		this.periodosPartido = periodosPartido;
+	}
 
 	@Id
 	@Column(name = "ID_PARTIDO")
@@ -78,5 +92,22 @@ public class Partido {
 
 	public void setLugar(String lugar) {
 		this.lugar = lugar;
+	}
+	
+	@Override
+	public String toString() {
+		int ptseq1 = 0;
+		int ptseq2 = 0;
+		
+		if(periodosPartido.size() > 0){
+			Iterator<Periodo> itr = periodosPartido.iterator();
+			
+			while(itr.hasNext()){
+				ptseq1 += itr.next().getPts_equipo_1();
+				ptseq2 += itr.next().getPts_equipo_2();
+			}
+			return ptseq1 + " - " + ptseq2;
+		}else
+			return "No disponible";
 	}
 }

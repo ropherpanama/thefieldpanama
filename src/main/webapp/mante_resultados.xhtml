@@ -1,0 +1,106 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Registro de resultados</title>
+</h:head>
+<h:body>
+
+	<ui:include src="/public/menu.xhtml"></ui:include>
+
+	<p:panel id="panel1" header="Búsqueda de partidos"
+		style="margin-bottom:10px;">
+		<p:accordionPanel>
+			<p:tab title="Filtrar partidos por categoría">
+				<h:form prependId="false" styleClass="cmxform">
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
+					<fieldset>
+						<legend>Utilice los filtros para mejorar su busqueda</legend>
+						<table>
+							<tr>
+								<td><h:outputLabel value="Liga del partido" /></td>
+								<td><h:selectOneMenu id="selectLiga"
+										value="#{ResultadosMB.form_filter_id_liga}">
+										<p:ajax listener="#{ResultadosMB.onLigasChange}"
+											update="selectCategoria" />
+										<f:selectItem itemLabel="Seleccione una liga" itemValue="-1" />
+										<f:selectItems value="#{ResultadosMB.listLigas}" var="model"
+											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
+									</h:selectOneMenu></td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Categoria de la liga" /></td>
+								<td><h:selectOneMenu id="selectCategoria"
+										value="#{ResultadosMB.form_filter_id_categoria}">
+										<f:selectItem itemLabel="Seleccione una categoria de la liga"
+											itemValue="-1" />
+										<f:selectItems value="#{ResultadosMB.listCategoriasFiltradas}"
+											var="model" itemLabel="#{model.nom_categoria}"
+											itemValue="#{model.id_categoria}" />
+									</h:selectOneMenu></td>
+							</tr>
+
+							<tr>
+								<td><h:outputLabel for="fecha" value="Fecha del partido " /></td>
+								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
+										effect="fold" mode="popup"
+										value="#{ResultadosMB.form_date_partido}" /></td>
+							</tr>
+
+							<tr>
+								<td><p:commandButton id="buscarPartidos"
+										value="Buscar partidos" update=":form:partidos"
+										action="#{ResultadosMB.buscarPartidos}" ajax="false" /></td>
+							</tr>
+						</table>
+					</fieldset>
+				</h:form>
+			</p:tab>
+		</p:accordionPanel>
+	</p:panel>
+	<p:panel header="Partidos encontrados">
+		<h:form id="form">
+			<p:dataTable id="partidos" var="p" 
+				value="#{ResultadosMB.listPartidos}" paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="ID" />
+					</f:facet>
+					<h:outputText value="#{p.id_partido}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Equipo 1" />
+					</f:facet>
+					<h:outputText value="#{p.equipo1.nom_equipo}" />
+				</p:column>
+
+				<p:column headerText=" Total " style="text-align: center;">
+					<h:outputText value="#{p.toString()}" />
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Equipo 2" />
+					</f:facet>
+					<h:outputText value="#{p.equipo2.nom_equipo}" />
+				</p:column>
+
+				<p:column headerText="+Marcador">
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+	</p:panel>
+
+	<ui:include src="/public/footer.xhtml"></ui:include>
+
+</h:body>
+</html>

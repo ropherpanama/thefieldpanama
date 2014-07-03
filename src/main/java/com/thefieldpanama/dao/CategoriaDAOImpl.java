@@ -24,7 +24,7 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Categoria> listCategorias() {
-		return sessionFactory.getCurrentSession().createQuery("from Categoria").list();
+		return sessionFactory.getCurrentSession().createQuery("from Categoria as c order by c.liga.id").list();
 	}
 
 	@Override

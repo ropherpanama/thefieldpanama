@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Liga;
 import com.thefieldpanama.beans.Partido;
+import com.thefieldpanama.beans.Periodo;
 import com.thefieldpanama.services.CategoriaService;
 import com.thefieldpanama.services.LigaService;
 import com.thefieldpanama.services.PartidoService;
@@ -36,6 +37,7 @@ public class PeriodoManagedBean implements Serializable {
 	private Categoria selectedCategoria;
 	private Partido selectedPartido;
 	private List<Liga> listLigas;
+	private Periodo selectedPeriodo;
 	private List<Partido> listPartidos;
 	private List<Categoria> listCategorias;
 	private List<Categoria> listCategoriasFiltradas;
@@ -52,7 +54,7 @@ public class PeriodoManagedBean implements Serializable {
 		this.getListCategorias();
 		listCategoriasFiltradas = new ArrayList<Categoria>();
 	}
-	
+
 	public int getForm_filter_id_liga() {
 		return form_filter_id_liga;
 	}
@@ -71,6 +73,14 @@ public class PeriodoManagedBean implements Serializable {
 
 	public PartidoService getPartidoService() {
 		return partidoService;
+	}
+
+	public Periodo getSelectedPeriodo() {
+		return selectedPeriodo;
+	}
+
+	public void setSelectedPeriodo(Periodo selectedPeriodo) {
+		this.selectedPeriodo = selectedPeriodo;
 	}
 
 	public void setPartidoService(PartidoService partidoService) {
@@ -210,23 +220,65 @@ public class PeriodoManagedBean implements Serializable {
 	}
 
 	public void buscarPartidos() {
-		try{
+		try {
 			listPartidos.clear();
-			listPartidos = partidoService.getPartidosByCategoryAndDate(this.getForm_filter_id_categoria(), this.getForm_date_partido());
-			
-			if(listPartidos.size() <= 0) {
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						new FacesMessage(FacesMessage.SEVERITY_WARN,
-								"Nada por aqui",
-								"La categoria o fecha seleccionada no tiene partidos"));
+			listPartidos = partidoService.getPartidosByCategoryAndDate(
+					this.getForm_filter_id_categoria(),
+					this.getForm_date_partido());
+
+			if (listPartidos.size() <= 0) {
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(FacesMessage.SEVERITY_WARN,
+										"Nada por aqui",
+										"La categoria o fecha seleccionada no tiene partidos"));
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Lo sentimos",
-							e.getMessage()));
+							"Lo sentimos", e.getMessage()));
+		}
+	}
+
+	public void agregarPeriodos() {
+		try {
+			Periodo p = new Periodo();
+			p.setPartido(this.getSelectedPartido());
+			p.setPts_equipo_1(this.getForm_pts_equipo_1());
+			p.setPts_equipo_2(this.getForm_pts_equipo_2());
+			periodoService.addPeriodo(p);
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"Registro ingresado correctamente", selectedPartido
+									.getEquipo1().getNom_equipo()
+									+ " vs "
+									+ selectedPartido.getEquipo2()
+											.getNom_equipo()));
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Lo sentimos", e.getMessage()));
+		}
+	}
+
+	public void eliminarPeriodo() {
+		try {
+			periodoService.removePeriodo(selectedPeriodo.getId_periodo());
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"Registro eliminado", "ID: "
+									+ selectedPeriodo.getId_periodo()));
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Lo sentimos", e.getMessage()));
 		}
 	}
 }

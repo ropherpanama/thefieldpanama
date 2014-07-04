@@ -103,8 +103,10 @@ public class Partido {
 			Iterator<Periodo> itr = periodosPartido.iterator();
 			
 			while(itr.hasNext()){
-				ptseq1 += itr.next().getPts_equipo_1();
-				ptseq2 += itr.next().getPts_equipo_2();
+				Periodo p = new Periodo();
+				p = itr.next();
+				ptseq1 += p.getPts_equipo_1();
+				ptseq2 += p.getPts_equipo_2();
 			}
 			return ptseq1 + " - " + ptseq2;
 		}else

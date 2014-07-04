@@ -15,7 +15,8 @@
 		<p:accordionPanel>
 			<p:tab title="Registrar nuevo partido">
 				<h:form prependId="false" styleClass="cmxform">
-					<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
 					<fieldset>
 						<legend>Por favor llene todos los campos necesarios</legend>
 						<table>
@@ -60,8 +61,7 @@
 								<td><h:outputLabel value="Equipo 2" /></td>
 								<td><h:selectOneMenu id="selectEquipo2"
 										value="#{PartidoMB.form_filter_eq2}">
-										<f:selectItem itemLabel="Seleccione un equipo"
-											itemValue="-1" />
+										<f:selectItem itemLabel="Seleccione un equipo" itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
 											var="model" itemLabel="#{model.nom_equipo}"
 											itemValue="#{model.id_equipo}" />
@@ -70,15 +70,14 @@
 
 							<tr>
 								<td><h:outputLabel for="fecha" value="Fecha del partido " /></td>
-								<td><p:calendar id="fecha" pattern="dd-MM-yyyy" effect="fold"
-										mode="popup" value="#{PartidoMB.form_fecha}" /></td>
+								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
+										effect="fold" mode="popup" value="#{PartidoMB.form_fecha}" /></td>
 							</tr>
 
 							<tr>
 								<td><h:outputLabel value="Hora del partido" /></td>
-								<td>
-									<p:calendar id="hora" value="#{PartidoMB.form_hora}" pattern="hh:mm a" timeOnly="true" effect="fold" />
-								</td>
+								<td><p:calendar id="hora" value="#{PartidoMB.form_hora}"
+										pattern="hh:mm a" timeOnly="true" effect="fold" /></td>
 							</tr>
 
 							<tr>
@@ -97,16 +96,18 @@
 				</h:form>
 			</p:tab>
 			<p:tab title="Partidos registrados">
+				
+				<p:messages id="messages" showDetail="true" autoUpdate="true"
+					closable="true" />
+					
 				<h:form id="form">
-
-					<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 
 					<p:dataTable id="partidos" var="p"
 						value="#{PartidoMB.listPartidos}" paginator="true" rows="10"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						rowsPerPageTemplate="5,10,15">
 
-						<p:column>
+						<p:column style="width:3%">
 							<f:facet name="header">
 								<h:outputText value="ID" />
 							</f:facet>
@@ -152,7 +153,7 @@
 							<f:facet name="header">
 								<h:outputText value="Fecha del partido" />
 							</f:facet>
-							<h:outputText value="#{p.fecha}"/>
+							<h:outputText value="#{p.fecha}" />
 						</p:column>
 
 						<p:column>
@@ -162,7 +163,7 @@
 							<h:outputText value="#{p.hora}" />
 						</p:column>
 
-						<p:column style="width:4%">
+						<p:column style="width:7%">
 							<f:facet name="header">
 								<h:outputText value="Opciones" />
 							</f:facet>

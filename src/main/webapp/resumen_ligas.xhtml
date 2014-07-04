@@ -26,13 +26,13 @@
 						<tr>
 							<td><h:outputLabel for="f_ini" value="Fecha de inicio " /></td>
 							<td><p:calendar id="f_ini" pattern="dd-MM-yyyy" mode="popup"
-									value="#{LigaMB.f_ini}" effect="fold"/></td>
+									value="#{LigaMB.f_ini}" effect="fold" /></td>
 						</tr>
 
 						<tr>
 							<td><h:outputLabel for="f_fin" value="Fecha de termino " /></td>
 							<td><p:calendar id="f_fin" pattern="dd-MM-yyyy" mode="popup"
-									value="#{LigaMB.f_fin}" effect="fold"/></td>
+									value="#{LigaMB.f_fin}" effect="fold" /></td>
 						</tr>
 
 						<!-- Botones del formulario -->
@@ -53,11 +53,12 @@
 						closable="true" />
 
 					<p:dataTable id="ligas" var="liga" value="#{LigaMB.listLigas}"
-						paginator="true" rows="10"
+						paginator="true" rows="10" resizableColumns="true"
+						draggableColumns="true"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						rowsPerPageTemplate="5,10,15">
-
-						<p:column>
+						
+						<p:column style="width:3%">
 							<f:facet name="header">
 								<h:outputText value="ID" />
 							</f:facet>
@@ -82,7 +83,7 @@
 							<h:outputText value="#{liga.f_fin}" />
 						</p:column>
 
-						<p:column style="width:4%">
+						<p:column style="width:7%">
 							<f:facet name="header">
 								<h:outputText value="Opciones" />
 							</f:facet>

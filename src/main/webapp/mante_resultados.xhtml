@@ -63,12 +63,23 @@
 	</p:panel>
 	<p:panel header="Partidos encontrados">
 		<h:form id="form">
-			<p:dataTable id="partidos" var="p" 
+			<p:dataTable id="partidos" var="p"
 				value="#{ResultadosMB.listPartidos}" paginator="true" rows="10"
+				resizableColumns="true" draggableColumns="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,15">
 
-				<p:column>
+				<f:facet name="header">
+					<p:commandButton id="toggler" type="button" value="Columnas"
+						style="float:right" icon="ui-icon-calculator" />
+					<p:columnToggler datasource="partidos" trigger="toggler" />
+				</f:facet>
+
+				<p:column headerText="Detalle" style="width:50px">
+					<p:rowToggler />
+				</p:column>
+
+				<p:column style="width:3%">
 					<f:facet name="header">
 						<h:outputText value="ID" />
 					</f:facet>
@@ -85,7 +96,7 @@
 				<p:column headerText=" Total " style="text-align: center;">
 					<h:outputText value="#{p.toString()}" />
 				</p:column>
-				
+
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Equipo 2" />
@@ -93,12 +104,70 @@
 					<h:outputText value="#{p.equipo2.nom_equipo}" />
 				</p:column>
 
-				<p:column headerText="+Marcador">
+				<p:column headerText="Periodos" style="width:6%">
+					<p:commandButton value="+" oncomplete="PF('dlg_periodo').show();"
+						update=":dialog_form:dlg_periodo">
+						<f:setPropertyActionListener value="#{p}"
+							target="#{ResultadosMB.selectedPartido}" />
+					</p:commandButton>
 				</p:column>
 
+				<p:rowExpansion>
+					<p:dataTable id="detallePeriodos" var="details" rowIndexVar="rowIndex"
+						value="#{p.periodosPartido}"
+						emptyMessage="No se han incluido periodos">
+
+						<f:facet name="header">
+							<h:outputText value="Periodos del partido" />
+						</f:facet>
+
+						<p:column headerText="Periodo" style="width:5%">
+        					#{rowIndex+1}
+    					</p:column>
+
+						<p:column>
+							<h:outputText
+								value="#{details.partido.equipo1.nom_equipo} : #{details.pts_equipo_1}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText
+								value="#{details.partido.equipo2.nom_equipo} : #{details.pts_equipo_2}" />
+						</p:column>
+
+						<p:column headerText="Opciones" style="width:6%">
+							<p:commandButton icon="ui-icon-trash" action="#{ResultadosMB.eliminarPeriodo}" 
+								update="detallePeriodos">
+								<f:setPropertyActionListener value="#{details}"
+									target="#{ResultadosMB.selectedPeriodo}" />
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</p:rowExpansion>
 			</p:dataTable>
 		</h:form>
 	</p:panel>
+
+	<h:form id="dialog_form">
+		<!-- Dialogo para añadir periodos al partido -->
+		<p:dialog header="Añadir periodos al partido" id="dlg_periodo"
+			widgetVar="dlg_periodo" modal="true" showEffect="explode"
+			hideEffect="bounce" height="100">
+			<p:panel style="text-align:center;"
+				header="#{ResultadosMB.selectedPartido.equipo1.nom_equipo} VS #{ResultadosMB.selectedPartido.equipo2.nom_equipo}">
+				<h:panelGroup style="white-space: nowrap;text-align:center;">
+					<p:spinner size="5" value="#{ResultadosMB.form_pts_equipo_1}" />
+					<p:spacer width="10" height="10" />
+					<p:spinner size="5" value="#{ResultadosMB.form_pts_equipo_2}" />
+					<p:spacer width="10" height="10" />
+					<p:commandButton icon="ui-icon-circle-check"
+						update=":form:partidos" action="#{ResultadosMB.agregarPeriodos}"
+						oncomplete="PF('dlg_periodo').hide();" />
+				</h:panelGroup>
+			</p:panel>
+		</p:dialog>
+	</h:form>
 
 	<ui:include src="/public/footer.xhtml"></ui:include>
 

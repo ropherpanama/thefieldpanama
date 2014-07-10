@@ -6,14 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Liga;
@@ -94,11 +92,35 @@ public class PartidoManagedBean implements Serializable {
 
 	public void editarPartido() {
 		try {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro editado", "ID: "
-									+ selectedPartido.getId_partido()));
+			boolean update = false;
+			
+			System.out.println("fecha " + getForm_fecha() + 
+					"\nHora " + getForm_hora() + 
+					"\nLugar " + getForm_lugar());
+			
+			if(getForm_fecha() != null) {
+				selectedPartido.setFecha(getForm_fecha());
+				update = true;
+			}
+			
+			if(getForm_hora() != null) {
+				selectedPartido.setHora(formatter.format(this.getForm_hora()));
+				update = true;
+			}
+			
+			if(!getForm_lugar().equals("")) {
+				selectedPartido.setLugar(getForm_lugar());
+				update = true;
+			}
+			
+			if(update){
+				partidoService.updatePartido(selectedPartido);
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO,
+								"Registro editado", "ID: "
+										+ selectedPartido.getId_partido()));
+			}
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,

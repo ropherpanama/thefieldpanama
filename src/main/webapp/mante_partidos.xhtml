@@ -14,7 +14,7 @@
 		style="margin-bottom:10px;">
 		<p:accordionPanel>
 			<p:tab title="Registrar nuevo partido">
-				<h:form prependId="false" styleClass="cmxform">
+				<h:form id="first_form" prependId="false" styleClass="cmxform">
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
 						closable="true" />
 					<fieldset>
@@ -96,10 +96,7 @@
 				</h:form>
 			</p:tab>
 			<p:tab title="Partidos registrados">
-				
-				<p:messages id="messages" showDetail="true" autoUpdate="true"
-					closable="true" />
-					
+
 				<h:form id="form">
 
 					<p:dataTable id="partidos" var="p"
@@ -170,7 +167,8 @@
 
 							<h:panelGroup style="white-space: nowrap">
 								<p:commandButton icon="ui-icon-pencil" title="Editar partido"
-									action="#{PartidoMB.editarPartido}" update="partidos">
+									oncomplete="PF('dlg_edit').show();"
+									update=":edit_form:dlg_edit">
 									<f:setPropertyActionListener value="#{p}"
 										target="#{PartidoMB.selectedPartido}" />
 								</p:commandButton>
@@ -188,6 +186,42 @@
 			</p:tab>
 		</p:accordionPanel>
 	</p:panel>
+
+	<!-- 	Dialogo para edicion de registro -->
+	<h:form id="edit_form">
+		<p:dialog header="Editar detalles del partido" id="dlg_edit"
+			widgetVar="dlg_edit" modal="true" showEffect="explode"
+			hideEffect="bounce" style="height: 'auto';">
+			<p:panel style="text-align:center;"
+				header="#{PartidoMB.selectedPartido.equipo1.nom_equipo} vs #{PartidoMB.selectedPartido.equipo2.nom_equipo}">
+				<table>
+					<tr>
+						<td><h:outputLabel value="Lugar del partido" /></td>
+						<td><p:inputText id="lugar" value="#{PartidoMB.form_lugar}">
+							</p:inputText></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel for="fecha" value="Fecha del partido " /></td>
+						<td><p:calendar id="fecha" pattern="dd-MM-yyyy" effect="fold"
+								mode="popup" value="#{PartidoMB.form_fecha}" /></td>
+					</tr>
+
+					<tr>
+						<td><h:outputLabel value="Hora del partido" /></td>
+						<td><p:calendar id="hora" value="#{PartidoMB.form_hora}"
+								pattern="hh:mm a" timeOnly="true" effect="fold" /></td>
+					</tr>
+				</table>
+
+				<p:commandButton icon="ui-icon-circle-check"
+					action="#{PartidoMB.editarPartido}"
+					oncomplete="PF('dlg_edit').hide();" />
+
+				<p:commandButton icon="ui-icon-circle-close"
+					oncomplete="PF('dlg_edit').hide();" />
+			</p:panel>
+		</p:dialog>
+	</h:form>
 
 	<ui:include src="/public/footer.xhtml"></ui:include>
 

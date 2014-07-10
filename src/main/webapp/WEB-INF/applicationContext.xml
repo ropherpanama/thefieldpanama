@@ -12,27 +12,33 @@
 	<context:component-scan base-package="com.thefieldpanama" />
 	<context:annotation-config />
 	<context:spring-configured />
-
+	
 	<bean id="Liga" class="com.thefieldpanama.beans.Liga" />
+	
 	<bean id="LigaServicio" class="com.thefieldpanama.services.LigaServiceImpl">
 		<property name="ligaDAO" ref="LigaDAO" />
 	</bean>
+	
 	<bean id="LigaDAO" class="com.thefieldpanama.dao.LigaDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
 
 	<bean id="Categoria" class="com.thefieldpanama.beans.Categoria" />
+	
 	<bean id="CategoriaServicio" class="com.thefieldpanama.services.CategoriaServiceImpl">
 		<property name="categoriaDAO" ref="CategoriaDAO" />
 	</bean>
+	
 	<bean id="CategoriaDAO" class="com.thefieldpanama.dao.CategoriaDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
 	
 	<bean id="Equipo" class="com.thefieldpanama.beans.Equipo" />
+	
 	<bean id="EquipoServicio" class="com.thefieldpanama.services.EquipoServiceImpl">
 		<property name="equipoDAO" ref="EquipoDAO" />
 	</bean>
+	
 	<bean id="EquipoDAO" class="com.thefieldpanama.dao.EquipoDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>

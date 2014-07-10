@@ -57,7 +57,7 @@
 						draggableColumns="true"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						rowsPerPageTemplate="5,10,15">
-						
+
 						<p:column style="width:3%">
 							<f:facet name="header">
 								<h:outputText value="ID" />
@@ -90,7 +90,8 @@
 
 							<h:panelGroup style="white-space: nowrap">
 								<p:commandButton icon="ui-icon-pencil" title="Editar liga"
-									action="#{LigaMB.editarLiga}" update="ligas">
+									oncomplete="PF('dlg_edit').show();"
+									update=":edit_form:dlg_edit">
 									<f:setPropertyActionListener value="#{liga}"
 										target="#{LigaMB.selectedLiga}" />
 								</p:commandButton>
@@ -110,6 +111,21 @@
 
 	</p:panel>
 
+	<h:form id="edit_form">
+		<p:dialog header="Editar detalles de la liga" id="dlg_edit"
+			widgetVar="dlg_edit" modal="true" showEffect="explode"
+			hideEffect="bounce" style="height: 'auto';">
+			<p:panel style="text-align:center;"
+				header="#{LigaMB.selectedLiga.nom_liga}">
+
+				<p:commandButton icon="ui-icon-circle-check"
+					action="#{LigaMB.editarLiga}" oncomplete="PF('dlg_edit').hide();" />
+
+				<p:commandButton icon="ui-icon-circle-close"
+					oncomplete="PF('dlg_edit').hide();" />
+			</p:panel>
+		</p:dialog>
+	</h:form>
 	<ui:include src="/public/footer.xhtml"></ui:include>
 
 </h:body>

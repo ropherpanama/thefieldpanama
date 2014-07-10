@@ -30,6 +30,22 @@
 		<welcome-file>faces/index.xhtml</welcome-file>
 	</welcome-file-list>
 
+	<!-- 	Configuracion para servicios web -->
+<servlet>
+		<display-name>com.thefieldpanama.webservices</display-name>
+		<servlet-name>Jersey REST Service</servlet-name>
+		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.thefieldpanama.webservices</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey REST Service</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
+	<!-- 	Configuracion para servicios web -->
+
 	<!-- JSF mapping -->
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>

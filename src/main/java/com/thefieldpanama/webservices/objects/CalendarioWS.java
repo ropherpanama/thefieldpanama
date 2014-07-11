@@ -3,6 +3,10 @@ package com.thefieldpanama.webservices.objects;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.thefieldpanama.utilities.JSONDateSerializer;
+
 /**
  * Objeto enviado a traves de los servicios web para la entidad Calendario
  * 
@@ -19,7 +23,9 @@ public class CalendarioWS implements Serializable {
 	private String lugar;
 	private String categoria;
 	private String liga;
+	private int idPartido;
 
+	@JsonSerialize(using=JSONDateSerializer.class) 
 	public Date getFecha() {
 		return fecha;
 	}
@@ -74,5 +80,13 @@ public class CalendarioWS implements Serializable {
 
 	public void setLiga(String liga) {
 		this.liga = liga;
+	}
+
+	public int getIdPartido() {
+		return idPartido;
+	}
+
+	public void setIdPartido(int idPartido) {
+		this.idPartido = idPartido;
 	}
 }

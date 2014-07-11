@@ -44,6 +44,7 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 	private List<Partido> listPartidos;
 	private List<Categoria> listCategorias;
 	private List<Categoria> listCategoriasFiltradas;
+	private List<Partido> partidosBuscados;
 
 	private int form_pts_equipo_1;
 	private int form_pts_equipo_2;
@@ -224,19 +225,22 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 
 	public void buscarPartidos() {
 		try {
-			listPartidos.clear();
-			listPartidos = partidoService.getPartidosByCategoryAndDate(
+			partidosBuscados = partidoService.getPartidosByCategoryAndDate(
 					this.getForm_filter_id_categoria(),
 					this.getForm_date_partido());
 
-			if (listPartidos.size() <= 0) {
+			if (partidosBuscados.size() <= 0) {
 				FacesContext
 						.getCurrentInstance()
 						.addMessage(
 								null,
 								new FacesMessage(FacesMessage.SEVERITY_WARN,
 										this.getProvider().getValue("msg_nothing"),
-										this.getProvider().getValue("liga_sin_cats")));
+										this.getProvider().getValue("res_sin_partidos")));
+			}else{
+				for(Partido p : partidosBuscados){
+					log.info(p.getEquipo1().getNom_equipo() + " vs " + p.getEquipo2().getNom_equipo()); 
+				}
 			}
 		} catch (Exception e) {
 			log.info(Utilities.stringStackTrace(e));
@@ -286,5 +290,14 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
 							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
+	}
+
+	public List<Partido> getPartidosBuscados() {
+		partidosBuscados = new ArrayList<Partido>();
+		return partidosBuscados;
+	}
+
+	public void setPartidosBuscados(List<Partido> partidosBuscados) {
+		this.partidosBuscados = partidosBuscados;
 	}
 }

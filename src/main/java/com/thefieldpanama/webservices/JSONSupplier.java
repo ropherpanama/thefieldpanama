@@ -20,11 +20,13 @@ import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Liga;
 import com.thefieldpanama.beans.Partido;
+import com.thefieldpanama.beans.Periodo;
 import com.thefieldpanama.utilities.Utilities;
 import com.thefieldpanama.webservices.objects.CalendarioWS;
 import com.thefieldpanama.webservices.objects.CategoriasWS;
 import com.thefieldpanama.webservices.objects.EquiposWS;
 import com.thefieldpanama.webservices.objects.LigasWS;
+import com.thefieldpanama.webservices.objects.ResultadosWS;
 
 /**
  * Esta clase contiene los Url´s y metodos asociados a los servicios web
@@ -42,6 +44,7 @@ public class JSONSupplier extends JSONCore {
 	private List<EquiposWS> equiposWs = new ArrayList<EquiposWS>();
 	private List<Partido> partidos = new ArrayList<Partido>();
 	private List<CalendarioWS> calendWs = new ArrayList<CalendarioWS>();
+	private List<ResultadosWS> scoresWs = new ArrayList<ResultadosWS>();
 	private Logger log = Logger.getLogger(this.getClass());
 
 	/**
@@ -154,6 +157,7 @@ public class JSONSupplier extends JSONCore {
 	public String calendario() {
 		try {
 			calendWs.clear();
+			scoresWs.clear();
 			partidos = this.getPartidoService().listPartidos();
 			// Se cargan los datos del calendario a partir del listado de
 			// partidos disponible
@@ -166,9 +170,47 @@ public class JSONSupplier extends JSONCore {
 				cws.setFecha(p.getFecha());
 				cws.setHora(p.getHora());
 				cws.setLugar(p.getLugar());
+				cws.setIdPartido(p.getId_partido()); 
 				calendWs.add(cws);
+				
+				//Inicializar data de scores
+				ResultadosWS rws = new ResultadosWS();//Por cada partido creas un objeto score
+				ArrayList<String> periodos = new ArrayList<String>();
+				
+				rws.setCategoria(p.getEquipo1().getCategoria().getNom_categoria());
+				rws.setLiga(p.getEquipo1().getCategoria().getLiga().getNom_liga());
+				rws.setNomEquipo1(p.getEquipo1().getNom_equipo()); 
+				rws.setNomEquipo2(p.getEquipo2().getNom_equipo());
+				rws.setIdPartido(p.getId_partido());
+				
+				Iterator<Periodo> it = p.getPeriodosPartido().iterator();
+				while(it.hasNext()) {
+					Periodo pd = it.next();
+					String str = String.format("%1$s : %2$-4d - %3$s : %4$d", p.getEquipo1().getNom_equipo(), pd.getPts_equipo_1(), p.getEquipo2().getNom_equipo(), pd.getPts_equipo_2());
+					periodos.add(str);
+				}
+				
+				rws.setPeriodos(periodos); 
+				scoresWs.add(rws);
 			}
 			return this.getMapper().writeValueAsString(calendWs);
+		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			return null;
+		}
+	}
+	
+	/**
+	 * Este metodo retorna la informacion de los scores
+	 * 
+	 * @return scores
+	 */
+	@GET
+	@Path("scores")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String scores() {
+		try {
+			return this.getMapper().writeValueAsString(scoresWs);
 		} catch (Exception e) {
 			log.info(Utilities.stringStackTrace(e));
 			return null;

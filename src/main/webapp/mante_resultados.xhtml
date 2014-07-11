@@ -26,7 +26,8 @@
 										value="#{ResultadosMB.form_filter_id_liga}">
 										<p:ajax listener="#{ResultadosMB.onLigasChange}"
 											update="selectCategoria" />
-										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}" itemValue="-1" />
+										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
+											itemValue="-1" />
 										<f:selectItems value="#{ResultadosMB.listLigas}" var="model"
 											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
 									</h:selectOneMenu></td>
@@ -44,16 +45,18 @@
 							</tr>
 
 							<tr>
-								<td><h:outputLabel for="fecha" value="#{msgs.par_header_fecha}" /></td>
+								<td><h:outputLabel for="fecha"
+										value="#{msgs.par_header_fecha}" /></td>
 								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
 										effect="fold" mode="popup"
 										value="#{ResultadosMB.form_date_partido}" /></td>
 							</tr>
 
 							<tr>
-								<td><p:commandButton id="buscarPartidos"
-										value="#{msgs.res_search_par}" update=":form:partidos"
-										action="#{ResultadosMB.buscarPartidos}" ajax="false" /></td>
+								<td><p:commandButton id="buscarPartidos" 
+										value="#{msgs.res_search_par}" ajax="false"
+										action="#{ResultadosMB.buscarPartidos}"
+										update=":panel2:form:partidos" /></td>
 							</tr>
 						</table>
 					</fieldset>
@@ -61,7 +64,7 @@
 			</p:tab>
 		</p:accordionPanel>
 	</p:panel>
-	<p:panel header="#{msgs.res_dispon}">
+	<p:panel header="#{msgs.res_dispon}" id="panel2">
 		<h:form id="form">
 			<p:dataTable id="partidos" var="p"
 				value="#{ResultadosMB.listPartidos}" paginator="true" rows="10"
@@ -70,8 +73,9 @@
 				rowsPerPageTemplate="5,10,15">
 
 				<f:facet name="header">
-					<p:commandButton id="toggler" type="button" value="#{msgs.res_filter_columns}"
-						style="float:right" icon="ui-icon-calculator" />
+					<p:commandButton id="toggler" type="button"
+						value="#{msgs.res_filter_columns}" style="float:right"
+						icon="ui-icon-calculator" />
 					<p:columnToggler datasource="partidos" trigger="toggler" />
 				</f:facet>
 
@@ -93,7 +97,8 @@
 					<h:outputText value="#{p.equipo1.nom_equipo}" />
 				</p:column>
 
-				<p:column headerText="#{msgs.par_total_pts}" style="text-align: center;">
+				<p:column headerText="#{msgs.par_total_pts}"
+					style="text-align: center;">
 					<h:outputText value="#{p.toString()}" />
 				</p:column>
 
@@ -113,8 +118,8 @@
 				</p:column>
 
 				<p:rowExpansion>
-					<p:dataTable id="detallePeriodos" var="details" rowIndexVar="rowIndex"
-						value="#{p.periodosPartido}"
+					<p:dataTable id="detallePeriodos" var="details"
+						rowIndexVar="rowIndex" value="#{p.periodosPartido}"
 						emptyMessage="#{msgs.res_empty_table}">
 
 						<f:facet name="header">
@@ -136,7 +141,8 @@
 						</p:column>
 
 						<p:column headerText="#{msgs.col_header_opc}" style="width:6%">
-							<p:commandButton icon="ui-icon-trash" action="#{ResultadosMB.eliminarPeriodo}" 
+							<p:commandButton icon="ui-icon-trash"
+								action="#{ResultadosMB.eliminarPeriodo}"
 								update="detallePeriodos">
 								<f:setPropertyActionListener value="#{details}"
 									target="#{ResultadosMB.selectedPeriodo}" />

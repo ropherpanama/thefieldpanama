@@ -17,6 +17,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 
 import com.thefieldpanama.beans.Liga;
@@ -25,7 +26,7 @@ import com.thefieldpanama.utilities.Utilities;
 
 @ManagedBean(name = "LigaMB")
 @ViewScoped
-public class LigaManagedBean implements Serializable {
+public class LigaManagedBean extends AncientManagedBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String SUCCESS = "resumen_ligas";
 	private static final String ERROR = "error";
@@ -38,6 +39,7 @@ public class LigaManagedBean implements Serializable {
 	private Date f_ini;
 	private Date f_fin;
 	List<Liga> listLigas;
+	private Logger log = Logger.getLogger(this.getClass());
 
 	/**
 	 * Metodo invocado por el boton agregar nueva liga
@@ -53,6 +55,7 @@ public class LigaManagedBean implements Serializable {
 			ligaService.addLiga(l);
 			return SUCCESS;
 		} catch (DataAccessException d) {
+			log.info(Utilities.stringStackTrace(d));
 			return ERROR;
 		}
 	}
@@ -67,12 +70,13 @@ public class LigaManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro eliminado", selectedLiga.getNom_liga()));
+							this.getProvider().getValue("msg_del"), selectedLiga.getNom_liga()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -84,12 +88,13 @@ public class LigaManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro editado", selectedLiga.getNom_liga()));
+							this.getProvider().getValue("msg_upt"), selectedLiga.getNom_liga()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 

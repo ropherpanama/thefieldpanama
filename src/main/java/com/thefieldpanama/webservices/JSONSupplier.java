@@ -7,18 +7,31 @@ package com.thefieldpanama.webservices;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
+
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Liga;
+import com.thefieldpanama.beans.Partido;
+import com.thefieldpanama.utilities.Utilities;
+import com.thefieldpanama.webservices.objects.CalendarioWS;
 import com.thefieldpanama.webservices.objects.CategoriasWS;
 import com.thefieldpanama.webservices.objects.EquiposWS;
 import com.thefieldpanama.webservices.objects.LigasWS;
 
+/**
+ * Esta clase contiene los Url´s y metodos asociados a los servicios web
+ * 
+ * @author rospena
+ * 
+ */
 @Component
 @Path("app")
 public class JSONSupplier extends JSONCore {
@@ -27,6 +40,9 @@ public class JSONSupplier extends JSONCore {
 	private List<LigasWS> listWs = new ArrayList<LigasWS>();
 	private List<Liga> ligas = new ArrayList<Liga>();
 	private List<EquiposWS> equiposWs = new ArrayList<EquiposWS>();
+	private List<Partido> partidos = new ArrayList<Partido>();
+	private List<CalendarioWS> calendWs = new ArrayList<CalendarioWS>();
+	private Logger log = Logger.getLogger(this.getClass());
 
 	/**
 	 * Este metodo retorna la informacion sobre las ligas (id;nombre)
@@ -63,7 +79,7 @@ public class JSONSupplier extends JSONCore {
 			// de liga)
 			return this.getMapper().writeValueAsString(listWs);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info(Utilities.stringStackTrace(e));
 			return null;
 		}
 	}
@@ -80,7 +96,7 @@ public class JSONSupplier extends JSONCore {
 		try {
 			return this.getMapper().writeValueAsString(catsWs);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info(Utilities.stringStackTrace(e));
 			return null;
 		}
 	}
@@ -118,7 +134,37 @@ public class JSONSupplier extends JSONCore {
 			}
 			return this.getMapper().writeValueAsString(equiposWs);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info(Utilities.stringStackTrace(e));
+			return null;
+		}
+	}
+
+	/**
+	 * Este servicio retorna la informacion sobre el calendario de partidos
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("calendar")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String calendario() {
+		try {
+			partidos = this.getPartidoService().listPartidos();
+			// Se cargan los datos del calendario a partir del listado de
+			// partidos disponible
+			for (Partido p : partidos) {
+				CalendarioWS cws = new CalendarioWS();
+				cws.setCategoria(p.getEquipo1().getCategoria().getNom_categoria());
+				cws.setLiga(p.getEquipo1().getCategoria().getLiga().getNom_liga());
+				cws.setEquipo1(p.getEquipo1().getNom_equipo());
+				cws.setEquipo2(p.getEquipo2().getNom_equipo());
+				cws.setFecha(p.getFecha());
+				cws.setHora(p.getHora());
+				cws.setLugar(p.getLugar());
+			}
+			return this.getMapper().writeValueAsString(calendWs);
+		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			return null;
 		}
 	}

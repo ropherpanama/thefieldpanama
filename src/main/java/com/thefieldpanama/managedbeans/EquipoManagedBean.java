@@ -11,16 +11,19 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Liga;
 import com.thefieldpanama.services.CategoriaService;
 import com.thefieldpanama.services.EquipoService;
 import com.thefieldpanama.services.LigaService;
+import com.thefieldpanama.utilities.Utilities;
 
 @ManagedBean(name = "EquipoMB")
 @ViewScoped
-public class EquipoManagedBean implements Serializable {
+public class EquipoManagedBean extends AncientManagedBean implements Serializable {
 	private static final long serialVersionUID = 2792026524599271882L;
 	@ManagedProperty(value = "#{EquipoServicio}")
 	EquipoService equipoService;
@@ -38,6 +41,7 @@ public class EquipoManagedBean implements Serializable {
 	private String form_localidad;
 	private int form_id_categoria;
 	private int form_filter_id_liga;
+	private Logger log = Logger.getLogger(this.getClass());
 
 	@PostConstruct
 	public void init() {
@@ -99,12 +103,13 @@ public class EquipoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro insertado", this.getForm_nom_equipo()));
+							this.getProvider().getValue("msg_add"), this.getForm_nom_equipo()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -114,13 +119,14 @@ public class EquipoManagedBean implements Serializable {
 					.addMessage(
 							null,
 							new FacesMessage(FacesMessage.SEVERITY_INFO,
-									"Registro editado", selectedEquipo
+									this.getProvider().getValue("msg_upt"), selectedEquipo
 											.getNom_equipo()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -130,13 +136,14 @@ public class EquipoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro eliminado", selectedEquipo
+							this.getProvider().getValue("msg_del"), selectedEquipo
 									.getNom_equipo()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -151,8 +158,6 @@ public class EquipoManagedBean implements Serializable {
 	}
 
 	public List<Categoria> getListCategorias() {
-		System.out.println("VALOR DE LIGA DEL FORMULARIO "
-				+ this.getForm_filter_id_liga());
 		listCategorias = new ArrayList<Categoria>();
 		listCategorias.addAll(categoriaService.listCategorias());
 		return listCategorias;
@@ -227,7 +232,7 @@ public class EquipoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Nada por aqui", "La liga seleccionada no tiene categorias"));
+							this.getProvider().getValue("msg_nothing"), this.getProvider().getValue("liga_sin_cats")));
 		}
 	}
 }

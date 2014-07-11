@@ -10,19 +10,23 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Liga;
 import com.thefieldpanama.services.CategoriaService;
 import com.thefieldpanama.services.LigaService;
+import com.thefieldpanama.utilities.Utilities;
 
 @ManagedBean(name = "CategoriaMB")
 @ViewScoped
-public class CategoriaManagedBean implements Serializable {
+public class CategoriaManagedBean extends AncientManagedBean implements Serializable {
 	private static final long serialVersionUID = -2870050274909865404L;
 	@ManagedProperty(value = "#{CategoriaServicio}")
 	CategoriaService categoriaService;
 	@ManagedProperty(value = "#{LigaServicio}")
 	LigaService ligaService;
+	private Logger log = Logger.getLogger(this.getClass());
 
 	Liga selectedLiga;
 	Categoria selectedCategoria;
@@ -41,12 +45,13 @@ public class CategoriaManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro insertado", this.getForm_nom_categoria()));
+							this.getProvider().getValue("msg_add"), this.getForm_nom_categoria()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e)); 
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -54,13 +59,14 @@ public class CategoriaManagedBean implements Serializable {
 		try{FacesContext.getCurrentInstance().addMessage(
 				null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Registro editado", selectedCategoria
+						this.getProvider().getValue("msg_upt"), selectedCategoria
 								.getNom_categoria() + " de " + selectedCategoria.getLiga().getNom_liga()));
 		}catch(Exception e){
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -71,13 +77,14 @@ public class CategoriaManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro eliminado", selectedCategoria
+							this.getProvider().getValue("msg_del"), selectedCategoria
 									.getNom_categoria()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 

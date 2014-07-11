@@ -1,6 +1,15 @@
 package com.thefieldpanama.webservices.objects;
 
-public class EquiposWS {
+import java.io.Serializable;
+
+/**
+ * Objeto enviado a traves del servicio web para la entidad Equipos
+ * 
+ * @author rospena
+ * 
+ */
+public class EquiposWS implements Serializable {
+	private static final long serialVersionUID = -1126316627175573996L;
 	private int id;
 	private String nombre;
 	private String categoria;

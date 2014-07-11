@@ -12,6 +12,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Liga;
 import com.thefieldpanama.beans.Partido;
@@ -20,10 +22,11 @@ import com.thefieldpanama.services.CategoriaService;
 import com.thefieldpanama.services.LigaService;
 import com.thefieldpanama.services.PartidoService;
 import com.thefieldpanama.services.PeriodoService;
+import com.thefieldpanama.utilities.Utilities;
 
 @ManagedBean(name = "ResultadosMB")
 @ViewScoped
-public class PeriodoManagedBean implements Serializable {
+public class PeriodoManagedBean extends AncientManagedBean implements Serializable {
 	private static final long serialVersionUID = -2168388622285931517L;
 	@ManagedProperty(value = "#{PartidoServicio}")
 	PartidoService partidoService;
@@ -33,7 +36,7 @@ public class PeriodoManagedBean implements Serializable {
 	LigaService ligaService;
 	@ManagedProperty(value = "#{PeriodoServicio}")
 	PeriodoService periodoService;
-
+	private Logger log = Logger.getLogger(this.getClass());
 	private Categoria selectedCategoria;
 	private Partido selectedPartido;
 	private List<Liga> listLigas;
@@ -210,8 +213,8 @@ public class PeriodoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Nada por aqui",
-							"La liga seleccionada no tiene categorias"));
+							this.getProvider().getValue("msg_nothing"),
+							this.getProvider().getValue("liga_sin_cats")));
 		}
 	}
 
@@ -232,14 +235,15 @@ public class PeriodoManagedBean implements Serializable {
 						.addMessage(
 								null,
 								new FacesMessage(FacesMessage.SEVERITY_WARN,
-										"Nada por aqui",
-										"La categoria o fecha seleccionada no tiene partidos"));
+										this.getProvider().getValue("msg_nothing"),
+										this.getProvider().getValue("liga_sin_cats")));
 			}
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Lo sentimos", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -253,16 +257,17 @@ public class PeriodoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro ingresado correctamente", selectedPartido
+							this.getProvider().getValue("msg_add"), selectedPartido
 									.getEquipo1().getNom_equipo()
 									+ " vs "
 									+ selectedPartido.getEquipo2()
 											.getNom_equipo()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Lo sentimos", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -272,13 +277,14 @@ public class PeriodoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro eliminado", "ID: "
+							this.getProvider().getValue("msg_del"), "ID: "
 									+ selectedPeriodo.getId_periodo()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Lo sentimos", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 }

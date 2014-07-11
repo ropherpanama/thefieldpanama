@@ -12,12 +12,22 @@
 		</param-value>
 	</context-param>
 
+	<!-- 	Carga de la configuracion de log4j -->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/log4j-config.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>
-			org.springframework.web.context.request.RequestContextListener</listener-class>
+			org.springframework.web.context.request.RequestContextListener
+		</listener-class>
 	</listener>
 
 	<!-- Change to "Production" when you are ready to deploy -->
@@ -30,8 +40,8 @@
 		<welcome-file>faces/index.xhtml</welcome-file>
 	</welcome-file-list>
 
-	<!-- 	Configuracion para servicios web -->
-<servlet>
+	<!-- Configuracion para servicios web -->
+	<servlet>
 		<display-name>com.thefieldpanama.webservices</display-name>
 		<servlet-name>Jersey REST Service</servlet-name>
 		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
@@ -44,7 +54,7 @@
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
-	<!-- 	Configuracion para servicios web -->
+	<!-- Configuracion para servicios web -->
 
 	<!-- JSF mapping -->
 	<servlet>

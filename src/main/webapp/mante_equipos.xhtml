@@ -4,44 +4,44 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Resumen de categorias</title>
+	<title>#{msgs.eq_title}</title>
 </h:head>
 <h:body>
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
 
-	<p:panel header="Mantenimiento de equipos" style="margin-bottom:10px;">
+	<p:panel header="#{msgs.eq_header}" style="margin-bottom:10px;">
 		<p:accordionPanel>
-			<p:tab title="Agregar nuevo equipo">
+			<p:tab title="#{msgs.eq_add}">
 				<h:form prependId="false" styleClass="cmxform">
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
 						closable="true" />
 					<fieldset>
-						<legend>Por favor llene todos los campos necesarios</legend>
+						<legend>#{msgs.msg_fill_all}</legend>
 						<table>
 							<tr>
-								<td><h:outputLabel value="Liga elegida" /></td>
+								<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
 								<td><h:selectOneMenu id="selectLiga"
 										value="#{EquipoMB.form_filter_id_liga}">
 										<p:ajax listener="#{EquipoMB.onLigasChange}"
 											update="selectCategoria" />
-										<f:selectItem itemLabel="Seleccione una liga disponible" itemValue="-1" />
+										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}" itemValue="-1" />
 										<f:selectItems value="#{EquipoMB.listLigas}" var="model"
 											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
 									</h:selectOneMenu></td>
 							</tr>
 							<tr>
-								<td><h:outputLabel value="Categoria elegida" /></td>
+								<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
 								<td><h:selectOneMenu id="selectCategoria"
 										value="#{EquipoMB.form_id_categoria}">
-										<f:selectItem itemLabel="Seleccione una categoria de la liga" itemValue="-1" />
+										<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}" itemValue="-1" />
 										<f:selectItems value="#{EquipoMB.listCategoriasFiltradas}"
 											var="model" itemLabel="#{model.nom_categoria}"
 											itemValue="#{model.id_categoria}" />
 									</h:selectOneMenu></td>
 							</tr>
 							<tr>
-								<td><h:outputLabel value="Nombre del equipo" /></td>
+								<td><h:outputLabel value="#{msgs.eq_name}" /></td>
 								<td><p:inputText id="nombre"
 										value="#{EquipoMB.form_nom_equipo}">
 										<f:validateLength minimum="5" />
@@ -49,7 +49,7 @@
 							</tr>
 
 							<tr>
-								<td><h:outputLabel value="Localidad del equipo" /></td>
+								<td><h:outputLabel value="#{msgs.eq_local}" /></td>
 								<td><p:inputText id="localidad"
 										value="#{EquipoMB.form_localidad}">
 										<f:validateLength minimum="5" />
@@ -57,14 +57,14 @@
 							</tr>
 							<tr>
 								<td><p:commandButton id="agregarEquipo"
-										value="Registrar equipo" action="#{EquipoMB.agregarEquipo}"
+										value="#{msgs.eq_button_add}" action="#{EquipoMB.agregarEquipo}"
 										ajax="false" /></td>
 							</tr>
 						</table>
 					</fieldset>
 				</h:form>
 			</p:tab>
-			<p:tab title="Ver equipos disponibles">
+			<p:tab title="#{msgs.eq_dispon}">
 				<h:form id="form">
 
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
@@ -77,45 +77,45 @@
 
 						<p:column style="width:3%">
 							<f:facet name="header">
-								<h:outputText value="ID" />
+								<h:outputText value="#{msgs.col_header_id}" />
 							</f:facet>
 							<h:outputText value="#{equipo.id_equipo}" />
 						</p:column>
 
-						<p:column headerText="Liga">
+						<p:column headerText="#{msgs.cat_header_liga}">
 							<h:outputText value="#{equipo.categoria.liga.nom_liga}" />
 						</p:column>
 
-						<p:column headerText="Categoria">
+						<p:column headerText="#{msgs.cat_header_categoria}">
 							<h:outputText value="#{equipo.categoria.nom_categoria}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Equipo" />
+								<h:outputText value="#{msgs.eq_header_equipo}" />
 							</f:facet>
 							<h:outputText value="#{equipo.nom_equipo}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Localidad" />
+								<h:outputText value="#{msgs.eq_header_local}" />
 							</f:facet>
 							<h:outputText value="#{equipo.localidad}" />
 						</p:column>
 
 						<p:column style="width:7%">
 							<f:facet name="header">
-								<h:outputText value="Opciones" />
+								<h:outputText value="#{msgs.col_header_opc}" />
 							</f:facet>
 
 							<h:panelGroup style="white-space: nowrap">
-								<p:commandButton icon="ui-icon-pencil" title="Editar liga"
+								<p:commandButton icon="ui-icon-pencil" title="#{msgs.eq_edit_eq}"
 									action="#{EquipoMB.editarEquipo}" update="equipos">
 									<f:setPropertyActionListener value="#{equipo}"
 										target="#{EquipoMB.selectedEquipo}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-trash" title="Borrar Equipo"
+								<p:commandButton icon="ui-icon-trash" title="#{msgs.eq_del_eq}"
 									action="#{EquipoMB.eliminarEquipo}" update="equipos">
 									<f:setPropertyActionListener value="#{equipo}"
 										target="#{EquipoMB.selectedEquipo}" />

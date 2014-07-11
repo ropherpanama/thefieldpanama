@@ -4,13 +4,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Registro de resultados</title>
+	<title>#{msgs.res_title}</title>
 </h:head>
 <h:body>
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
 
-	<p:panel id="panel1" header="Búsqueda de partidos"
+	<p:panel id="panel1" header="#{msgs.res_header}"
 		style="margin-bottom:10px;">
 		<p:accordionPanel>
 			<p:tab title="Filtrar partidos por categoría">
@@ -18,24 +18,24 @@
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
 						closable="true" />
 					<fieldset>
-						<legend>Utilice los filtros para mejorar su busqueda</legend>
+						<legend>#{msgs.res_search}</legend>
 						<table>
 							<tr>
-								<td><h:outputLabel value="Liga del partido" /></td>
+								<td><h:outputLabel value="#{msgs.res_liga}" /></td>
 								<td><h:selectOneMenu id="selectLiga"
 										value="#{ResultadosMB.form_filter_id_liga}">
 										<p:ajax listener="#{ResultadosMB.onLigasChange}"
 											update="selectCategoria" />
-										<f:selectItem itemLabel="Seleccione una liga" itemValue="-1" />
+										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}" itemValue="-1" />
 										<f:selectItems value="#{ResultadosMB.listLigas}" var="model"
 											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
 									</h:selectOneMenu></td>
 							</tr>
 							<tr>
-								<td><h:outputLabel value="Categoria de la liga" /></td>
+								<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
 								<td><h:selectOneMenu id="selectCategoria"
 										value="#{ResultadosMB.form_filter_id_categoria}">
-										<f:selectItem itemLabel="Seleccione una categoria de la liga"
+										<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}"
 											itemValue="-1" />
 										<f:selectItems value="#{ResultadosMB.listCategoriasFiltradas}"
 											var="model" itemLabel="#{model.nom_categoria}"
@@ -44,7 +44,7 @@
 							</tr>
 
 							<tr>
-								<td><h:outputLabel for="fecha" value="Fecha del partido " /></td>
+								<td><h:outputLabel for="fecha" value="#{msgs.par_header_fecha}" /></td>
 								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
 										effect="fold" mode="popup"
 										value="#{ResultadosMB.form_date_partido}" /></td>
@@ -52,7 +52,7 @@
 
 							<tr>
 								<td><p:commandButton id="buscarPartidos"
-										value="Buscar partidos" update=":form:partidos"
+										value="#{msgs.res_search_par}" update=":form:partidos"
 										action="#{ResultadosMB.buscarPartidos}" ajax="false" /></td>
 							</tr>
 						</table>
@@ -61,7 +61,7 @@
 			</p:tab>
 		</p:accordionPanel>
 	</p:panel>
-	<p:panel header="Partidos encontrados">
+	<p:panel header="#{msgs.res_dispon}">
 		<h:form id="form">
 			<p:dataTable id="partidos" var="p"
 				value="#{ResultadosMB.listPartidos}" paginator="true" rows="10"
@@ -70,41 +70,41 @@
 				rowsPerPageTemplate="5,10,15">
 
 				<f:facet name="header">
-					<p:commandButton id="toggler" type="button" value="Columnas"
+					<p:commandButton id="toggler" type="button" value="#{msgs.res_filter_columns}"
 						style="float:right" icon="ui-icon-calculator" />
 					<p:columnToggler datasource="partidos" trigger="toggler" />
 				</f:facet>
 
-				<p:column headerText="Detalle" style="width:50px">
+				<p:column headerText="#{msgs.res_header_detail}" style="width:50px">
 					<p:rowToggler />
 				</p:column>
 
 				<p:column style="width:3%">
 					<f:facet name="header">
-						<h:outputText value="ID" />
+						<h:outputText value="#{msgs.col_header_id}" />
 					</f:facet>
 					<h:outputText value="#{p.id_partido}" />
 				</p:column>
 
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Equipo 1" />
+						<h:outputText value="#{msgs.par_header_eq1}" />
 					</f:facet>
 					<h:outputText value="#{p.equipo1.nom_equipo}" />
 				</p:column>
 
-				<p:column headerText=" Total " style="text-align: center;">
+				<p:column headerText="#{msgs.par_total_pts}" style="text-align: center;">
 					<h:outputText value="#{p.toString()}" />
 				</p:column>
 
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Equipo 2" />
+						<h:outputText value="#{msgs.par_header_eq2}" />
 					</f:facet>
 					<h:outputText value="#{p.equipo2.nom_equipo}" />
 				</p:column>
 
-				<p:column headerText="Periodos" style="width:6%">
+				<p:column headerText="#{msgs.res_header_pers}" style="width:6%">
 					<p:commandButton value="+" oncomplete="PF('dlg_periodo').show();"
 						update=":dialog_form:dlg_periodo">
 						<f:setPropertyActionListener value="#{p}"
@@ -115,13 +115,13 @@
 				<p:rowExpansion>
 					<p:dataTable id="detallePeriodos" var="details" rowIndexVar="rowIndex"
 						value="#{p.periodosPartido}"
-						emptyMessage="No se han incluido periodos">
+						emptyMessage="#{msgs.res_empty_table}">
 
 						<f:facet name="header">
-							<h:outputText value="Periodos del partido" />
+							<h:outputText value="#{msgs.res_per_dispon}" />
 						</f:facet>
 
-						<p:column headerText="Periodo" style="width:5%">
+						<p:column headerText="#{msgs.res_header_per}" style="width:5%">
         					#{rowIndex+1}
     					</p:column>
 
@@ -135,7 +135,7 @@
 								value="#{details.partido.equipo2.nom_equipo} : #{details.pts_equipo_2}" />
 						</p:column>
 
-						<p:column headerText="Opciones" style="width:6%">
+						<p:column headerText="#{msgs.col_header_opc}" style="width:6%">
 							<p:commandButton icon="ui-icon-trash" action="#{ResultadosMB.eliminarPeriodo}" 
 								update="detallePeriodos">
 								<f:setPropertyActionListener value="#{details}"
@@ -151,7 +151,7 @@
 
 	<h:form id="dialog_form">
 		<!-- Dialogo para añadir periodos al partido -->
-		<p:dialog header="Añadir periodos al partido" id="dlg_periodo"
+		<p:dialog header="#{msgs.res_dlg_title}" id="dlg_periodo"
 			widgetVar="dlg_periodo" modal="true" showEffect="explode"
 			hideEffect="bounce" height="100">
 			<p:panel style="text-align:center;"

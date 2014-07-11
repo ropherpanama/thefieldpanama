@@ -4,31 +4,32 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Resumen de categorias</title>
+	<title>#{msgs.cat_title}</title>
 </h:head>
 <h:body>
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
-	<p:panel header="Mantenimiento de categorias" style="margin-bottom:10px;">
+	<p:panel header="#{msgs.cat_header}" style="margin-bottom:10px;">
 		<p:accordionPanel>
-			<p:tab title="Agregar nueva categoria">
+			<p:tab title="#{msgs.cat_add}">
 				<h:form prependId="false" styleClass="cmxform">
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
 						closable="true" />
 					<fieldset>
-						<legend>Por favor llene todos los campos necesarios</legend>
+						<legend>#{msgs.msg_fill_all}</legend>
 						<table>
 							<tr>
-								<td><h:outputLabel value="Liga elegida" /></td>
+								<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
 								<td><h:selectOneMenu id="selectOneCb"
 										value="#{CategoriaMB.form_id_liga}">
-										<f:selectItem itemLabel="Seleccione una liga disponible" itemValue="-1" />
+										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
+											itemValue="-1" />
 										<f:selectItems value="#{CategoriaMB.listLigas}" var="model"
 											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
 									</h:selectOneMenu></td>
 							</tr>
 							<tr>
-								<td><h:outputLabel value="Nombre de la categoria" /></td>
+								<td><h:outputLabel value="#{msgs.cat_name}" /></td>
 								<td><p:inputText id="nombre"
 										value="#{CategoriaMB.form_nom_categoria}">
 										<f:validateLength minimum="5" />
@@ -36,14 +37,14 @@
 							</tr>
 							<tr>
 								<td><p:commandButton id="agregarCategoria"
-										value="Registrar categoria"
+										value="#{msgs.cat_button_add}"
 										action="#{CategoriaMB.agregarCategoria}" ajax="false" /></td>
 							</tr>
 						</table>
 					</fieldset>
 				</h:form>
 			</p:tab>
-			<p:tab title="Ver categorias disponibles">
+			<p:tab title="#{msgs.cat_dispon}">
 				<h:form id="form">
 
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
@@ -56,34 +57,36 @@
 
 						<p:column style="width:3%">
 							<f:facet name="header">
-								<h:outputText value="ID" />
+								<h:outputText value="#{msgs.col_header_id}" />
 							</f:facet>
 							<h:outputText value="#{cat.id_categoria}" />
 						</p:column>
 
-						<p:column headerText="Liga">
+						<p:column headerText="#{msgs.cat_header_liga}">
 							<h:outputText value="#{cat.liga.nom_liga}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Categoria" />
+								<h:outputText value="#{msgs.cat_header_categoria}" />
 							</f:facet>
 							<h:outputText value="#{cat.nom_categoria}" />
 						</p:column>
 
 						<p:column style="width:7%">
 							<f:facet name="header">
-								<h:outputText value="Opciones" />
+								<h:outputText value="#{msgs.col_header_opc}" />
 							</f:facet>
 
 							<h:panelGroup style="white-space: nowrap">
-								<p:commandButton icon="ui-icon-pencil" title="Editar liga"
+								<p:commandButton icon="ui-icon-pencil"
+									title="#{msgs.cat_edit_cat}"
 									action="#{CategoriaMB.editarCategoria}" update="categorias">
 									<f:setPropertyActionListener value="#{cat}"
 										target="#{CategoriaMB.selectedCategoria}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-trash" title="Borrar Categoria"
+								<p:commandButton icon="ui-icon-trash"
+									title="#{msgs.cat_del_cat}"
 									action="#{CategoriaMB.eliminarCategoria}" update="categorias">
 									<f:setPropertyActionListener value="#{cat}"
 										target="#{CategoriaMB.selectedCategoria}" />
@@ -97,7 +100,7 @@
 			</p:tab>
 		</p:accordionPanel>
 	</p:panel>
-	
+
 	<ui:include src="/public/footer.xhtml"></ui:include>
 
 </h:body>

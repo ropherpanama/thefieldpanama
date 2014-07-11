@@ -6,12 +6,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
+import org.apache.log4j.Logger;
+
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Liga;
@@ -24,7 +28,7 @@ import com.thefieldpanama.utilities.Utilities;
 
 @ManagedBean(name = "PartidoMB")
 @ViewScoped
-public class PartidoManagedBean implements Serializable {
+public class PartidoManagedBean extends AncientManagedBean implements Serializable {
 	private static final long serialVersionUID = -8883168995914955949L;
 	@ManagedProperty(value = "#{PartidoServicio}")
 	PartidoService partidoService;
@@ -34,7 +38,7 @@ public class PartidoManagedBean implements Serializable {
 	CategoriaService categoriaService;
 	@ManagedProperty(value = "#{LigaServicio}")
 	LigaService ligaService;
-
+	private Logger log = Logger.getLogger(this.getClass());
 	private Equipo selectedEquipo1;
 	private Equipo selectedEquipo2;
 	private Categoria selectedCategoria;// Ya esta asociada a la liga
@@ -77,26 +81,23 @@ public class PartidoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro insertado", p.getEquipo1()
+							this.getProvider().getValue("msg_add"), p.getEquipo1()
 									.getNom_equipo()
 									+ " vs "
 									+ p.getEquipo2().getNom_equipo()));
 			partidoService.addPartido(p);
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
 	public void editarPartido() {
 		try {
 			boolean update = false;
-			
-			System.out.println("fecha " + getForm_fecha() + 
-					"\nHora " + getForm_hora() + 
-					"\nLugar " + getForm_lugar());
 			
 			if(getForm_fecha() != null) {
 				selectedPartido.setFecha(getForm_fecha());
@@ -118,14 +119,15 @@ public class PartidoManagedBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(
 						null,
 						new FacesMessage(FacesMessage.SEVERITY_INFO,
-								"Registro editado", "ID: "
+								this.getProvider().getValue("msg_upt"), "ID: "
 										+ selectedPartido.getId_partido()));
 			}
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -135,13 +137,14 @@ public class PartidoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Registro eliminado", "ID: "
+							this.getProvider().getValue("msg_del"), "ID: "
 									+ selectedPartido.getId_partido()));
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							"Error de sistema", e.getMessage()));
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
 
@@ -349,8 +352,8 @@ public class PartidoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Nada por aqui",
-							"La liga seleccionada no tiene categorias"));
+							this.getProvider().getValue("msg_nothing"),
+							this.getProvider().getValue("liga_sin_cats")));
 		}
 	}
 
@@ -371,8 +374,8 @@ public class PartidoManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Nada por aqui",
-							"La categoria seleccionada no contiene equipos"));
+							this.getProvider().getValue("msg_nothing"),
+							this.getProvider().getValue("liga_sin_cats")));
 		}
 	}
 

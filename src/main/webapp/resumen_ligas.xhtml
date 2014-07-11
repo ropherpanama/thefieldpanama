@@ -4,40 +4,40 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Resumen de registros</title>
+	<title>#{msgs.lig_title}</title>
 </h:head>
 <h:body>
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
 
-	<p:panel header="Mantenimiento de Ligas" style="margin-bottom:10px;">
+	<p:panel header="#{msgs.lig_mant}" style="margin-bottom:10px;">
 		<p:accordionPanel>
-			<p:tab title="Agregar nueva liga">
+			<p:tab title="#{msgs.lig_add}">
 				<h:form>
 					<table>
 						<!-- 			Campo para ingresar el nombre de la liga -->
 						<tr>
-							<td><h:outputLabel for="nombre" value="Nombre de la liga" /></td>
+							<td><h:outputLabel for="nombre" value="#{msgs.lig_name}" /></td>
 							<td><p:inputText id="nombre" value="#{LigaMB.nom_liga}">
 								</p:inputText> <h:message for="nombre" style="color:red" /></td>
 						</tr>
 						<!-- 			Campo para ingresar el nombre de la liga -->
 
 						<tr>
-							<td><h:outputLabel for="f_ini" value="Fecha de inicio " /></td>
+							<td><h:outputLabel for="f_ini" value="#{msgs.lig_ini_date}" /></td>
 							<td><p:calendar id="f_ini" pattern="dd-MM-yyyy" mode="popup"
 									value="#{LigaMB.f_ini}" effect="fold" /></td>
 						</tr>
 
 						<tr>
-							<td><h:outputLabel for="f_fin" value="Fecha de termino " /></td>
+							<td><h:outputLabel for="f_fin" value="#{msgs.lig_fin_date}" /></td>
 							<td><p:calendar id="f_fin" pattern="dd-MM-yyyy" mode="popup"
 									value="#{LigaMB.f_fin}" effect="fold" /></td>
 						</tr>
 
 						<!-- Botones del formulario -->
 						<tr>
-							<td><p:commandButton id="agregarLiga" value="Registrar liga"
+							<td><p:commandButton id="agregarLiga" value="#{msgs.lig_button_add}"
 									action="#{LigaMB.agregarLiga}" ajax="false" /></td>
 							<td><p:commandButton id="reset" value="Limpiar campos"
 									action="#{LigaMB.reset}" ajax="false" /></td>
@@ -46,7 +46,7 @@
 					</table>
 				</h:form>
 			</p:tab>
-			<p:tab title="Ligas disponibles">
+			<p:tab title="#{msgs.lig_dispon}">
 				<h:form id="form">
 
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
@@ -60,42 +60,42 @@
 
 						<p:column style="width:3%">
 							<f:facet name="header">
-								<h:outputText value="ID" />
+								<h:outputText value="#{msgs.col_header_id}" />
 							</f:facet>
 							<h:outputText value="#{liga.id}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Nombre" />
+								<h:outputText value="#{msgs.lig_name}" />
 							</f:facet>
 							<h:outputText value="#{liga.nom_liga}" />
 						</p:column>
 
-						<p:column headerText="Fecha de inicio">
+						<p:column headerText="#{msgs.lig_ini_date}">
 							<h:outputText value="#{liga.f_ini}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Fecha de termino" />
+								<h:outputText value="#{msgs.lig_fin_date}" />
 							</f:facet>
 							<h:outputText value="#{liga.f_fin}" />
 						</p:column>
 
 						<p:column style="width:7%">
 							<f:facet name="header">
-								<h:outputText value="Opciones" />
+								<h:outputText value="#{msgs.col_header_opc}" />
 							</f:facet>
 
 							<h:panelGroup style="white-space: nowrap">
-								<p:commandButton icon="ui-icon-pencil" title="Editar liga"
+								<p:commandButton icon="ui-icon-pencil" title="#{msgs.lig_edit_lig}"
 									oncomplete="PF('dlg_edit').show();"
 									update=":edit_form:dlg_edit">
 									<f:setPropertyActionListener value="#{liga}"
 										target="#{LigaMB.selectedLiga}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-trash" title="Borrar Liga"
+								<p:commandButton icon="ui-icon-trash" title="#{msgs.lig_del_lig}"
 									action="#{LigaMB.eliminarLiga}" update="ligas">
 									<f:setPropertyActionListener value="#{liga}"
 										target="#{LigaMB.selectedLiga}" />
@@ -112,7 +112,7 @@
 	</p:panel>
 
 	<h:form id="edit_form">
-		<p:dialog header="Editar detalles de la liga" id="dlg_edit"
+		<p:dialog header="#{msgs.lig_dlg_title}" id="dlg_edit"
 			widgetVar="dlg_edit" modal="true" showEffect="explode"
 			hideEffect="bounce" style="height: 'auto';">
 			<p:panel style="text-align:center;"

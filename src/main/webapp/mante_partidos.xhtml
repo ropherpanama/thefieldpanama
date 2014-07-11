@@ -4,41 +4,41 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Registro de partidos</title>
+	<title>#{msgs.par_title}</title>
 </h:head>
 <h:body>
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
 
-	<p:panel id="panel1" header="Mantenimiento de partidos"
+	<p:panel id="panel1" header="#{msgs.par_header}"
 		style="margin-bottom:10px;">
 		<p:accordionPanel>
-			<p:tab title="Registrar nuevo partido">
+			<p:tab title="#{msgs.par_add}">
 				<h:form id="first_form" prependId="false" styleClass="cmxform">
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
 						closable="true" />
 					<fieldset>
-						<legend>Por favor llene todos los campos necesarios</legend>
+						<legend>#{msgs.msg_fill_all}</legend>
 						<table>
 							<tr>
-								<td><h:outputLabel value="Liga del partido" /></td>
+								<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
 								<td><h:selectOneMenu id="selectLiga"
 										value="#{PartidoMB.form_filter_id_liga}">
 										<p:ajax listener="#{PartidoMB.onLigasChange}"
 											update="selectCategoria" />
-										<f:selectItem itemLabel="Seleccione una liga disponible"
+										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
 											itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listLigas}" var="model"
 											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
 									</h:selectOneMenu></td>
 							</tr>
 							<tr>
-								<td><h:outputLabel value="Categoria de la liga" /></td>
+								<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
 								<td><h:selectOneMenu id="selectCategoria"
 										value="#{PartidoMB.form_filter_id_categoria}">
 										<p:ajax listener="#{PartidoMB.onCategoriasChange}"
 											update="selectEquipo1" />
-										<f:selectItem itemLabel="Seleccione una categoria de la liga"
+										<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}"
 											itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listCategoriasFiltradas}"
 											var="model" itemLabel="#{model.nom_categoria}"
@@ -47,21 +47,21 @@
 							</tr>
 
 							<tr>
-								<td><h:outputLabel value="Equipo 1" /></td>
+								<td><h:outputLabel value="#{msgs.par_header_eq1}" /></td>
 								<td><h:selectOneMenu id="selectEquipo1"
 										value="#{PartidoMB.form_filter_eq1}">
 										<p:ajax listener="#{PartidoMB.onPrimerEquipoElegido}"
 											update="selectEquipo2" />
-										<f:selectItem itemLabel="Seleccione un equipo" itemValue="-1" />
+										<f:selectItem itemLabel="#{msgs.par_selector_eq_default}" itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
 											var="model" itemLabel="#{model.nom_equipo}"
 											itemValue="#{model.id_equipo}" />
 									</h:selectOneMenu></td>
 
-								<td><h:outputLabel value="Equipo 2" /></td>
+								<td><h:outputLabel value="#{msgs.par_header_eq2}" /></td>
 								<td><h:selectOneMenu id="selectEquipo2"
 										value="#{PartidoMB.form_filter_eq2}">
-										<f:selectItem itemLabel="Seleccione un equipo" itemValue="-1" />
+										<f:selectItem itemLabel="#{msgs.par_selector_eq_default}" itemValue="-1" />
 										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
 											var="model" itemLabel="#{model.nom_equipo}"
 											itemValue="#{model.id_equipo}" />
@@ -69,33 +69,33 @@
 							</tr>
 
 							<tr>
-								<td><h:outputLabel for="fecha" value="Fecha del partido " /></td>
+								<td><h:outputLabel for="fecha" value="#{msgs.par_header_fecha}" /></td>
 								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
 										effect="fold" mode="popup" value="#{PartidoMB.form_fecha}" /></td>
 							</tr>
 
 							<tr>
-								<td><h:outputLabel value="Hora del partido" /></td>
+								<td><h:outputLabel value="#{msgs.par_header_hora}" /></td>
 								<td><p:calendar id="hora" value="#{PartidoMB.form_hora}"
 										pattern="hh:mm a" timeOnly="true" effect="fold" /></td>
 							</tr>
 
 							<tr>
-								<td><h:outputLabel value="Lugar del partido" /></td>
+								<td><h:outputLabel value="#{msgs.par_header_lugar}" /></td>
 								<td><p:inputText id="lugar" value="#{PartidoMB.form_lugar}">
 									</p:inputText> <h:message for="lugar" style="color:red" /></td>
 							</tr>
 
 							<tr>
 								<td><p:commandButton id="agregarPartido"
-										value="Registrar partido" action="#{PartidoMB.agregarPartido}"
+										value="#{msgs.par_button_add}" action="#{PartidoMB.agregarPartido}"
 										ajax="false" /></td>
 							</tr>
 						</table>
 					</fieldset>
 				</h:form>
 			</p:tab>
-			<p:tab title="Partidos registrados">
+			<p:tab title="#{msgs.par_dispon}">
 
 				<h:form id="form">
 
@@ -106,73 +106,73 @@
 
 						<p:column style="width:3%">
 							<f:facet name="header">
-								<h:outputText value="ID" />
+								<h:outputText value="#{msgs.col_header_id}" />
 							</f:facet>
 							<h:outputText value="#{p.id_partido}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Liga" />
+								<h:outputText value="#{msgs.cat_header_liga}" />
 							</f:facet>
 							<h:outputText value="#{p.equipo1.categoria.liga.nom_liga}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Categoria" />
+								<h:outputText value="#{msgs.cat_header_categoria}" />
 							</f:facet>
 							<h:outputText value="#{p.equipo1.categoria.nom_categoria}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Equipo 1" />
+								<h:outputText value="#{msgs.par_header_eq1}" />
 							</f:facet>
 							<h:outputText value="#{p.equipo1.nom_equipo}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Equipo 2" />
+								<h:outputText value="#{msgs.par_header_eq2}" />
 							</f:facet>
 							<h:outputText value="#{p.equipo2.nom_equipo}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Lugar" />
+								<h:outputText value="#{msgs.par_header_lugar}" />
 							</f:facet>
 							<h:outputText value="#{p.lugar}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Fecha del partido" />
+								<h:outputText value="#{msgs.par_header_fecha}" />
 							</f:facet>
 							<h:outputText value="#{p.fecha}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Hora" />
+								<h:outputText value="#{msgs.par_header_hora_par}" />
 							</f:facet>
 							<h:outputText value="#{p.hora}" />
 						</p:column>
 
 						<p:column style="width:7%">
 							<f:facet name="header">
-								<h:outputText value="Opciones" />
+								<h:outputText value="#{msgs.col_header_opc}" />
 							</f:facet>
 
 							<h:panelGroup style="white-space: nowrap">
-								<p:commandButton icon="ui-icon-pencil" title="Editar partido"
+								<p:commandButton icon="ui-icon-pencil" title="#{msgs.par_edit_par}"
 									oncomplete="PF('dlg_edit').show();"
 									update=":edit_form:dlg_edit">
 									<f:setPropertyActionListener value="#{p}"
 										target="#{PartidoMB.selectedPartido}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-trash" title="Borrar partido"
+								<p:commandButton icon="ui-icon-trash" title="#{msgs.par_del_par}"
 									action="#{PartidoMB.eliminarPartido}" update="partidos">
 									<f:setPropertyActionListener value="#{p}"
 										target="#{PartidoMB.selectedPartido}" />
@@ -189,25 +189,25 @@
 
 	<!-- 	Dialogo para edicion de registro -->
 	<h:form id="edit_form">
-		<p:dialog header="Editar detalles del partido" id="dlg_edit"
+		<p:dialog header="#{msgs.par_dlg_title}" id="dlg_edit"
 			widgetVar="dlg_edit" modal="true" showEffect="explode"
 			hideEffect="bounce" style="height: 'auto';">
 			<p:panel style="text-align:center;"
 				header="#{PartidoMB.selectedPartido.equipo1.nom_equipo} vs #{PartidoMB.selectedPartido.equipo2.nom_equipo}">
 				<table>
 					<tr>
-						<td><h:outputLabel value="Lugar del partido" /></td>
+						<td><h:outputLabel value="#{msgs.par_header_lugar}" /></td>
 						<td><p:inputText id="lugar" value="#{PartidoMB.form_lugar}">
 							</p:inputText></td>
 					</tr>
 					<tr>
-						<td><h:outputLabel for="fecha" value="Fecha del partido " /></td>
+						<td><h:outputLabel for="fecha" value="#{msgs.par_header_fecha}" /></td>
 						<td><p:calendar id="fecha" pattern="dd-MM-yyyy" effect="fold"
 								mode="popup" value="#{PartidoMB.form_fecha}" /></td>
 					</tr>
 
 					<tr>
-						<td><h:outputLabel value="Hora del partido" /></td>
+						<td><h:outputLabel value="#{msgs.par_header_hora}" /></td>
 						<td><p:calendar id="hora" value="#{PartidoMB.form_hora}"
 								pattern="hh:mm a" timeOnly="true" effect="fold" /></td>
 					</tr>

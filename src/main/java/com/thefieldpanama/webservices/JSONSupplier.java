@@ -54,6 +54,8 @@ public class JSONSupplier extends JSONCore {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String ligas() {
 		try {
+			catsWs.clear();
+			listWs.clear();
 			ligas = this.getLigaService().listLigas();
 
 			for (Liga l : ligas) {
@@ -111,6 +113,8 @@ public class JSONSupplier extends JSONCore {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String equipos() {
 		try {
+			equiposWs.clear();
+			
 			for (Liga l : ligas) {
 				Iterator<Categoria> it = l.getCategoriasDeLiga().iterator();
 
@@ -149,6 +153,7 @@ public class JSONSupplier extends JSONCore {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String calendario() {
 		try {
+			calendWs.clear();
 			partidos = this.getPartidoService().listPartidos();
 			// Se cargan los datos del calendario a partir del listado de
 			// partidos disponible
@@ -161,6 +166,7 @@ public class JSONSupplier extends JSONCore {
 				cws.setFecha(p.getFecha());
 				cws.setHora(p.getHora());
 				cws.setLugar(p.getLugar());
+				calendWs.add(cws);
 			}
 			return this.getMapper().writeValueAsString(calendWs);
 		} catch (Exception e) {

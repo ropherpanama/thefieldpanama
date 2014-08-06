@@ -183,14 +183,22 @@ public class JSONSupplier extends JSONCore {
 				rws.setNomEquipo2(p.getEquipo2().getNom_equipo());
 				rws.setIdPartido(p.getId_partido());
 				
+				int total1 = 0;
+				int total2 = 0;
+				
 				Iterator<Periodo> it = p.getPeriodosPartido().iterator();
 				while(it.hasNext()) {
 					Periodo pd = it.next();
 					String str = String.format("%1$s : %2$-4d - %3$s : %4$d", p.getEquipo1().getNom_equipo(), pd.getPts_equipo_1(), p.getEquipo2().getNom_equipo(), pd.getPts_equipo_2());
 					periodos.add(str);
+					
+					total1 += pd.getPts_equipo_1();
+					total2 += pd.getPts_equipo_2();
 				}
+				rws.setPeriodos(periodos);
+				rws.setTotalPtsEquipo1(total1);
+				rws.setTotalPtsEquipo2(total2); 
 				
-				rws.setPeriodos(periodos); 
 				scoresWs.add(rws);
 			}
 			return this.getMapper().writeValueAsString(calendWs);

@@ -67,7 +67,8 @@
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
-			<value>file:c:/jdbc.properties</value>
+<!-- 			<value>file:c:/jdbc.properties</value> -->
+			<value>file:/usr/glassfish/jdbc.properties</value>
 		</property>
 	</bean>
 

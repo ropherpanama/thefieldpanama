@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "CATEGORIAS")
+@Table(name = "categorias")
 public class Categoria {
 	private Integer id_categoria;
 	private String nom_categoria;

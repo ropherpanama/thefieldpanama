@@ -10,10 +10,26 @@ public class ResultadosWS implements Serializable {
 	private String nomEquipo1;
 	private String nomEquipo2;
 	ArrayList<String> periodos;
-//	private int ptsEquipo1;
-//	private int ptsEquipo2;
+	private int totalPtsEquipo1;
+	private int totalPtsEquipo2;
 //	private int numPeriodo;
 	private int idPartido;
+
+	public int getTotalPtsEquipo1() {
+		return totalPtsEquipo1;
+	}
+
+	public void setTotalPtsEquipo1(int totalPtsEquipo1) {
+		this.totalPtsEquipo1 = totalPtsEquipo1;
+	}
+
+	public int getTotalPtsEquipo2() {
+		return totalPtsEquipo2;
+	}
+
+	public void setTotalPtsEquipo2(int totalPtsEquipo2) {
+		this.totalPtsEquipo2 = totalPtsEquipo2;
+	}
 
 	public int getIdPartido() {
 		return idPartido;
@@ -62,28 +78,4 @@ public class ResultadosWS implements Serializable {
 	public void setPeriodos(ArrayList<String> periodos) {
 		this.periodos = periodos;
 	}
-
-//	public int getPtsEquipo1() {
-//		return ptsEquipo1;
-//	}
-//
-//	public void setPtsEquipo1(int ptsEquipo1) {
-//		this.ptsEquipo1 = ptsEquipo1;
-//	}
-//
-//	public int getPtsEquipo2() {
-//		return ptsEquipo2;
-//	}
-//
-//	public void setPtsEquipo2(int ptsEquipo2) {
-//		this.ptsEquipo2 = ptsEquipo2;
-//	}
-//
-//	public int getNumPeriodo() {
-//		return numPeriodo;
-//	}
-//
-//	public void setNumPeriodo(int numPeriodo) {
-//		this.numPeriodo = numPeriodo;
-//	}
 }

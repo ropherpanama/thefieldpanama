@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PARTIDOS")
+@Table(name = "partidos")
 public class Partido {
 	private Integer id_partido;
 	private Equipo equipo1;

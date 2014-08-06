@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PERIODOS")
+@Table(name = "periodos")
 public class Periodo {
 	private Integer id_periodo;
 	private int pts_equipo_1;

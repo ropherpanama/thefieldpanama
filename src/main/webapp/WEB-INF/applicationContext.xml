@@ -10,56 +10,79 @@
 	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
 	<context:component-scan base-package="com.thefieldpanama" />
+
+
+	<!-- Use annotation for configuration -->
 	<context:annotation-config />
 	<context:spring-configured />
-	
+
 	<bean id="Liga" class="com.thefieldpanama.beans.Liga" />
-	
+
 	<bean id="LigaServicio" class="com.thefieldpanama.services.LigaServiceImpl">
 		<property name="ligaDAO" ref="LigaDAO" />
 	</bean>
-	
+
 	<bean id="LigaDAO" class="com.thefieldpanama.dao.LigaDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
 
 	<bean id="Categoria" class="com.thefieldpanama.beans.Categoria" />
-	
+
 	<bean id="CategoriaServicio" class="com.thefieldpanama.services.CategoriaServiceImpl">
 		<property name="categoriaDAO" ref="CategoriaDAO" />
 	</bean>
-	
+
 	<bean id="CategoriaDAO" class="com.thefieldpanama.dao.CategoriaDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
-	
+
 	<bean id="Equipo" class="com.thefieldpanama.beans.Equipo" />
-	
+
 	<bean id="EquipoServicio" class="com.thefieldpanama.services.EquipoServiceImpl">
 		<property name="equipoDAO" ref="EquipoDAO" />
 	</bean>
-	
+
 	<bean id="EquipoDAO" class="com.thefieldpanama.dao.EquipoDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
-	
+
 	<bean id="Partido" class="com.thefieldpanama.beans.Partido" />
-	
+
 	<bean id="PartidoServicio" class="com.thefieldpanama.services.PartidoServiceImpl">
 		<property name="partidoDAO" ref="PartidoDAO" />
 	</bean>
-	
+
 	<bean id="PartidoDAO" class="com.thefieldpanama.dao.PartidoDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
 
 	<bean id="Periodo" class="com.thefieldpanama.beans.Periodo" />
-	
+
 	<bean id="PeriodoServicio" class="com.thefieldpanama.services.PeriodoServiceImpl">
 		<property name="periodoDAO" ref="PeriodoDAO" />
 	</bean>
-	
+
 	<bean id="PeriodoDAO" class="com.thefieldpanama.dao.PeriodoDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
+	<bean id="Usuario" class="com.thefieldpanama.beans.Usuario" />
+
+	<bean id="UsuarioServicio" class="com.thefieldpanama.services.UsuariosServiceImpl">
+		<property name="usuariosDAO" ref="UsuarioDAO" />
+	</bean>
+
+	<bean id="UsuarioDAO" class="com.thefieldpanama.dao.UsuariosDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+
+	<bean id="Roles" class="com.thefieldpanama.beans.Roles" />
+
+	<bean id="RolesServicio" class="com.thefieldpanama.services.RolesServiceImpl">
+		<property name="rolesDAO" ref="RolesDAO" />
+	</bean>
+
+	<bean id="RolesDAO" class="com.thefieldpanama.dao.RolesDAOImpl">
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
 	

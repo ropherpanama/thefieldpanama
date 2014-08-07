@@ -3,15 +3,16 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-	<h:form id="menu_form">
+	<h:form id="menu_form" >
 		<p:menu styleClass="ui-menubar" style="width: auto;">
 			<p:submenu label="#{msgs.menu_header}">
-				<p:menuitem value="#{msgs.menu_1}" outcome="index" icon="ui-icon-home" />
-				<p:menuitem value="#{msgs.menu_2}" outcome="resumen_ligas" />
-				<p:menuitem value="#{msgs.menu_3}" outcome="mante_categorias" />
-				<p:menuitem value="#{msgs.menu_4}" outcome="mante_equipos" />
-				<p:menuitem value="#{msgs.menu_5}" outcome="mante_partidos" />
-				<p:menuitem value="#{msgs.menu_6}" outcome="mante_resultados" />
+				<p:menuitem value="#{msgs.menu_1}" outcome="/private/index" icon="ui-icon-home" />
+				<p:menuitem value="#{msgs.menu_2}" outcome="/private/resumen_ligas" />
+				<p:menuitem value="#{msgs.menu_3}" outcome="/private/mante_categorias" />
+				<p:menuitem value="#{msgs.menu_4}" outcome="/private/mante_equipos" />
+				<p:menuitem value="#{msgs.menu_5}" outcome="/private/mante_partidos" />
+				<p:menuitem value="#{msgs.menu_6}" outcome="/private/mante_resultados" />
+				<p:menuitem value="#{msgs.cerrar_sesion}" url="/logout" />
 			</p:submenu>
 		</p:menu>
 	</h:form>

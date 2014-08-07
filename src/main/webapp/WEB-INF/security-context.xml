@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<!-- Enable method level Spring Security by annotations -->
+	<sec:global-method-security
+		pre-post-annotations="enabled" />
+	<sec:http auto-config="true" use-expressions="true">
+
+		<sec:intercept-url pattern="/private/**" access="isAuthenticated()" />
+
+		<sec:intercept-url pattern="/public/**" access="permitAll" />
+
+		<sec:intercept-url pattern="/javax.faces.resource/**" access="permitAll" />
+		
+		<sec:intercept-url pattern="/services/app/**" access="permitAll"/> 
+
+		<sec:form-login login-page="/public/login.xhtml" />
+
+		<sec:logout invalidate-session="true" logout-success-url="/" logout-url="/logout" />
+
+	</sec:http>
+
+	<!-- Set customUserDetailsService class as the authentication Manager for 
+		Spring Security -->
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider user-service-ref="customUserDetailsService">
+			<sec:password-encoder hash="plaintext"></sec:password-encoder> 
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+
+	<!-- Inject authentication Manager to our LoginBean -->
+	<beans:bean id="loginBean" name="loginBean"
+		class="com.thefieldpanama.managedbeans.LoginManagedBean" scope="prototype">
+		<beans:property name="authenticationManager" ref="authenticationManager"></beans:property>
+	</beans:bean>
+	
+</beans:beans>

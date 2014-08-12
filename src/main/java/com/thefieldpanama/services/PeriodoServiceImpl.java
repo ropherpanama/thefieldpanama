@@ -1,8 +1,11 @@
 package com.thefieldpanama.services;
 
 import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
+
 import com.thefieldpanama.beans.Periodo;
+import com.thefieldpanama.beans.Scores;
 import com.thefieldpanama.dao.PeriodoDAO;
 
 @Transactional(readOnly = true)
@@ -51,5 +54,10 @@ public class PeriodoServiceImpl implements PeriodoService {
 	@Transactional(readOnly = false)
 	public List<Periodo> getPeriodosByIdPartido(int id_partido) {
 		return periodoDAO.getPeriodosByIdPartido(id_partido);
+	}
+
+	@Override
+	public List<Scores> getTodayScores() {
+		return periodoDAO.getTodayScores();
 	}
 }

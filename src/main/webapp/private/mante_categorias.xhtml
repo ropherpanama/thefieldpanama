@@ -63,11 +63,11 @@
 							<h:outputText value="#{cat.id_categoria}" />
 						</p:column>
 
-						<p:column headerText="#{msgs.cat_header_liga}">
+						<p:column headerText="#{msgs.cat_header_liga}" filterBy="#{cat.liga.nom_liga}" footerText="contains" filterMatchMode="contains">
 							<h:outputText value="#{cat.liga.nom_liga}" />
 						</p:column>
 
-						<p:column>
+						<p:column filterBy="#{cat.nom_categoria}" headerText="Id" footerText="contains" filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msgs.cat_header_categoria}" />
 							</f:facet>

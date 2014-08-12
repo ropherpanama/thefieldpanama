@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.thefieldpanama.services.LigaService;
 import com.thefieldpanama.services.PartidoService;
+import com.thefieldpanama.services.PeriodoService;
 
 /**
  * Core de los servicios web, de esta clase extienden todos los recursos
@@ -18,6 +19,8 @@ public class JSONCore {
 	private LigaService ligaService;
 	@Autowired
 	private PartidoService partidoService;
+	@Autowired
+	private PeriodoService periodoService;
 	private ObjectMapper mapper = new ObjectMapper();
 
 	public LigaService getLigaService() {
@@ -42,5 +45,13 @@ public class JSONCore {
 
 	public void setPartidoService(PartidoService partidoService) {
 		this.partidoService = partidoService;
+	}
+
+	public PeriodoService getPeriodoService() {
+		return periodoService;
+	}
+
+	public void setPeriodoService(PeriodoService periodoService) {
+		this.periodoService = periodoService;
 	}
 }

@@ -26,7 +26,7 @@ public class EquipoDAOImpl implements EquipoDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Equipo> listEquipos() {
-		return sessionFactory.getCurrentSession().createQuery("from Equipo")
+		return sessionFactory.getCurrentSession().createQuery("from Equipo as e order by e.categoria.liga.id")
 				.list();
 	}
 

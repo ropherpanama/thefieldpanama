@@ -21,6 +21,7 @@ import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Liga;
 import com.thefieldpanama.beans.Partido;
 import com.thefieldpanama.beans.Periodo;
+import com.thefieldpanama.beans.Scores;
 import com.thefieldpanama.utilities.Utilities;
 import com.thefieldpanama.webservices.objects.CalendarioWS;
 import com.thefieldpanama.webservices.objects.CategoriasWS;
@@ -45,6 +46,7 @@ public class JSONSupplier extends JSONCore {
 	private List<Partido> partidos = new ArrayList<Partido>();
 	private List<CalendarioWS> calendWs = new ArrayList<CalendarioWS>();
 	private List<ResultadosWS> scoresWs = new ArrayList<ResultadosWS>();
+	private List<Scores> todayScoresWS = new ArrayList<Scores>();
 	private Logger log = Logger.getLogger(this.getClass());
 
 	/**
@@ -220,6 +222,42 @@ public class JSONSupplier extends JSONCore {
 		try {
 			return this.getMapper().writeValueAsString(scoresWs);
 		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			return null;
+		}
+	}
+	
+	/**
+	 * Este servicio retorna solo los resultados de los partidos del dia
+	 * Para el tab Scores de la Android App
+	 * @return today scores
+	 */
+	@GET
+	@Path("today_scores")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String todayScores() {
+		try {
+			todayScoresWS.clear();
+			List<Scores> temp = this.getPeriodoService().getTodayScores();
+			
+			log.info("TAMAÑO DE LA LISTA DE SCORES RETORNADO ::: " + temp.size()); 
+				
+			
+			for (Scores sc : temp) {
+				if (Utilities.compareHours(sc.getHora()) == 1)
+					sc.setStatus("Por iniciar");
+				else if (Utilities.compareHours(sc.getHora()) == 2)
+					sc.setStatus("En curso");
+				else if (Utilities.compareHours(sc.getHora()) == 3)
+					sc.setStatus("Final");
+				else
+					sc.setStatus("Sin informacion");
+				
+				todayScoresWS.add(sc);
+			}
+			
+			return this.getMapper().writeValueAsString(todayScoresWS);
+		}catch(Exception e) {
 			log.info(Utilities.stringStackTrace(e));
 			return null;
 		}

@@ -83,15 +83,15 @@
 							<h:outputText value="#{equipo.id_equipo}" />
 						</p:column>
 
-						<p:column headerText="#{msgs.cat_header_liga}">
+						<p:column headerText="#{msgs.cat_header_liga}" filterBy="#{equipo.categoria.liga.nom_liga}" footerText="contains" filterMatchMode="contains">
 							<h:outputText value="#{equipo.categoria.liga.nom_liga}" />
 						</p:column>
 
-						<p:column headerText="#{msgs.cat_header_categoria}">
+						<p:column headerText="#{msgs.cat_header_categoria}" filterBy="#{equipo.categoria.nom_categoria}" footerText="contains" filterMatchMode="contains">
 							<h:outputText value="#{equipo.categoria.nom_categoria}" />
 						</p:column>
 
-						<p:column>
+						<p:column filterBy="#{equipo.nom_equipo}" footerText="contains" filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msgs.eq_header_equipo}" />
 							</f:facet>

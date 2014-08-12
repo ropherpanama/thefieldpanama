@@ -32,7 +32,7 @@ public class LigaDAOImpl implements LigaDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Liga> listLigas() {
-		return sessionFactory.getCurrentSession().createQuery("from Liga")
+		return sessionFactory.getCurrentSession().createQuery("from Liga order by nom_liga")
 				.list();
 	}
 

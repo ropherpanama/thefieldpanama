@@ -45,7 +45,7 @@
 								<td><h:outputLabel value="#{msgs.eq_name}" /></td>
 								<td><p:inputText id="nombre"
 										value="#{EquipoMB.form_nom_equipo}">
-										<f:validateLength minimum="5" />
+										<f:validateLength minimum="3" />
 									</p:inputText> <h:message for="nombre" style="color:red" /></td>
 							</tr>
 
@@ -53,7 +53,7 @@
 								<td><h:outputLabel value="#{msgs.eq_local}" /></td>
 								<td><p:inputText id="localidad"
 										value="#{EquipoMB.form_localidad}">
-										<f:validateLength minimum="5" />
+										<f:validateLength minimum="3" />
 									</p:inputText> <h:message for="localidad" style="color:red" /></td>
 							</tr>
 							<tr>
@@ -83,15 +83,15 @@
 							<h:outputText value="#{equipo.id_equipo}" />
 						</p:column>
 
-						<p:column headerText="#{msgs.cat_header_liga}" filterBy="#{equipo.categoria.liga.nom_liga}" footerText="contains" filterMatchMode="contains">
+						<p:column headerText="#{msgs.cat_header_liga}" filterBy="#{equipo.categoria.liga.nom_liga}" footerText="" filterMatchMode="contains">
 							<h:outputText value="#{equipo.categoria.liga.nom_liga}" />
 						</p:column>
 
-						<p:column headerText="#{msgs.cat_header_categoria}" filterBy="#{equipo.categoria.nom_categoria}" footerText="contains" filterMatchMode="contains">
+						<p:column headerText="#{msgs.cat_header_categoria}" filterBy="#{equipo.categoria.nom_categoria}" footerText="" filterMatchMode="contains">
 							<h:outputText value="#{equipo.categoria.nom_categoria}" />
 						</p:column>
 
-						<p:column filterBy="#{equipo.nom_equipo}" footerText="contains" filterMatchMode="contains">
+						<p:column filterBy="#{equipo.nom_equipo}" footerText="" filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msgs.eq_header_equipo}" />
 							</f:facet>

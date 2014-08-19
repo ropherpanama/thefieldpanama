@@ -1,5 +1,7 @@
 package com.thefieldpanama.beans;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "periodos")
-public class Periodo {
+public class Periodo implements Serializable{
+	private static final long serialVersionUID = -344082477279191525L;
 	private Integer id_periodo;
 	private int pts_equipo_1;
 	private int pts_equipo_2;

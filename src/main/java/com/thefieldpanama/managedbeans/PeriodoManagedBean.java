@@ -291,6 +291,23 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
 		}
 	}
+	
+	public void editarPeriodo() {
+		try {
+			periodoService.removePeriodo(selectedPeriodo.getId_periodo());
+			Periodo p = new Periodo();
+			p.setPartido(this.getSelectedPeriodo().getPartido());
+			p.setPts_equipo_1(this.getForm_pts_equipo_1());
+			p.setPts_equipo_2(this.getForm_pts_equipo_2());
+			periodoService.addPeriodo(p);
+		}catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
+		}
+	}
 
 	public List<Partido> getPartidosBuscados() {
 		partidosBuscados = new ArrayList<Partido>();

@@ -1,5 +1,6 @@
 package com.thefieldpanama.beans;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "categorias")
-public class Categoria {
+public class Categoria implements Serializable{
+	private static final long serialVersionUID = -2225788362906294841L;
 	private Integer id_categoria;
 	private String nom_categoria;
 	//Relacion ManyToOne = Varias Categorias solo pertenecen a una Liga

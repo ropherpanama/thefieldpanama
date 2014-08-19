@@ -245,11 +245,11 @@ public class JSONSupplier extends JSONCore {
 			
 			for (Scores sc : temp) {
 				if (Utilities.compareHours(sc.getHora()) == 1)
-					sc.setStatus("Por iniciar");
+					sc.setStatus(sc.getHora());
 				else if (Utilities.compareHours(sc.getHora()) == 2)
-					sc.setStatus("En curso");
+					sc.setStatus("JG");
 				else if (Utilities.compareHours(sc.getHora()) == 3)
-					sc.setStatus("Final");
+					sc.setStatus("FT");
 				else
 					sc.setStatus("Sin informacion");
 				

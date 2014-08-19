@@ -4,6 +4,7 @@ package com.thefieldpanama.beans;
  * ropherpanama@gmail.com
  * Date: 23/06/2014
  */
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +19,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ligas")
-public class Liga {
-
+public class Liga implements Serializable{
+	private static final long serialVersionUID = -3808340059933128946L;
 	private int id;
 	private String nom_liga;
 	private java.util.Date f_ini;

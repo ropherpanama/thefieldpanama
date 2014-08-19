@@ -1,5 +1,6 @@
 package com.thefieldpanama.beans;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,7 +19,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "partidos")
-public class Partido {
+public class Partido implements Serializable{
+	private static final long serialVersionUID = 895509194481347034L;
 	private Integer id_partido;
 	private Equipo equipo1;
 	private Equipo equipo2;

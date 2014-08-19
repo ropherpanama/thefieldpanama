@@ -22,6 +22,15 @@ import org.apache.log4j.Logger;
 public class Utilities {
 	
 	private static Logger log = Logger.getLogger(Utilities.class);
+	public static final String DDMMYYYYSLASH = "dd/MM/yyyy";
+	public static final String DDMMYYYY      = "ddMMyyyy";
+	public static final String DDMMYYYYGUION = "dd-MM-yyyy";
+	public static final String YYYYMMDDGUION = "yyyy-MM-dd";
+	public static final String MMDDYYYYSLASH = "MM/dd/yyyy";
+	public static final String YYYYMMDDHORAGUION = "yyyy-MM-dd HH:mm:ss";
+	public static final String YYYYMMDDHORASLASH = "yyyy/MM/dd HH:mm:ss";
+	public static final String YYYYMMDDHORA = "yyyyMMdd HH:mm:ss";
+	public static final String YYYYMMDD = "yyyyMMdd";
 	/**
 	 * Convierte un java.util.Date a un java.sql.Date
 	 * 
@@ -37,11 +46,25 @@ public class Utilities {
 	 * 
 	 * @return java.sql.Date now
 	 */
-	public static java.sql.Date fechahoy() {
+	public static Date fechahoy() {
 		java.util.Date now = new java.util.Date();
 		java.sql.Date sqlDate = new java.sql.Date(now.getTime());
 		log.info("FECHA DE SYSTEMA SQL TYPE ::: " + sqlDate); 
 		return sqlDate;
+	}
+	
+	public static Date fechahoy(String formato) {
+		try {
+			Date date = new Date();
+	        StringBuilder fechahoy;
+	        SimpleDateFormat YYYYMMDD = new SimpleDateFormat(formato);
+	        fechahoy = new StringBuilder(YYYYMMDD.format(date));
+	        Date retorno = YYYYMMDD.parse(fechahoy.toString());
+			return retorno;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**

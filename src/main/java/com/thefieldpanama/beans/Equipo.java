@@ -1,5 +1,6 @@
 package com.thefieldpanama.beans;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "equipos")
-public class Equipo {
+public class Equipo implements Serializable{
+	private static final long serialVersionUID = 8906498391552370102L;
 	private Integer id_equipo;
 	private String nom_equipo;
 	private Categoria categoria;

@@ -26,7 +26,7 @@ public class PartidoDAOImpl implements PartidoDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Partido> listPartidos() {
-		return sessionFactory.getCurrentSession().createQuery("from Partido order by fecha")
+		return sessionFactory.getCurrentSession().createQuery("from Partido order by fecha desc")
 				.list();
 	}
 

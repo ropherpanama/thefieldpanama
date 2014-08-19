@@ -70,7 +70,7 @@ public class PeriodoDAOImpl implements PeriodoDAO {
 				+ "from Partido p left join p.periodosPartido periodos "
 				+ "where p.fecha = ? "
 				+ "group by p.equipo1.nom_equipo, p.equipo2.nom_equipo, p.hora order by p.hora")
-		.setParameter(0, Utilities.fechahoy())
+		.setParameter(0, Utilities.fechahoy(Utilities.YYYYMMDDGUION))
 		.list();
 		return list;
 	}

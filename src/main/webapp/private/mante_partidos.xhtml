@@ -111,28 +111,28 @@
 							<h:outputText value="#{p.id_partido}" />
 						</p:column>
 
-						<p:column filterBy="#{p.equipo1.categoria.liga.nom_liga}" footerText="contains" filterMatchMode="contains">
+						<p:column filterBy="#{p.equipo1.categoria.liga.nom_liga}" footerText="" filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msgs.cat_header_liga}" />
 							</f:facet>
 							<h:outputText value="#{p.equipo1.categoria.liga.nom_liga}" />
 						</p:column>
 
-						<p:column filterBy="#{p.equipo1.categoria.nom_categoria}" footerText="contains" filterMatchMode="contains">
+						<p:column filterBy="#{p.equipo1.categoria.nom_categoria}" footerText="" filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msgs.cat_header_categoria}" />
 							</f:facet>
 							<h:outputText value="#{p.equipo1.categoria.nom_categoria}" />
 						</p:column>
 
-						<p:column filterBy="#{p.equipo1.nom_equipo}" footerText="contains" filterMatchMode="contains">
+						<p:column filterBy="#{p.equipo1.nom_equipo}" footerText="" filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msgs.par_header_eq1}" />
 							</f:facet>
 							<h:outputText value="#{p.equipo1.nom_equipo}" />
 						</p:column>
 
-						<p:column filterBy="#{p.equipo2.nom_equipo}" footerText="contains" filterMatchMode="contains">
+						<p:column filterBy="#{p.equipo2.nom_equipo}" footerText="" filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msgs.par_header_eq2}" />
 							</f:facet>

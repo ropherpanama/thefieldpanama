@@ -33,7 +33,7 @@
 								<td><h:outputLabel value="#{msgs.cat_name}" /></td>
 								<td><p:inputText id="nombre"
 										value="#{CategoriaMB.form_nom_categoria}">
-										<f:validateLength minimum="5" />
+										<f:validateLength minimum="3" />
 									</p:inputText> <h:message for="nombre" style="color:red" /></td>
 							</tr>
 							<tr>
@@ -63,11 +63,11 @@
 							<h:outputText value="#{cat.id_categoria}" />
 						</p:column>
 
-						<p:column headerText="#{msgs.cat_header_liga}" filterBy="#{cat.liga.nom_liga}" footerText="contains" filterMatchMode="contains">
+						<p:column headerText="#{msgs.cat_header_liga}" filterBy="#{cat.liga.nom_liga}" footerText="" filterMatchMode="contains">
 							<h:outputText value="#{cat.liga.nom_liga}" />
 						</p:column>
 
-						<p:column filterBy="#{cat.nom_categoria}" headerText="Id" footerText="contains" filterMatchMode="contains">
+						<p:column filterBy="#{cat.nom_categoria}" headerText="Id" footerText="" filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msgs.cat_header_categoria}" />
 							</f:facet>

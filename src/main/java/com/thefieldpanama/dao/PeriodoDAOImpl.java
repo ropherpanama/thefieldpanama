@@ -66,7 +66,7 @@ public class PeriodoDAOImpl implements PeriodoDAO {
 	public List<Scores> getTodayScores() {
 		@SuppressWarnings("unchecked")
 		List<Scores> list = getSessionFactory().getCurrentSession()
-		.createQuery("select new com.thefieldpanama.beans.Scores(p.equipo1.nom_equipo, p.equipo2.nom_equipo, sum(periodos.pts_equipo_1) as pts1, sum(periodos.pts_equipo_2) as pts2, ' ' as status, p.hora) "
+		.createQuery("select new com.thefieldpanama.beans.Scores(p.equipo1.nom_equipo, p.equipo2.nom_equipo, sum(periodos.pts_equipo_1) as pts1, sum(periodos.pts_equipo_2) as pts2, ' ' as status, p.hora, p.equipo1.categoria.nom_categoria as categoria) "
 				+ "from Partido p left join p.periodosPartido periodos "
 				+ "where p.fecha = ? "
 				+ "group by p.equipo1.nom_equipo, p.equipo2.nom_equipo, p.hora order by p.hora")

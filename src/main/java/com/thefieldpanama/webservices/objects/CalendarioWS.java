@@ -24,6 +24,7 @@ public class CalendarioWS implements Serializable {
 	private String categoria;
 	private String liga;
 	private int idPartido;
+	private String marcadorFinal;
 
 	@JsonSerialize(using=JSONDateSerializer.class) 
 	public Date getFecha() {
@@ -88,5 +89,13 @@ public class CalendarioWS implements Serializable {
 
 	public void setIdPartido(int idPartido) {
 		this.idPartido = idPartido;
+	}
+
+	public String getMarcadorFinal() {
+		return marcadorFinal;
+	}
+
+	public void setMarcadorFinal(String marcadorFinal) {
+		this.marcadorFinal = marcadorFinal;
 	}
 }

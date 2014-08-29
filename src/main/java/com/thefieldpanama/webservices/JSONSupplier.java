@@ -158,6 +158,7 @@ public class JSONSupplier extends JSONCore {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String calendario() {
 		try {
+			boolean matchHasPts = false;
 			calendWs.clear();
 			scoresWs.clear();
 			partidos = this.getPartidoService().listPartidos();
@@ -173,7 +174,7 @@ public class JSONSupplier extends JSONCore {
 				cws.setHora(p.getHora());
 				cws.setLugar(p.getLugar());
 				cws.setIdPartido(p.getId_partido()); 
-				calendWs.add(cws);
+//				calendWs.add(cws);
 				
 				//Inicializar data de scores
 				ResultadosWS rws = new ResultadosWS();//Por cada partido creas un objeto score
@@ -196,12 +197,21 @@ public class JSONSupplier extends JSONCore {
 					
 					total1 += pd.getPts_equipo_1();
 					total2 += pd.getPts_equipo_2();
+					
+					matchHasPts = true;
 				}
 				rws.setPeriodos(periodos);
 				rws.setTotalPtsEquipo1(total1);
 				rws.setTotalPtsEquipo2(total2); 
 				
 				scoresWs.add(rws);
+				
+				if(matchHasPts)
+					cws.setMarcadorFinal(total1 + " - " + total2); 
+				else
+					cws.setMarcadorFinal("");
+				
+				calendWs.add(cws);
 			}
 			return this.getMapper().writeValueAsString(calendWs);
 		} catch (Exception e) {

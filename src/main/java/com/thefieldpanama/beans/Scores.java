@@ -8,14 +8,16 @@ public class Scores {
 	private Long pts2;
 	private String status;
 	private String hora;
+	private String categoria;
 
-	public Scores(String equipo1, String equipo2, Long pts1, Long pts2, String status, String hora) {
+	public Scores(String equipo1, String equipo2, Long pts1, Long pts2, String status, String hora, String categoria) {
 		this.equipo1 = equipo1;
 		this.equipo2 = equipo2;
 		this.pts1 = pts1;
 		this.pts2 = pts2;
 		this.status = status;
 		this.hora = hora;
+		this.categoria = categoria;
 	}
 
 	public Scores() {
@@ -67,5 +69,13 @@ public class Scores {
 
 	public void setHora(String hora) {
 		this.hora = hora;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 }

@@ -25,6 +25,7 @@ public class Equipo implements Serializable{
 	private String localidad;
 	//Un equipo tiene varios partidos (One to Many)
 	private Set<Partido> partidos = new HashSet<Partido>();
+	private Grupos grupo;
 
 	@Id
 	@Column(name = "ID_EQUIPO")
@@ -72,5 +73,15 @@ public class Equipo implements Serializable{
 
 	public void setPartidos(Set<Partido> partidos) {
 		this.partidos = partidos;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "GRUPO", nullable = false)
+	public Grupos getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Grupos grupo) {
+		this.grupo = grupo;
 	}
 }

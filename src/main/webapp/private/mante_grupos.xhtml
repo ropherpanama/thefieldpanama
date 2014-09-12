@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>#{msgs.gr_title}</title>
+	<h:outputStylesheet name="graphics/css/style.css" />
+</h:head>
+<h:body>
+	<ui:include src="/public/menu.xhtml"></ui:include>
+	<p:panel>
+	
+		<h:form id="first_form" prependId="false" styleClass="cmxform">
+			<p:messages id="messages" showDetail="true" autoUpdate="true"
+				closable="true" />
+			<p:fieldset legend="#{msgs.msg_fill_all}">
+				<table>
+					<tr>
+						<td><h:outputLabel value="#{msgs.gr_nombre}" /></td>
+						<td><p:inputText id="nombre"
+								value="#{GrupoMB.form_gr_nombre}">
+								<f:validateLength minimum="1" />
+							</p:inputText> <h:message for="nombre" style="color:red" /></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
+						<td><h:selectOneMenu id="selectLiga"
+								value="#{GrupoMB.form_filter_id_liga}">
+								<p:ajax listener="#{GrupoMB.onLigasChange}"
+									update="selectCategoria" />
+								<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
+									itemValue="-1" />
+								<f:selectItems value="#{GrupoMB.listLigas}" var="model"
+									itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
+						<td><h:selectOneMenu id="selectCategoria"
+								value="#{GrupoMB.form_filter_id_categoria}">
+								<p:ajax listener="#{GrupoMB.onCategoriasChange}"
+									update="equiposPickList" />
+								<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}"
+									itemValue="-1" />
+								<f:selectItems value="#{GrupoMB.listCategoriasFiltradas}"
+									var="model" itemLabel="#{model.nom_categoria}"
+									itemValue="#{model.id_categoria}" />
+							</h:selectOneMenu></td>
+					</tr>
+				</table>
+			</p:fieldset>
+
+			<p:fieldset legend="Equipos del grupo" style="margin-top:15">
+				<p:pickList id="equiposPickList" value="#{GrupoMB.pickListEquipos}"
+					converter="equiposConverter" var="team"
+					itemLabel="#{team.nom_equipo}" itemValue="#{team}" />
+				
+				<h:selectOneMenu id="formulasCalculo" style="margin-top:15"
+					value="#{GrupoMB.form_id_formula}">
+					<f:selectItem itemLabel="Seleccione un tipo de calculo"
+						itemValue="-1" />
+					<f:selectItems value="#{GrupoMB.formulasCalculo}" var="formula"
+						itemLabel="JG:#{formula.jg} - JE:#{formula.je} - JP:#{formula.jp}" itemValue="#{formula.id_formula_calculo}" />
+				</h:selectOneMenu>
+				<p></p>
+				<p:commandButton value="#{msgs.gr_crear}"
+					action="#{GrupoMB.crearGrupo}" icon="ui-icon-check"
+					style="margin-top:15" ajax="false" />
+			</p:fieldset>
+
+		</h:form>
+	</p:panel>
+	<ui:include src="/public/footer.xhtml"></ui:include>
+
+</h:body>
+</html>

@@ -14,4 +14,6 @@ public interface EquipoService {
 	public void updateEquipo(Equipo e);
 
 	public Equipo getEquipoById(int id);
+	
+	public List<Equipo> getEquiposSinGrupo();
 }

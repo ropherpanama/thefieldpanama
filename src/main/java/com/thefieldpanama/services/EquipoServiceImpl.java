@@ -52,4 +52,9 @@ public class EquipoServiceImpl implements EquipoService {
 	public Equipo getEquipoById(int id) {
 		return equipoDAO.getEquipoById(id);
 	}
+
+	@Override
+	public List<Equipo> getEquiposSinGrupo() {
+		return equipoDAO.getEquiposSinGrupo();
+	}
 }

@@ -28,6 +28,7 @@ public class Partido implements Serializable{
 	private String hora;
 	private String lugar;
 	private Set<Periodo> periodosPartido = new HashSet<Periodo>(0);
+	private int indPlayoff;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "partido")
 	public Set<Periodo> getPeriodosPartido() {
@@ -113,5 +114,14 @@ public class Partido implements Serializable{
 			return ptseq1 + " - " + ptseq2;
 		}else
 			return "No disponible";
+	}
+
+	@Column(name = "IND_PLAYOFF")
+	public int getIndPlayoff() {
+		return indPlayoff;
+	}
+
+	public void setIndPlayoff(int indPlayoff) {
+		this.indPlayoff = indPlayoff;
 	}
 }

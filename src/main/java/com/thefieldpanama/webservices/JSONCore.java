@@ -3,6 +3,8 @@ package com.thefieldpanama.webservices;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.thefieldpanama.services.EquipoService;
+import com.thefieldpanama.services.GruposService;
 import com.thefieldpanama.services.LigaService;
 import com.thefieldpanama.services.PartidoService;
 import com.thefieldpanama.services.PeriodoService;
@@ -14,7 +16,6 @@ import com.thefieldpanama.services.PeriodoService;
  * 
  */
 public class JSONCore {
-
 	@Autowired
 	private LigaService ligaService;
 	@Autowired
@@ -22,6 +23,18 @@ public class JSONCore {
 	@Autowired
 	private PeriodoService periodoService;
 	private ObjectMapper mapper = new ObjectMapper();
+	@Autowired
+	private GruposService grupoService;
+	@Autowired
+	private EquipoService equipoService;
+
+	public EquipoService getEquipoService() {
+		return equipoService;
+	}
+
+	public void setEquipoService(EquipoService equipoService) {
+		this.equipoService = equipoService;
+	}
 
 	public LigaService getLigaService() {
 		return ligaService;
@@ -53,5 +66,13 @@ public class JSONCore {
 
 	public void setPeriodoService(PeriodoService periodoService) {
 		this.periodoService = periodoService;
+	}
+
+	public GruposService getGrupoService() {
+		return grupoService;
+	}
+
+	public void setGrupoService(GruposService grupoService) {
+		this.grupoService = grupoService;
 	}
 }

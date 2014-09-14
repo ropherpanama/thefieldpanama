@@ -16,4 +16,6 @@ public interface EquipoDAO {
 	public Equipo getEquipoById(int id);
 	
 	public List<Equipo> getEquiposSinGrupo();
+	
+	public List<Equipo> getEquipoByGrupo(int idGrupo);
 }

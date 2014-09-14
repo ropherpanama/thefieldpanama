@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 
 import com.thefieldpanama.beans.Partido;
+import com.thefieldpanama.utilities.Utilities;
 
 public class PartidoDAOImpl implements PartidoDAO {
 	private SessionFactory sessionFactory;
@@ -60,6 +61,16 @@ public class PartidoDAOImpl implements PartidoDAO {
 				.createQuery("from Partido as p where p.fecha = ? and p.equipo1.categoria.id_categoria = ?")
 				.setParameter(0, f)
 				.setParameter(1, cat_id).list(); 
+		return list;
+	}
+
+	@Override
+	public List<Partido> getPartidosToday() {
+		@SuppressWarnings("unchecked")
+		List<Partido> list = getSessionFactory().getCurrentSession()
+				.createQuery("from Partido as p where p.fecha = ? ")
+				.setParameter(0, Utilities.fechahoy(Utilities.YYYYMMDDGUION)) 
+				.list(); 
 		return list;
 	}
 }

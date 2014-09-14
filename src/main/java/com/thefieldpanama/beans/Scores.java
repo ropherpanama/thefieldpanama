@@ -3,7 +3,6 @@ package com.thefieldpanama.beans;
 public class Scores {
 	private String equipo1;
 	private String equipo2;
-	// private Set<Periodo> periodosPartido = new HashSet<Periodo>(0);
 	private Long pts1;
 	private Long pts2;
 	private String status;

@@ -11,4 +11,5 @@ public interface PartidoDAO {
 	public void updatePartido(Partido p);
 	public Partido getPartidoById(int id);
 	public List<Partido> getPartidosByCategoryAndDate(int cat_id, java.util.Date f);
+	public List<Partido> getPartidosToday();
 }

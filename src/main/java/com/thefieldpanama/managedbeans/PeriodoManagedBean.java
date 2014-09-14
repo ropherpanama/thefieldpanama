@@ -45,7 +45,6 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 	private List<Categoria> listCategorias;
 	private List<Categoria> listCategoriasFiltradas;
 	private List<Partido> partidosBuscados;
-
 	private int form_pts_equipo_1;
 	private int form_pts_equipo_2;
 	private Date form_date_partido;
@@ -57,6 +56,7 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 		// Se inicializan las listas generales para filtrarlas despues
 		this.getListCategorias();
 		listCategoriasFiltradas = new ArrayList<Categoria>();
+		listPartidos = new ArrayList<Partido>();
 	}
 
 	public int getForm_filter_id_liga() {
@@ -142,8 +142,6 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 	}
 
 	public List<Partido> getListPartidos() {
-		listPartidos = new ArrayList<Partido>();
-		listPartidos.addAll(partidoService.listPartidos());
 		return listPartidos;
 	}
 
@@ -316,5 +314,29 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 
 	public void setPartidosBuscados(List<Partido> partidosBuscados) {
 		this.partidosBuscados = partidosBuscados;
+	}
+	
+	/**
+	 * Muestra en el grid de partidos todos los partidos registrados
+	 */
+	public void listarTodosLosPartidos() {
+		listPartidos.clear();
+		listPartidos.addAll(partidoService.listPartidos());
+	}
+	
+	/**
+	 * Muestra en el grid de partidos, solo los partidos de hoy
+	 */
+	public void listarPartidosDelDia() {
+		listPartidos.clear();
+		listPartidos.addAll(partidoService.getPartidosToday());
+		
+		if(listPartidos.size() == 0) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							this.getProvider().getValue("msg_nothing"),
+							"No hay partidos para hoy"));
+		}
 	}
 }

@@ -68,6 +68,17 @@
 	<p:panel header="#{msgs.res_dispon}" id="panel2"
 		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
 		<h:form id="form">
+
+			<p:panel>
+				<p:commandButton id="buttonDelDia" value="Partidos del dia"
+					ajax="false" action="#{ResultadosMB.listarPartidosDelDia}"
+					update="partidos" />
+
+				<p:commandButton id="buttonDelTodos" value="Todos los partidos"
+					ajax="false" action="#{ResultadosMB.listarTodosLosPartidos}"
+					update="partidos" />
+			</p:panel>
+
 			<p:dataTable id="partidos" var="p"
 				value="#{ResultadosMB.listPartidos}" paginator="true" rows="10"
 				resizableColumns="true" draggableColumns="true"
@@ -85,11 +96,11 @@
 					<p:rowToggler />
 				</p:column>
 
-				<p:column style="width:3%">
+				<p:column style="width:14%">
 					<f:facet name="header">
-						<h:outputText value="#{msgs.col_header_id}" />
+						<h:outputText value="Fecha" />
 					</f:facet>
-					<h:outputText value="#{p.id_partido}" />
+					<h:outputText value="#{p.fecha}" />
 				</p:column>
 
 				<p:column filterBy="#{p.equipo1.nom_equipo}" footerText=""
@@ -145,7 +156,8 @@
 						</p:column>
 
 						<p:column headerText="#{msgs.col_header_opc}" style="width:6%">
-							<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlg_editar_periodo').show();" 
+							<p:commandButton icon="ui-icon-pencil"
+								oncomplete="PF('dlg_editar_periodo').show();"
 								update=":dialog_edit_form:dlg_editar_periodo">
 								<f:setPropertyActionListener value="#{details}"
 									target="#{ResultadosMB.selectedPeriodo}" />
@@ -183,8 +195,8 @@
 			</p:panel>
 		</p:dialog>
 	</h:form>
-	
-		<h:form id="dialog_edit_form">
+
+	<h:form id="dialog_edit_form">
 		<!-- Dialogo para añadir periodos al partido -->
 		<p:dialog header="#{msgs.res_dlg_edit_title}" id="dlg_editar_periodo"
 			widgetVar="dlg_editar_periodo" modal="true" showEffect="explode"

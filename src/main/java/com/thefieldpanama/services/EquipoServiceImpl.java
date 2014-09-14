@@ -57,4 +57,9 @@ public class EquipoServiceImpl implements EquipoService {
 	public List<Equipo> getEquiposSinGrupo() {
 		return equipoDAO.getEquiposSinGrupo();
 	}
+
+	@Override
+	public List<Equipo> getEquipoByGrupo(int idGrupo) {
+		return equipoDAO.getEquipoByGrupo(idGrupo);
+	}
 }

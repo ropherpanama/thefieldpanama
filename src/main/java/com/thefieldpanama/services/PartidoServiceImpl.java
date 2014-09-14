@@ -54,4 +54,9 @@ public class PartidoServiceImpl implements PartidoService {
 	public List<Partido> getPartidosByCategoryAndDate(int cat_id, Date f) {
 		return partidoDAO.getPartidosByCategoryAndDate(cat_id, f);
 	}
+
+	@Override
+	public List<Partido> getPartidosToday() {
+		return partidoDAO.getPartidosToday();
+	}
 }

@@ -1,8 +1,12 @@
 package com.thefieldpanama.services;
 
 import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
+
+import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Grupos;
+import com.thefieldpanama.beans.ResumenEquipo;
 import com.thefieldpanama.dao.GruposDAO;
 
 @Transactional(readOnly = true)
@@ -44,6 +48,12 @@ public class GruposServiceImpl implements GruposService{
 	@Override
 	public Grupos getById(int id) {
 		return grupoDAO.getById(id);
+	}
+
+	@Override
+	public List<List<ResumenEquipo>> getResumenResultados(List<Equipo> e) {
+		return grupoDAO.getResumenResultados(e); 
+		
 	}
 
 }

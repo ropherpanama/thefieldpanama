@@ -2,7 +2,9 @@ package com.thefieldpanama.dao;
 
 import java.util.List;
 
+import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Grupos;
+import com.thefieldpanama.beans.ResumenEquipo;
 
 public interface GruposDAO {
 
@@ -15,4 +17,6 @@ public interface GruposDAO {
 	public void update(Grupos l);
 
 	public Grupos getById(int id);
+	
+	public List<List<ResumenEquipo>> getResumenResultados(List<Equipo> e);
 }

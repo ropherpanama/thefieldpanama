@@ -5,6 +5,7 @@ package com.thefieldpanama.webservices;
  * en el orden de su aparicion (primero el de ligas, luego categorias, etc.)
  */
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,15 +19,19 @@ import org.springframework.stereotype.Component;
 
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
+import com.thefieldpanama.beans.FormulasCalculo;
+import com.thefieldpanama.beans.Grupos;
 import com.thefieldpanama.beans.Liga;
 import com.thefieldpanama.beans.Partido;
 import com.thefieldpanama.beans.Periodo;
+import com.thefieldpanama.beans.ResumenEquipo;
 import com.thefieldpanama.beans.Scores;
 import com.thefieldpanama.utilities.Utilities;
 import com.thefieldpanama.webservices.objects.CalendarioWS;
 import com.thefieldpanama.webservices.objects.CategoriasWS;
 import com.thefieldpanama.webservices.objects.EquiposWS;
 import com.thefieldpanama.webservices.objects.LigasWS;
+import com.thefieldpanama.webservices.objects.PosicionWS;
 import com.thefieldpanama.webservices.objects.ResultadosWS;
 
 /**
@@ -47,6 +52,7 @@ public class JSONSupplier extends JSONCore {
 	private List<CalendarioWS> calendWs = new ArrayList<CalendarioWS>();
 	private List<ResultadosWS> scoresWs = new ArrayList<ResultadosWS>();
 	private List<Scores> todayScoresWS = new ArrayList<Scores>();
+	private List<PosicionWS> posWs = new ArrayList<PosicionWS>();
 	private Logger log = Logger.getLogger(this.getClass());
 
 	/**
@@ -267,6 +273,96 @@ public class JSONSupplier extends JSONCore {
 			}
 			
 			return this.getMapper().writeValueAsString(todayScoresWS);
+		}catch(Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			return null;
+		}
+	}
+	
+	@GET
+	@Path("posiciones")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String posiciones() {
+		try{
+			posWs.clear();
+			//Paso 1. Buscar los grupos registrados
+			List<Grupos> grupos = this.getGrupoService().list();
+			
+			if(grupos.size() == 0)
+				return null;
+			else {
+				//Paso 2. Ya que tenemos los grupos, buscamos los equipos para cada uno
+				for(Grupos g : grupos) {
+					String nombreGrupo = g.getNombre();
+					FormulasCalculo formula = g.getFormula(); //Se obtiene la forma de calculo para el grupo
+					List<Equipo> equipos = this.getEquipoService().getEquipoByGrupo(g.getId_grupo()); 
+					
+					if(equipos.size() == 0)
+						return null;
+					
+					else {
+						//Paso 3. Teniendo los equipos se procede a buscar sus partidos
+						//y calcular sus puntos
+						List<List<ResumenEquipo>> posiciones = this.getGrupoService().getResumenResultados(equipos);
+						
+						for (List<ResumenEquipo> lr : posiciones) {
+							int JG = 0;
+							int JE = 0;
+							int JP = 0;
+							int cantJuegos = 0;
+							int pts = 0;
+							int categoria = 0;
+							String equipoActual = "";
+
+							for (ResumenEquipo r : lr) {
+								cantJuegos = cantJuegos + 1;
+								log.info(cantJuegos + " : " + r.toString());
+								equipoActual = r.getNombreEquipo();
+								categoria = r.getIdCategoria();
+
+								if (r.getPosicion() == 1) {
+									if (r.getPts1() > r.getPts2()) {
+										JG = JG + 1;
+										pts = pts + formula.getJg();
+									} else if (r.getPts1() < r.getPts2()) {
+										JP = JP + 1;
+										pts = pts + formula.getJp();
+									} else {
+										JE = JE + 1;
+										pts = pts + formula.getJe();
+									}
+								} else if (r.getPosicion() == 2) {
+									if (r.getPts2() > r.getPts1()) {
+										JG = JG + 1;
+										pts = pts + formula.getJg();
+									} else if (r.getPts2() < r.getPts1()) {
+										JP = JP + 1;
+										pts = pts + formula.getJp();
+									} else {
+										JE = JE + 1;
+										pts = pts + formula.getJe();
+									}
+								}
+							}
+
+							PosicionWS p = new PosicionWS();
+							p.setNombreEquipo(equipoActual);
+							p.setNombreGrupo(nombreGrupo); 
+							p.setCantJG(JG);
+							p.setCantJP(JP);
+							p.setCantJE(JE);
+							p.setCantJuegos(cantJuegos);
+							p.setCantPts(pts);
+							p.setIdCategoria(categoria);
+							posWs.add(p);
+						}
+					}
+				}
+			}
+			
+			Collections.sort(posWs);//Se ordena en base a los puntos obtenidos
+			
+			return this.getMapper().writeValueAsString(posWs);
 		}catch(Exception e) {
 			log.info(Utilities.stringStackTrace(e));
 			return null;

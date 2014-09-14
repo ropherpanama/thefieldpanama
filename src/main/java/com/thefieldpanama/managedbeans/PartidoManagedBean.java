@@ -54,6 +54,7 @@ public class PartidoManagedBean extends AncientManagedBean implements Serializab
 	private int form_filter_id_categoria;
 	private int form_filter_eq1;
 	private int form_filter_eq2;
+	private boolean playOff;
 	private Date form_fecha;
 	private Date form_hora;
 	private String form_lugar;
@@ -67,6 +68,7 @@ public class PartidoManagedBean extends AncientManagedBean implements Serializab
 		listEquiposFiltrados = new ArrayList<Equipo>();
 		listCategoriasFiltradas = new ArrayList<Categoria>();
 		formatter = new SimpleDateFormat("HH:mm:ss");
+		listPartidos = new ArrayList<Partido>();
 	}
 
 	public void agregarPartido() {
@@ -77,6 +79,12 @@ public class PartidoManagedBean extends AncientManagedBean implements Serializab
 			p.setFecha(this.getForm_fecha());
 			p.setHora(formatter.format(this.getForm_hora()));
 			p.setLugar(this.getForm_lugar());
+			
+			if(playOff) //Indicativo de playoffs
+				p.setIndPlayoff(1);
+			else 
+				p.setIndPlayoff(0);
+			
 			this.reset();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -308,8 +316,8 @@ public class PartidoManagedBean extends AncientManagedBean implements Serializab
 	}
 
 	public List<Partido> getListPartidos() {
-		listPartidos = new ArrayList<Partido>();
-		listPartidos.addAll(partidoService.listPartidos());
+//		listPartidos = new ArrayList<Partido>();
+//		listPartidos.addAll(partidoService.listPartidos());
 		return listPartidos;
 	}
 
@@ -407,5 +415,37 @@ public class PartidoManagedBean extends AncientManagedBean implements Serializab
 		this.setForm_filter_eq2(-1);
 		this.setForm_filter_id_categoria(-1);
 		this.setForm_filter_id_liga(-1);
+	}
+	
+	/**
+	 * Muestra en el grid de partidos todos los partidos registrados
+	 */
+	public void listarTodosLosPartidos() {
+		listPartidos.clear();
+		listPartidos.addAll(partidoService.listPartidos());
+	}
+	
+	/**
+	 * Muestra en el grid de partidos, solo los partidos de hoy
+	 */
+	public void listarPartidosDelDia() {
+		listPartidos.clear();
+		listPartidos.addAll(partidoService.getPartidosToday());
+		
+		if(listPartidos.size() == 0) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							this.getProvider().getValue("msg_nothing"),
+							"No hay partidos para hoy"));
+		}
+	}
+
+	public boolean isPlayOff() {
+		return playOff;
+	}
+
+	public void setPlayOff(boolean playOff) {
+		this.playOff = playOff;
 	}
 }

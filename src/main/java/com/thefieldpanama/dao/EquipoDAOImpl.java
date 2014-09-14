@@ -62,4 +62,13 @@ public class EquipoDAOImpl implements EquipoDAO {
 				.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Equipo> getEquipoByGrupo(int idGrupo) {
+		return sessionFactory.getCurrentSession()
+				.createQuery("from Equipo as e where e.grupo.id_grupo = ? order by e.nom_equipo")
+				.setParameter(0, idGrupo)
+				.list();
+	}
+
 }

@@ -33,6 +33,7 @@ import com.thefieldpanama.webservices.objects.EquiposWS;
 import com.thefieldpanama.webservices.objects.LigasWS;
 import com.thefieldpanama.webservices.objects.PosicionWS;
 import com.thefieldpanama.webservices.objects.ResultadosWS;
+import com.thefieldpanama.webservices.objects.TablaPosiciones;
 
 /**
  * Esta clase contiene los Url´s y metodos asociados a los servicios web
@@ -52,7 +53,8 @@ public class JSONSupplier extends JSONCore {
 	private List<CalendarioWS> calendWs = new ArrayList<CalendarioWS>();
 	private List<ResultadosWS> scoresWs = new ArrayList<ResultadosWS>();
 	private List<Scores> todayScoresWS = new ArrayList<Scores>();
-	private List<PosicionWS> posWs = new ArrayList<PosicionWS>();
+//	private List<PosicionWS> posWs = new ArrayList<PosicionWS>();
+	private List<TablaPosiciones> tabla = new ArrayList<TablaPosiciones>();
 	private Logger log = Logger.getLogger(this.getClass());
 
 	/**
@@ -284,7 +286,7 @@ public class JSONSupplier extends JSONCore {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String posiciones() {
 		try{
-			posWs.clear();
+			tabla.clear();
 			//Paso 1. Buscar los grupos registrados
 			List<Grupos> grupos = this.getGrupoService().list();
 			
@@ -295,7 +297,12 @@ public class JSONSupplier extends JSONCore {
 				for(Grupos g : grupos) {
 					String nombreGrupo = g.getNombre();
 					FormulasCalculo formula = g.getFormula(); //Se obtiene la forma de calculo para el grupo
-					List<Equipo> equipos = this.getEquipoService().getEquipoByGrupo(g.getId_grupo()); 
+					List<Equipo> equipos = this.getEquipoService().getEquipoByGrupo(g.getId_grupo());
+					
+					List<PosicionWS> posWs = new ArrayList<PosicionWS>();
+					TablaPosiciones t = new TablaPosiciones();
+					t.setIdCategoria(g.getId_categoria());
+					t.setNombreGrupo(nombreGrupo);
 					
 					if(equipos.size() == 0)
 						return null;
@@ -315,32 +322,32 @@ public class JSONSupplier extends JSONCore {
 							String equipoActual = "";
 
 							for (ResumenEquipo r : lr) {
-								cantJuegos = cantJuegos + 1;
+								cantJuegos++;
 								log.info(cantJuegos + " : " + r.toString());
 								equipoActual = r.getNombreEquipo();
 								categoria = r.getIdCategoria();
 
 								if (r.getPosicion() == 1) {
 									if (r.getPts1() > r.getPts2()) {
-										JG = JG + 1;
-										pts = pts + formula.getJg();
+										JG++;
+										pts += formula.getJg();
 									} else if (r.getPts1() < r.getPts2()) {
-										JP = JP + 1;
-										pts = pts + formula.getJp();
+										JP++;
+										pts += formula.getJp();
 									} else {
-										JE = JE + 1;
-										pts = pts + formula.getJe();
+										JE++;
+										pts += formula.getJe();
 									}
 								} else if (r.getPosicion() == 2) {
 									if (r.getPts2() > r.getPts1()) {
-										JG = JG + 1;
-										pts = pts + formula.getJg();
+										JG++;
+										pts += formula.getJg();
 									} else if (r.getPts2() < r.getPts1()) {
-										JP = JP + 1;
-										pts = pts + formula.getJp();
+										JP++;
+										pts += formula.getJp();
 									} else {
-										JE = JE + 1;
-										pts = pts + formula.getJe();
+										JE++;
+										pts += formula.getJe();
 									}
 								}
 							}
@@ -357,12 +364,16 @@ public class JSONSupplier extends JSONCore {
 							posWs.add(p);
 						}
 					}
+					
+					Collections.sort(posWs);
+					t.setPosiciones(posWs); 
+					tabla.add(t);
 				}
 			}
 			
-			Collections.sort(posWs);//Se ordena en base a los puntos obtenidos
-			
-			return this.getMapper().writeValueAsString(posWs);
+			Collections.sort(tabla); 
+
+			return this.getMapper().writeValueAsString(tabla);
 		}catch(Exception e) {
 			log.info(Utilities.stringStackTrace(e));
 			return null;

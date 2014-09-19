@@ -76,7 +76,7 @@ public class Equipo implements Serializable{
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "GRUPO", nullable = false)
+	@JoinColumn(name = "GRUPO", nullable = false) 
 	public Grupos getGrupo() {
 		return grupo;
 	}

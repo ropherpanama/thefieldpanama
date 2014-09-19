@@ -30,7 +30,7 @@ public class GruposDAOImpl implements GruposDAO{
 	@Override
 	public List<Grupos> list() {
 		return sessionFactory.getCurrentSession().createQuery("from Grupos where id_grupo != ? order by id_grupo")
-				.setParameter(0, 0) 
+				.setParameter(0, 100) //100 es el grupo NULO, no lo quiero
 				.list();
 	}
 
@@ -60,21 +60,23 @@ public class GruposDAOImpl implements GruposDAO{
 	@Override
 	public List<List<ResumenEquipo>> getResumenResultados(List<Equipo> e) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("select r.nom_equipo as nombreEquipo, r.pos as posicion, p.pts_equipo_1 as pts1, p.pts_equipo_2 as pts2, r.id_partido as idPartido, r.id_categoria as idCategoria "); 
+		sql.append("select r.nom_equipo as nombreEquipo, r.pos as posicion, sum(p.pts_equipo_1) as pts1, sum(p.pts_equipo_2) as pts2, r.id_partido as idPartido, r.id_categoria as idCategoria "); 
 		sql.append("from periodos p, (select e.nom_equipo, s.id_partido, s.id_equipo_1, s.id_equipo_2, s.fecha, 1 as pos, e.id_categoria "); 
 		sql.append("from partidos s, equipos e ");
 		sql.append("where s.id_equipo_1 = ? ");
 		sql.append("and s.ind_playoff = 0 ");
 		sql.append("and s.id_equipo_1 = e.id_equipo) r ");
 		sql.append("where r.id_partido = p.id_partido ");
+		sql.append("group by r.nom_equipo, r.pos, r.id_partido, r.id_categoria ");
 		sql.append("union "); 
-		sql.append("select r.nom_equipo as nombreEquipo, r.pos as posicion, p.pts_equipo_1 as pts1, p.pts_equipo_2 as pts2, r.id_partido as idPartido, r.id_categoria as idCategoria "); 
+		sql.append("select r.nom_equipo as nombreEquipo, r.pos as posicion, sum(p.pts_equipo_1) as pts1, sum(p.pts_equipo_2) as pts2, r.id_partido as idPartido, r.id_categoria as idCategoria "); 
 		sql.append("from periodos p, (select e.nom_equipo, s.id_partido, s.id_equipo_1, s.id_equipo_2, s.fecha, 2 as pos, e.id_categoria ");
 		sql.append("from partidos s, equipos e ");
 		sql.append("where s.id_equipo_2 = ? ");
 		sql.append("and s.ind_playoff = 0 ");
 		sql.append("and s.id_equipo_2 = e.id_equipo) r ");
 		sql.append("where r.id_partido = p.id_partido ");
+		sql.append("group by r.nom_equipo, r.pos, r.id_partido, r.id_categoria ");
 		
 		List<List<ResumenEquipo>> resultados = new ArrayList<List<ResumenEquipo>>();
 		

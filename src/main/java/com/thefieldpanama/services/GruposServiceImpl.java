@@ -13,6 +13,7 @@ import com.thefieldpanama.dao.GruposDAO;
 public class GruposServiceImpl implements GruposService{
 
 	private GruposDAO grupoDAO;
+	
 	public GruposDAO getGrupoDAO() {
 		return grupoDAO;
 	}
@@ -46,14 +47,15 @@ public class GruposServiceImpl implements GruposService{
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public Grupos getById(int id) {
 		return grupoDAO.getById(id);
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public List<List<ResumenEquipo>> getResumenResultados(List<Equipo> e) {
 		return grupoDAO.getResumenResultados(e); 
 		
 	}
-
 }

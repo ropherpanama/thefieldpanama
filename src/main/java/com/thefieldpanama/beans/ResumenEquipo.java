@@ -1,5 +1,7 @@
 package com.thefieldpanama.beans;
 
+import java.math.BigDecimal;
+
 public class ResumenEquipo {
 	private String nombreEquipo;
 	private int posicion;
@@ -43,20 +45,20 @@ public class ResumenEquipo {
 		this.posicion = posicion;
 	}
 
-	public int getPts1() {
+	public Integer getPts1() {
 		return pts1;
 	}
 
-	public void setPts1(int pts1) {
-		this.pts1 = pts1;
+	public void setPts1(BigDecimal pts1) {
+		this.pts1 = pts1.intValue();
 	}
 
-	public int getPts2() {
+	public Integer getPts2() {
 		return pts2;
 	}
 
-	public void setPts2(int pts2) {
-		this.pts2 = pts2;
+	public void setPts2(BigDecimal pts2) {
+		this.pts2 = pts2.intValue();
 	}
 	
 	@Override

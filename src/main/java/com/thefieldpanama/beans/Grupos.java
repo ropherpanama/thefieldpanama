@@ -1,5 +1,6 @@
 package com.thefieldpanama.beans;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,12 +17,13 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "grupos")
-public class Grupos {
+public class Grupos implements Serializable{
+	private static final long serialVersionUID = -7594983741145877810L;
 	private int id_grupo;
 	private String nombre;
 //	private Integer formula_calculo;
 	private int id_categoria;
-	private Set<Equipo> equipos = new HashSet<Equipo>();
+	private Set<Equipo> equipos = new HashSet<Equipo>(0);
 	private FormulasCalculo formula;
 
 	@Id
@@ -43,15 +45,6 @@ public class Grupos {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-//	@Column(name = "formula_calculo")
-//	public int getFormula_calculo() {
-//		return formula_calculo;
-//	}
-//
-//	public void setFormula_calculo(int formula_calculo) {
-//		this.formula_calculo = formula_calculo;
-//	}
 
 	@Column(name = "id_categoria")
 	public int getId_categoria() {

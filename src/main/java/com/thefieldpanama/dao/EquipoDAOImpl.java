@@ -58,7 +58,7 @@ public class EquipoDAOImpl implements EquipoDAO {
 	public List<Equipo> getEquiposSinGrupo() {
 		return sessionFactory.getCurrentSession()
 				.createQuery("from Equipo as e where e.grupo.id_grupo = ? order by e.nom_equipo")
-				.setParameter(0, 0)//Solo equipos con grupo = 0
+				.setParameter(0, 100)//Solo equipos con grupo = 100
 				.list();
 	}
 

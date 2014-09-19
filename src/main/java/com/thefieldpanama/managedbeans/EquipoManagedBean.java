@@ -18,6 +18,7 @@ import com.thefieldpanama.beans.Equipo;
 import com.thefieldpanama.beans.Liga;
 import com.thefieldpanama.services.CategoriaService;
 import com.thefieldpanama.services.EquipoService;
+import com.thefieldpanama.services.GruposService;
 import com.thefieldpanama.services.LigaService;
 import com.thefieldpanama.utilities.Utilities;
 
@@ -31,6 +32,8 @@ public class EquipoManagedBean extends AncientManagedBean implements Serializabl
 	CategoriaService categoriaService;
 	@ManagedProperty(value = "#{LigaServicio}")
 	LigaService ligaService;
+	@ManagedProperty(value = "#{GruposServicio}")
+	private GruposService grupoService;
 	Equipo selectedEquipo;
 	Categoria selectedCategoria;
 	List<Equipo> listEquipos;
@@ -95,11 +98,13 @@ public class EquipoManagedBean extends AncientManagedBean implements Serializabl
 	public void agregarEquipo() {
 		try {
 			Equipo e = new Equipo();
-			e.setCategoria(categoriaService.getCategoriaById(this
-					.getForm_id_categoria()));
+			e.setCategoria(categoriaService.getCategoriaById(this.getForm_id_categoria()));
 			e.setLocalidad(this.getForm_localidad());
 			e.setNom_equipo(this.getForm_nom_equipo());
+			//Al parecer no tomaba como valido un registro de db con id = 0, por eso se cambio el id a 100
+			e.setGrupo(grupoService.getById(100)); 
 			equipoService.addEquipo(e);
+			
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -234,5 +239,13 @@ public class EquipoManagedBean extends AncientManagedBean implements Serializabl
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
 							this.getProvider().getValue("msg_nothing"), this.getProvider().getValue("liga_sin_cats")));
 		}
+	}
+
+	public GruposService getGrupoService() {
+		return grupoService;
+	}
+
+	public void setGrupoService(GruposService grupoService) {
+		this.grupoService = grupoService;
 	}
 }

@@ -166,13 +166,13 @@ public class JSONSupplier extends JSONCore {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String calendario() {
 		try {
-			boolean matchHasPts = false;
 			calendWs.clear();
 			scoresWs.clear();
 			partidos = this.getPartidoService().listPartidos();
 			// Se cargan los datos del calendario a partir del listado de
 			// partidos disponible
 			for (Partido p : partidos) {
+				boolean matchHasPts = false;
 				CalendarioWS cws = new CalendarioWS();
 				cws.setCategoria(p.getEquipo1().getCategoria().getNom_categoria());
 				cws.setLiga(p.getEquipo1().getCategoria().getLiga().getNom_liga());
@@ -198,6 +198,7 @@ public class JSONSupplier extends JSONCore {
 				int total2 = 0;
 				
 				Iterator<Periodo> it = p.getPeriodosPartido().iterator();
+				
 				while(it.hasNext()) {
 					Periodo pd = it.next();
 					String str = String.format("%1$s : %2$-4d - %3$s : %4$d", p.getEquipo1().getNom_equipo(), pd.getPts_equipo_1(), p.getEquipo2().getNom_equipo(), pd.getPts_equipo_2());
@@ -208,6 +209,7 @@ public class JSONSupplier extends JSONCore {
 					
 					matchHasPts = true;
 				}
+				
 				rws.setPeriodos(periodos);
 				rws.setTotalPtsEquipo1(total1);
 				rws.setTotalPtsEquipo2(total2); 
@@ -323,7 +325,6 @@ public class JSONSupplier extends JSONCore {
 
 							for (ResumenEquipo r : lr) {
 								cantJuegos++;
-								log.info(cantJuegos + " : " + r.toString());
 								equipoActual = r.getNombreEquipo();
 								categoria = r.getIdCategoria();
 
@@ -352,6 +353,7 @@ public class JSONSupplier extends JSONCore {
 								}
 							}
 
+							log.info("NOMBRE DEL EQUIPO [" + equipoActual + "]");
 							PosicionWS p = new PosicionWS();
 							p.setNombreEquipo(equipoActual);
 							p.setNombreGrupo(nombreGrupo); 

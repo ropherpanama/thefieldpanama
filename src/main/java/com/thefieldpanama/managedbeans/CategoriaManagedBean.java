@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -11,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+import org.primefaces.event.RowEditEvent;
 
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Liga;
@@ -27,14 +29,17 @@ public class CategoriaManagedBean extends AncientManagedBean implements Serializ
 	@ManagedProperty(value = "#{LigaServicio}")
 	LigaService ligaService;
 	private Logger log = Logger.getLogger(this.getClass());
-
 	Liga selectedLiga;
 	Categoria selectedCategoria;
 	List<Categoria> listCategorias;
 	List<Liga> listLigas;
-
 	private String form_nom_categoria;
 	private int form_id_liga;
+	
+	@PostConstruct
+	public void init() {
+		listCategorias = new ArrayList<Categoria>();
+	}
 	
 	public void agregarCategoria() {
 		try {
@@ -42,6 +47,7 @@ public class CategoriaManagedBean extends AncientManagedBean implements Serializ
 			c.setLiga(ligaService.getLigaById(this.getForm_id_liga())); 
 			c.setNom_categoria(this.getForm_nom_categoria());
 			categoriaService.addCategoria(c);
+			mostrarCategorias();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -55,25 +61,10 @@ public class CategoriaManagedBean extends AncientManagedBean implements Serializ
 		}
 	}
 
-	public void editarCategoria() {
-		try{FacesContext.getCurrentInstance().addMessage(
-				null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO,
-						this.getProvider().getValue("msg_upt"), selectedCategoria
-								.getNom_categoria() + " de " + selectedCategoria.getLiga().getNom_liga()));
-		}catch(Exception e){
-			log.info(Utilities.stringStackTrace(e));
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
-		}
-	}
-
 	public void eliminarCategoria() {
 		try {
-			categoriaService.removeCategoria(selectedCategoria
-					.getId_categoria());
+			categoriaService.removeCategoria(selectedCategoria.getId_categoria());
+			mostrarCategorias();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -113,8 +104,8 @@ public class CategoriaManagedBean extends AncientManagedBean implements Serializ
 	}
 
 	public List<Categoria> getListCategorias() {
-		listCategorias = new ArrayList<Categoria>();
-		listCategorias.addAll(categoriaService.listCategorias());
+//		listCategorias = new ArrayList<Categoria>();
+//		listCategorias.addAll(categoriaService.listCategorias());
 		return listCategorias;
 	}
 
@@ -155,4 +146,25 @@ public class CategoriaManagedBean extends AncientManagedBean implements Serializ
 	public void setForm_id_liga(int form_id_liga) {
 		this.form_id_liga = form_id_liga;
 	}
+	
+	/**
+	 * Refresh the list data and show update GUI
+	 */
+	public void mostrarCategorias() {
+		listCategorias.clear();
+		listCategorias.addAll(categoriaService.listCategorias());
+	}
+	
+	public void onEdit(RowEditEvent event) { 
+		Categoria edited = (Categoria) event.getObject();
+		categoriaService.updateCategoria(edited); 
+        FacesMessage msg = new FacesMessage("Registro editado",((Categoria) event.getObject()).getNom_categoria()); 
+        FacesContext.getCurrentInstance().addMessage(null, msg); 
+    } 
+       
+    public void onCancel(RowEditEvent event) { 
+//        FacesMessage msg = new FacesMessage("Edicion cancelada");  
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+    	System.out.println("Edicion cancelada");
+    }
 }

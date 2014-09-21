@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -18,6 +19,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+import org.primefaces.event.RowEditEvent;
 import org.springframework.dao.DataAccessException;
 
 import com.thefieldpanama.beans.Liga;
@@ -41,6 +43,10 @@ public class LigaManagedBean extends AncientManagedBean implements Serializable 
 	List<Liga> listLigas;
 	private Logger log = Logger.getLogger(this.getClass());
 
+	@PostConstruct
+	public void init() {
+		listLigas = new ArrayList<Liga>();
+	}
 	/**
 	 * Metodo invocado por el boton agregar nueva liga
 	 * 
@@ -53,6 +59,13 @@ public class LigaManagedBean extends AncientManagedBean implements Serializable 
 			l.setF_ini(getF_ini());
 			l.setF_fin(getF_fin());
 			ligaService.addLiga(l);
+			
+			mostrarLigas();//Show update
+
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							this.getProvider().getValue("msg_add"), l.getNom_liga()));
 			return SUCCESS;
 		} catch (DataAccessException d) {
 			log.info(Utilities.stringStackTrace(d));
@@ -67,28 +80,11 @@ public class LigaManagedBean extends AncientManagedBean implements Serializable 
 	public void eliminarLiga() {
 		try {
 			ligaService.removeLiga(selectedLiga.getId());
+			mostrarLigas();//Recargo la lista despues de la actualizacion
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							this.getProvider().getValue("msg_del"), selectedLiga.getNom_liga()));
-		} catch (Exception e) {
-			log.info(Utilities.stringStackTrace(e));
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
-		}
-	}
-
-	/**
-	 * Metodo invocado por la opcion Editar Liga
-	 */
-	public void editarLiga() {
-		try {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							this.getProvider().getValue("msg_upt"), selectedLiga.getNom_liga()));
 		} catch (Exception e) {
 			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
@@ -155,19 +151,29 @@ public class LigaManagedBean extends AncientManagedBean implements Serializable 
 		this.f_fin = f_fin;
 	}
 
-	/**
-	 * Metodo usado por la pantalla de resumen de ligas Lista todas las ligas
-	 * existentes en la base de datos
-	 * 
-	 * @return Ligas Lista
-	 */
 	public List<Liga> getListLigas() {
-		listLigas = new ArrayList<Liga>();
-		listLigas.addAll(ligaService.listLigas());
 		return listLigas;
 	}
 
 	public void setListLigas(List<Liga> listLigas) {
 		this.listLigas = listLigas;
 	}
+	
+	public void mostrarLigas() {
+		listLigas.clear();
+		listLigas.addAll(ligaService.listLigas());
+	}
+	
+	public void onEdit(RowEditEvent event) { 
+		Liga edited = (Liga) event.getObject();
+		ligaService.updateLiga(edited); 
+        FacesMessage msg = new FacesMessage("Registro editado",((Liga) event.getObject()).getNom_liga()); 
+        FacesContext.getCurrentInstance().addMessage(null, msg); 
+    } 
+       
+    public void onCancel(RowEditEvent event) { 
+//        FacesMessage msg = new FacesMessage("Edicion cancelada");  
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+    	System.out.println("Edicion cancelada");
+    }  
 }

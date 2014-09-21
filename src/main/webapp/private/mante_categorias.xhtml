@@ -10,96 +10,111 @@
 <h:body>
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
-	<p:panel header="#{msgs.cat_header}" style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;" >
-		<p:accordionPanel>
-			<p:tab title="#{msgs.cat_add}">
-				<h:form prependId="false" styleClass="cmxform">
-					<p:messages id="messages" showDetail="true" autoUpdate="true"
-						closable="true" />
-					<fieldset>
-						<legend>#{msgs.msg_fill_all}</legend>
-						<table>
-							<tr>
-								<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
-								<td><h:selectOneMenu id="selectOneCb"
-										value="#{CategoriaMB.form_id_liga}">
-										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
-											itemValue="-1" />
-										<f:selectItems value="#{CategoriaMB.listLigas}" var="model"
-											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
-									</h:selectOneMenu></td>
-							</tr>
-							<tr>
-								<td><h:outputLabel value="#{msgs.cat_name}" /></td>
-								<td><p:inputText id="nombre"
-										value="#{CategoriaMB.form_nom_categoria}">
-										<f:validateLength minimum="3" />
-									</p:inputText> <h:message for="nombre" style="color:red" /></td>
-							</tr>
-							<tr>
-								<td><p:commandButton id="agregarCategoria"
-										value="#{msgs.cat_button_add}"
-										action="#{CategoriaMB.agregarCategoria}" ajax="false" /></td>
-							</tr>
-						</table>
-					</fieldset>
-				</h:form>
-			</p:tab>
-			<p:tab title="#{msgs.cat_dispon}">
-				<h:form id="form">
+	<p:panel header="#{msgs.cat_add}"
+		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
 
-					<p:messages id="messages" showDetail="true" autoUpdate="true"
-						closable="true" />
+		<h:form prependId="false" styleClass="cmxform">
+			<fieldset>
+				<legend>#{msgs.msg_fill_all}</legend>
+				<table>
+					<tr>
+						<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
+						<td><h:selectOneMenu id="selectOneCb"
+								value="#{CategoriaMB.form_id_liga}">
+								<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
+									itemValue="-1" />
+								<f:selectItems value="#{CategoriaMB.listLigas}" var="model"
+									itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="#{msgs.cat_name}" /></td>
+						<td><p:inputText id="nombre"
+								value="#{CategoriaMB.form_nom_categoria}">
+								<f:validateLength minimum="3" />
+							</p:inputText> <h:message for="nombre" style="color:red" /></td>
+					</tr>
+					<tr>
+						<td><p:commandButton id="agregarCategoria"
+								value="#{msgs.cat_button_add}" update=":form:categorias"
+								action="#{CategoriaMB.agregarCategoria}" ajax="true" /></td>
+					</tr>
+				</table>
+			</fieldset>
+		</h:form>
+	</p:panel>
 
-					<p:dataTable id="categorias" var="cat" widgetVar="catsForm"
-						value="#{CategoriaMB.listCategorias}" paginator="true" rows="10"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						rowsPerPageTemplate="5,10,15">
+	<p:panel header="#{msgs.cat_dispon}"
+		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
 
-						<p:column style="width:3%">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.col_header_id}" />
-							</f:facet>
-							<h:outputText value="#{cat.id_categoria}" />
-						</p:column>
+		<h:form id="form">
 
-						<p:column headerText="#{msgs.cat_header_liga}" filterBy="#{cat.liga.nom_liga}" footerText="" filterMatchMode="contains">
-							<h:outputText value="#{cat.liga.nom_liga}" />
-						</p:column>
+			<p:messages id="messages" showDetail="true" autoUpdate="true"
+				closable="true" />
 
-						<p:column filterBy="#{cat.nom_categoria}" headerText="Id" footerText="" filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.cat_header_categoria}" />
-							</f:facet>
+			<p:commandButton id="buttonShow" value="Mostrar categorias" ajax="true"
+				style="margin-bottom:5px;" action="#{CategoriaMB.mostrarCategorias}"
+				update="categorias" />
+				
+			<p:dataTable id="categorias" var="cat" widgetVar="catsForm"
+				value="#{CategoriaMB.listCategorias}" paginator="true" rows="10"
+				editable="true" selection="#{CategoriaMB.selectedCategoria}"
+				rowKey="#{cat.id_categoria}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:ajax event="rowEdit" listener="#{CategoriaMB.onEdit}"
+					update=":form:messages" />
+
+				<p:ajax event="rowEditCancel" listener="#{CategoriaMB.onCancel}"
+					update=":form:messages" />
+
+				<p:column style="width:3%">
+					<f:facet name="header">
+						<h:outputText value="#{msgs.col_header_id}" />
+					</f:facet>
+					<h:outputText value="#{cat.id_categoria}" />
+				</p:column>
+
+				<p:column headerText="#{msgs.cat_header_liga}"
+					filterBy="#{cat.liga.nom_liga}" footerText=""
+					filterMatchMode="contains">
+					<h:outputText value="#{cat.liga.nom_liga}" />
+				</p:column>
+
+				<p:column filterBy="#{cat.nom_categoria}" headerText="Nombre de categoria"
+					footerText="" filterMatchMode="contains">
+					<p:cellEditor>
+						<f:facet name="output">
 							<h:outputText value="#{cat.nom_categoria}" />
-						</p:column>
+						</f:facet>
+						<f:facet name="input">
+							<h:inputText value="#{cat.nom_categoria}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
 
-						<p:column style="width:7%">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.col_header_opc}" />
-							</f:facet>
+				<p:column headerText="Editar" style="width:4%">
+					<p:rowEditor />
+				</p:column>
 
-							<h:panelGroup style="white-space: nowrap">
-								<p:commandButton icon="ui-icon-pencil"
-									title="#{msgs.cat_edit_cat}"
-									action="#{CategoriaMB.editarCategoria}" update="categorias">
-									<f:setPropertyActionListener value="#{cat}"
-										target="#{CategoriaMB.selectedCategoria}" />
-								</p:commandButton>
-								<p:commandButton icon="ui-icon-trash"
-									title="#{msgs.cat_del_cat}"
-									action="#{CategoriaMB.eliminarCategoria}" update="categorias">
-									<f:setPropertyActionListener value="#{cat}"
-										target="#{CategoriaMB.selectedCategoria}" />
-								</p:commandButton>
-							</h:panelGroup>
+				<p:column style="width:4%">
+					<f:facet name="header">
+						<h:outputText value="Borrar" />
+					</f:facet>
 
-						</p:column>
+					<h:panelGroup style="white-space: nowrap">
+						<p:commandButton icon="ui-icon-trash" title="#{msgs.cat_del_cat}"
+							action="#{CategoriaMB.eliminarCategoria}" update="categorias">
+							<f:setPropertyActionListener value="#{cat}"
+								target="#{CategoriaMB.selectedCategoria}" />
+						</p:commandButton>
+					</h:panelGroup>
 
-					</p:dataTable>
-				</h:form>
-			</p:tab>
-		</p:accordionPanel>
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
 	</p:panel>
 
 	<ui:include src="/public/footer.xhtml"></ui:include>

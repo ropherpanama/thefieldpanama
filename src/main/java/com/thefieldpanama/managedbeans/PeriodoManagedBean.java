@@ -50,6 +50,7 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 	private Date form_date_partido;
 	private int form_filter_id_liga;
 	private int form_filter_id_categoria;
+	private int clickButtonFlag = 0;
 
 	@PostConstruct
 	public void init() {
@@ -256,6 +257,13 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 			p.setPts_equipo_1(this.getForm_pts_equipo_1());
 			p.setPts_equipo_2(this.getForm_pts_equipo_2());
 			periodoService.addPeriodo(p);
+			
+			//Recargar la lista segun de donde se ha cargado inicialmente
+			if(clickButtonFlag == 1)
+				listarTodosLosPartidos();
+			else if(clickButtonFlag == 2)
+				listarPartidosDelDia();
+			
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -276,6 +284,12 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 	public void eliminarPeriodo() {
 		try {
 			periodoService.removePeriodo(selectedPeriodo.getId_periodo());
+			//Necesito hacer esto para refrescar la lista con la actualización
+			if(clickButtonFlag == 1)
+				listarTodosLosPartidos();
+			else if(clickButtonFlag == 2)
+				listarPartidosDelDia();
+			
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -298,6 +312,13 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 			p.setPts_equipo_1(this.getForm_pts_equipo_1());
 			p.setPts_equipo_2(this.getForm_pts_equipo_2());
 			periodoService.addPeriodo(p);
+			
+			//Necesito hacer esto para refrescar la lista con la actualización
+			if(clickButtonFlag == 1)
+				listarTodosLosPartidos();
+			else if(clickButtonFlag == 2)
+				listarPartidosDelDia();
+			
 		}catch (Exception e) {
 			log.info(Utilities.stringStackTrace(e));
 			FacesContext.getCurrentInstance().addMessage(
@@ -320,6 +341,7 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 	 * Muestra en el grid de partidos todos los partidos registrados
 	 */
 	public void listarTodosLosPartidos() {
+		clickButtonFlag = 1;
 		listPartidos.clear();
 		listPartidos.addAll(partidoService.listPartidos());
 	}
@@ -328,6 +350,7 @@ public class PeriodoManagedBean extends AncientManagedBean implements Serializab
 	 * Muestra en el grid de partidos, solo los partidos de hoy
 	 */
 	public void listarPartidosDelDia() {
+		clickButtonFlag = 2;
 		listPartidos.clear();
 		listPartidos.addAll(partidoService.getPartidosToday());
 		

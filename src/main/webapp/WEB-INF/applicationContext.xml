@@ -86,6 +86,26 @@
 		<property name="sessionFactory" ref="SessionFactory" />
 	</bean>
 	
+	<bean id="Grupos" class="com.thefieldpanama.beans.Grupos" />
+
+	<bean id="GruposServicio" class="com.thefieldpanama.services.GruposServiceImpl">
+		<property name="grupoDAO" ref="GruposDAO" />
+	</bean>
+
+	<bean id="GruposDAO" class="com.thefieldpanama.dao.GruposDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
+	<bean id="FormulasCalculo" class="com.thefieldpanama.beans.FormulasCalculo" />
+
+	<bean id="FormulasCalculoServicio" class="com.thefieldpanama.services.FormulasCalculoServiceImpl">
+		<property name="formulasDAO" ref="FormulasCalculoDAO" />
+	</bean>
+
+	<bean id="FormulasCalculoDAO" class="com.thefieldpanama.dao.FormulasCalculoDAOImpl">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
 	<!-- Configuracion externa de parametros del DataSource -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

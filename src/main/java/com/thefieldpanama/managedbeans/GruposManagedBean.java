@@ -83,6 +83,7 @@ public class GruposManagedBean extends AncientManagedBean implements Serializabl
 		pickedEquipos = new ArrayList<Equipo>();
 		pickListEquipos = new DualListModel<Equipo>();
 	}
+	
 	public void onLigasChange() {
 		listCategoriasFiltradas.clear();
 		if (listCategorias.size() > 0) {

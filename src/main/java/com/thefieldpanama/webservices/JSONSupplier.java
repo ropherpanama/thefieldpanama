@@ -324,7 +324,10 @@ public class JSONSupplier extends JSONCore {
 							String equipoActual = "";
 
 							for (ResumenEquipo r : lr) {
-								cantJuegos++;
+								
+								if(r.getPts1() > -1 && r.getPts2() > -1)
+									cantJuegos++;//Solo sumo los juegos si se han jugado	
+								
 								equipoActual = r.getNombreEquipo();
 								categoria = r.getIdCategoria();
 
@@ -336,8 +339,12 @@ public class JSONSupplier extends JSONCore {
 										JP++;
 										pts += formula.getJp();
 									} else {
-										JE++;
-										pts += formula.getJe();
+										if(r.getPts1() == -1 || r.getPts2() == -1)
+											continue;//No sumo nada
+										else {
+											JE++;
+											pts += formula.getJe();
+										}
 									}
 								} else if (r.getPosicion() == 2) {
 									if (r.getPts2() > r.getPts1()) {
@@ -347,8 +354,12 @@ public class JSONSupplier extends JSONCore {
 										JP++;
 										pts += formula.getJp();
 									} else {
-										JE++;
-										pts += formula.getJe();
+										if(r.getPts1() == -1 || r.getPts2() == -1)
+											continue;//No sumo nada
+										else {
+											JE++;
+											pts += formula.getJe();
+										}
 									}
 								}
 							}

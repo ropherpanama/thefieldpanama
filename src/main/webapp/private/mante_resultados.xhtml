@@ -13,72 +13,20 @@
 
 	<p:panel id="panel1" header="#{msgs.res_header}"
 		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
-		<p:accordionPanel>
-			<p:tab title="Filtrar partidos por categoría">
-				<h:form prependId="false" styleClass="cmxform">
-					<p:messages id="messages" showDetail="true" autoUpdate="true"
-						closable="true" />
-					<fieldset>
-						<legend>#{msgs.res_search}</legend>
-						<table>
-							<tr>
-								<td><h:outputLabel value="#{msgs.res_liga}" /></td>
-								<td><h:selectOneMenu id="selectLiga"
-										value="#{ResultadosMB.form_filter_id_liga}">
-										<p:ajax listener="#{ResultadosMB.onLigasChange}"
-											update="selectCategoria" />
-										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
-											itemValue="-1" />
-										<f:selectItems value="#{ResultadosMB.listLigas}" var="model"
-											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
-									</h:selectOneMenu></td>
-							</tr>
-							<tr>
-								<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
-								<td><h:selectOneMenu id="selectCategoria"
-										value="#{ResultadosMB.form_filter_id_categoria}">
-										<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}"
-											itemValue="-1" />
-										<f:selectItems value="#{ResultadosMB.listCategoriasFiltradas}"
-											var="model" itemLabel="#{model.nom_categoria}"
-											itemValue="#{model.id_categoria}" />
-									</h:selectOneMenu></td>
-							</tr>
+		<h:form id="formFiltros">
+			<p:commandButton id="buttonDelDia" value="Partidos del dia"
+				ajax="true" action="#{ResultadosMB.listarPartidosDelDia}"
+				update=":form:partidos" />
 
-							<tr>
-								<td><h:outputLabel for="fecha"
-										value="#{msgs.par_header_fecha}" /></td>
-								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
-										effect="fold" mode="popup"
-										value="#{ResultadosMB.form_date_partido}" /></td>
-							</tr>
-
-							<tr>
-								<td><p:commandButton id="buscarPartidos"
-										value="#{msgs.res_search_par}" ajax="false"
-										action="#{ResultadosMB.buscarPartidos}"
-										update=":panel2:form:partidos" /></td>
-							</tr>
-						</table>
-					</fieldset>
-				</h:form>
-			</p:tab>
-		</p:accordionPanel>
+			<p:commandButton id="buttonDelTodos" value="Todos los partidos"
+				ajax="true" action="#{ResultadosMB.listarTodosLosPartidos}"
+				update=":form:partidos" />
+		</h:form>
 	</p:panel>
+
 	<p:panel header="#{msgs.res_dispon}" id="panel2"
 		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
 		<h:form id="form">
-
-			<p:panel>
-				<p:commandButton id="buttonDelDia" value="Partidos del dia"
-					ajax="false" action="#{ResultadosMB.listarPartidosDelDia}"
-					update="partidos" />
-
-				<p:commandButton id="buttonDelTodos" value="Todos los partidos"
-					ajax="false" action="#{ResultadosMB.listarTodosLosPartidos}"
-					update="partidos" />
-			</p:panel>
-
 			<p:dataTable id="partidos" var="p"
 				value="#{ResultadosMB.listPartidos}" paginator="true" rows="10"
 				resizableColumns="true" draggableColumns="true"
@@ -164,7 +112,7 @@
 							</p:commandButton>
 							<p:commandButton icon="ui-icon-trash"
 								action="#{ResultadosMB.eliminarPeriodo}"
-								update="detallePeriodos">
+								update=":form:partidos detallePeriodos">
 								<f:setPropertyActionListener value="#{details}"
 									target="#{ResultadosMB.selectedPeriodo}" />
 							</p:commandButton>
@@ -179,8 +127,7 @@
 	<h:form id="dialog_form">
 		<!-- Dialogo para añadir periodos al partido -->
 		<p:dialog header="#{msgs.res_dlg_title}" id="dlg_periodo"
-			widgetVar="dlg_periodo" modal="true" showEffect="explode"
-			hideEffect="bounce" height="100">
+			widgetVar="dlg_periodo" modal="true"  height="100">
 			<p:panel style="text-align:center;"
 				header="#{ResultadosMB.selectedPartido.equipo1.nom_equipo} VS #{ResultadosMB.selectedPartido.equipo2.nom_equipo}">
 				<h:panelGroup style="white-space: nowrap;text-align:center;">
@@ -188,9 +135,11 @@
 					<p:spacer width="10" height="10" />
 					<p:spinner size="5" value="#{ResultadosMB.form_pts_equipo_2}" />
 					<p:spacer width="10" height="10" />
-					<p:commandButton icon="ui-icon-circle-check"
-						update=":form:partidos" action="#{ResultadosMB.agregarPeriodos}"
-						oncomplete="PF('dlg_periodo').hide();" />
+
+					<p:commandButton icon="ui-icon-circle-check" ajax="true"
+						action="#{ResultadosMB.agregarPeriodos}"
+						oncomplete="PF('dlg_periodo').hide();" update=":form:partidos" />
+
 				</h:panelGroup>
 			</p:panel>
 		</p:dialog>
@@ -199,8 +148,7 @@
 	<h:form id="dialog_edit_form">
 		<!-- Dialogo para añadir periodos al partido -->
 		<p:dialog header="#{msgs.res_dlg_edit_title}" id="dlg_editar_periodo"
-			widgetVar="dlg_editar_periodo" modal="true" showEffect="explode"
-			hideEffect="bounce" height="100">
+			widgetVar="dlg_editar_periodo" modal="true" height="100">
 			<p:panel style="text-align:center;"
 				header="#{ResultadosMB.selectedPeriodo.partido.equipo1.nom_equipo} VS #{ResultadosMB.selectedPeriodo.partido.equipo2.nom_equipo}">
 				<h:panelGroup style="white-space: nowrap;text-align:center;">
@@ -208,7 +156,7 @@
 					<p:spacer width="10" height="10" />
 					<p:spinner size="5" value="#{ResultadosMB.form_pts_equipo_2}" />
 					<p:spacer width="10" height="10" />
-					<p:commandButton icon="ui-icon-circle-check"
+					<p:commandButton icon="ui-icon-circle-check" ajax="true"
 						update=":form:partidos" action="#{ResultadosMB.editarPeriodo}"
 						oncomplete="PF('dlg_editar_periodo').hide();" />
 				</h:panelGroup>

@@ -14,6 +14,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DualListModel;
 
 import com.thefieldpanama.beans.Categoria;
@@ -26,6 +27,7 @@ import com.thefieldpanama.services.EquipoService;
 import com.thefieldpanama.services.FormulasCalculoService;
 import com.thefieldpanama.services.GruposService;
 import com.thefieldpanama.services.LigaService;
+import com.thefieldpanama.utilities.Utilities;
 
 @ManagedBean(name = "GrupoMB")
 @ViewScoped
@@ -56,7 +58,17 @@ public class GruposManagedBean extends AncientManagedBean implements Serializabl
 	private FormulasCalculo selectedFormula;
 	private List<FormulasCalculo> formulasCalculo;
 	private int form_id_formula;
+	private List<Grupos> listGrupos;
+	private Grupos selectedGrupo;
 	
+	public List<Grupos> getListGrupos() {
+		return listGrupos;
+	}
+
+	public void setListGrupos(List<Grupos> listGrupos) {
+		this.listGrupos = listGrupos;
+	}
+
 	public GruposService getGrupoService() {
 		return grupoService;
 	}
@@ -78,10 +90,23 @@ public class GruposManagedBean extends AncientManagedBean implements Serializabl
 		// Se inicializan las listas generales para filtrarlas despues
 		this.getListCategorias();
 		this.getListEquipos();
+		listGrupos = new ArrayList<Grupos>();
 		listEquiposFiltrados = new ArrayList<Equipo>();
 		listCategoriasFiltradas = new ArrayList<Categoria>();
 		pickedEquipos = new ArrayList<Equipo>();
 		pickListEquipos = new DualListModel<Equipo>();
+	}
+	
+	public void mostrarGrupos() {
+		listGrupos.clear();
+		List<Grupos> gs = grupoService.list();
+		
+		for(Grupos g : gs) {
+			g.setNomCategoria(categoriaService.getCategoriaById(g.getId_categoria()).getNom_categoria());
+		}
+		
+//		listGrupos.addAll(grupoService.list());
+		listGrupos.addAll(gs);
 	}
 	
 	public void onLigasChange() {
@@ -224,6 +249,14 @@ public class GruposManagedBean extends AncientManagedBean implements Serializabl
 		this.listEquipos = listEquipos;
 	}
 
+	public Grupos getSelectedGrupo() {
+		return selectedGrupo;
+	}
+
+	public void setSelectedGrupo(Grupos selectedGrupo) {
+		this.selectedGrupo = selectedGrupo;
+	}
+
 	public List<Equipo> getListEquiposFiltrados() {
 		return listEquiposFiltrados;
 	}
@@ -259,6 +292,7 @@ public class GruposManagedBean extends AncientManagedBean implements Serializabl
     		gr.setEquipos(teams);
     		gr.setFormula(formulaService.getById(form_id_formula));
     		gr.setId_categoria(seleccionados.get(0).getCategoria().getId_categoria());
+//    		gr.setCategoria(seleccionados.get(0).getCategoria()); 
     		gr.setNombre(form_gr_nombre);
     		
     		grupoService.add(gr); 
@@ -269,6 +303,7 @@ public class GruposManagedBean extends AncientManagedBean implements Serializabl
     		}
     		
     		reset();
+    		mostrarGrupos();//Autoupdate de grid
     		
     		FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -328,5 +363,44 @@ public class GruposManagedBean extends AncientManagedBean implements Serializabl
 		this.setForm_filter_id_liga(-1);
 		this.setForm_gr_nombre("");
 		this.setForm_id_formula(-1);
+	}
+	
+	public void onEdit(RowEditEvent event) { 
+		Grupos edited = (Grupos) event.getObject();
+		grupoService.update(edited);  
+        FacesMessage msg = new FacesMessage("Registro editado",((Grupos) event.getObject()).getNombre()); 
+        FacesContext.getCurrentInstance().addMessage(null, msg); 
+    } 
+       
+    public void onCancel(RowEditEvent event) { 
+//        FacesMessage msg = new FacesMessage("Edicion cancelada");  
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+    	System.out.println("Edicion cancelada");
+    }  
+    
+    public void eliminarGrupo() {
+		try {
+			listEquiposFiltrados.clear();
+			listEquiposFiltrados = equipoService.getEquipoByGrupo(selectedGrupo.getId_grupo());
+			grupoService.remove(selectedGrupo.getId_grupo());
+			Grupos g = grupoService.getById(100);//Grupo Nulo
+			//Asigno grupo nulo a los equipos que pertenecian al grupo eliminado
+			for(Equipo e : listEquiposFiltrados) {
+				e.setGrupo(g);
+				equipoService.updateEquipo(e); 
+			}
+			
+			mostrarGrupos();//Recargo la lista despues de la actualizacion
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							this.getProvider().getValue("msg_del"), selectedGrupo.getNombre()));
+		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
+		}
 	}
 }

@@ -160,8 +160,14 @@ public class LigaManagedBean extends AncientManagedBean implements Serializable 
 	}
 	
 	public void mostrarLigas() {
-		listLigas.clear();
-		listLigas.addAll(ligaService.listLigas());
+		try {
+			listLigas.clear();
+			listLigas.addAll(ligaService.listLigas());
+		}catch(Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			FacesMessage msg = new FacesMessage("Error de sistema", e.getLocalizedMessage()); 
+	        FacesContext.getCurrentInstance().addMessage(null, msg); 
+		}
 	}
 	
 	public void onEdit(RowEditEvent event) { 

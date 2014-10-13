@@ -12,6 +12,11 @@ public class PosicionWS implements Serializable, Comparable<PosicionWS> {
 	private int cantPts;
 	private int cantJuegos;
 	private int idCategoria;
+	
+	//Campos para regla de diferencia de goles
+	private int gFavor;
+	private int gContra;
+	private int diferencia;
 
 	public String getNombreEquipo() {
 		return nombreEquipo;
@@ -81,5 +86,29 @@ public class PosicionWS implements Serializable, Comparable<PosicionWS> {
 	public int compareTo(PosicionWS o) {
 		int tablePosition = ((PosicionWS)o).getCantPts();
         return tablePosition - this.cantPts;
+	}
+
+	public int getgFavor() {
+		return gFavor;
+	}
+
+	public void setgFavor(int gFavor) {
+		this.gFavor = gFavor;
+	}
+
+	public int getgContra() {
+		return gContra;
+	}
+
+	public void setgContra(int gContra) {
+		this.gContra = gContra;
+	}
+
+	public int getDiferencia() {
+		return diferencia;
+	}
+
+	public void setDiferencia(int diferencia) {
+		this.diferencia = diferencia;
 	}
 }

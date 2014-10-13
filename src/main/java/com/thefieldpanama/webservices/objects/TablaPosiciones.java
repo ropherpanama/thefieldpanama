@@ -26,6 +26,10 @@ public class TablaPosiciones implements Serializable, Comparable<TablaPosiciones
 	}
 
 	public List<PosicionWS> getPosiciones() {
+		if(posiciones != null){
+			
+		}
+		
 		return posiciones;
 	}
 

@@ -9,67 +9,132 @@
 </h:head>
 <h:body>
 	<ui:include src="/public/menu.xhtml"></ui:include>
-	<p:panel>
-	
-		<h:form id="first_form" prependId="false" styleClass="cmxform">
-			<p:messages id="messages" showDetail="true" autoUpdate="true"
-				closable="true" />
-			<p:fieldset legend="#{msgs.msg_fill_all}">
-				<table>
-					<tr>
-						<td><h:outputLabel value="#{msgs.gr_nombre}" /></td>
-						<td><p:inputText id="nombre"
-								value="#{GrupoMB.form_gr_nombre}">
-								<f:validateLength minimum="1" />
-							</p:inputText> <h:message for="nombre" style="color:red" /></td>
-					</tr>
-					<tr>
-						<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
-						<td><h:selectOneMenu id="selectLiga"
-								value="#{GrupoMB.form_filter_id_liga}">
-								<p:ajax listener="#{GrupoMB.onLigasChange}"
-									update="selectCategoria" />
-								<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
-									itemValue="-1" />
-								<f:selectItems value="#{GrupoMB.listLigas}" var="model"
-									itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
-							</h:selectOneMenu></td>
-					</tr>
-					<tr>
-						<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
-						<td><h:selectOneMenu id="selectCategoria"
-								value="#{GrupoMB.form_filter_id_categoria}">
-								<p:ajax listener="#{GrupoMB.onCategoriasChange}"
-									update="equiposPickList" />
-								<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}"
-									itemValue="-1" />
-								<f:selectItems value="#{GrupoMB.listCategoriasFiltradas}"
-									var="model" itemLabel="#{model.nom_categoria}"
-									itemValue="#{model.id_categoria}" />
-							</h:selectOneMenu></td>
-					</tr>
-				</table>
-			</p:fieldset>
+	<p:panel header="Mantenimiento de grupos"
+		style="margin-bottom:10px;margin-left:10px;margin-top:2px;margin-right:10px;">
+		<p:accordionPanel>
+			<p:tab title="Crear grupo">
+				<h:form id="first_form" prependId="false" styleClass="cmxform">
+					<table>
+						<tr>
+							<td><h:outputLabel value="#{msgs.gr_nombre}" /></td>
+							<td><p:inputText id="nombre"
+									value="#{GrupoMB.form_gr_nombre}">
+									<f:validateLength minimum="1" />
+								</p:inputText> <h:message for="nombre" style="color:red" /></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
+							<td><h:selectOneMenu id="selectLiga"
+									value="#{GrupoMB.form_filter_id_liga}">
+									<p:ajax listener="#{GrupoMB.onLigasChange}"
+										update="selectCategoria" />
+									<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
+										itemValue="-1" />
+									<f:selectItems value="#{GrupoMB.listLigas}" var="model"
+										itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
+								</h:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
+							<td><h:selectOneMenu id="selectCategoria"
+									value="#{GrupoMB.form_filter_id_categoria}">
+									<p:ajax listener="#{GrupoMB.onCategoriasChange}"
+										update="equiposPickList" />
+									<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}"
+										itemValue="-1" />
+									<f:selectItems value="#{GrupoMB.listCategoriasFiltradas}"
+										var="model" itemLabel="#{model.nom_categoria}"
+										itemValue="#{model.id_categoria}" />
+								</h:selectOneMenu></td>
+						</tr>
+					</table>
 
-			<p:fieldset legend="Equipos del grupo" style="margin-top:15">
-				<p:pickList id="equiposPickList" value="#{GrupoMB.pickListEquipos}"
-					converter="equiposConverter" var="team"
-					itemLabel="#{team.nom_equipo}" itemValue="#{team}" />
+					<br></br>
+					<h:outputText value="Equipos del grupo" />
+
+					<p:pickList id="equiposPickList" value="#{GrupoMB.pickListEquipos}"
+						converter="equiposConverter" var="team"
+						itemLabel="#{team.nom_equipo}" itemValue="#{team}" />
+
+					<h:selectOneMenu id="formulasCalculo" style="margin-top:15"
+						value="#{GrupoMB.form_id_formula}">
+						<f:selectItem itemLabel="Seleccione un tipo de calculo"
+							itemValue="-1" />
+						<f:selectItems value="#{GrupoMB.formulasCalculo}" var="formula"
+							itemLabel="JG:#{formula.jg} - JE:#{formula.je} - JP:#{formula.jp}"
+							itemValue="#{formula.id_formula_calculo}" />
+					</h:selectOneMenu>
+
+					<p:commandButton value="+" style="margin-left:10px;" ajax="true">
+					</p:commandButton>
+
+					<p></p>
+					<p:commandButton value="#{msgs.gr_crear}"
+						action="#{GrupoMB.crearGrupo}" icon="ui-icon-check"
+						style="margin-top:15" ajax="false" />
+
+				</h:form>
+			</p:tab>
+
+			<p:tab title="Grupos creados">
+				<h:form id="form">
 				
-				<h:selectOneMenu id="formulasCalculo" style="margin-top:15"
-					value="#{GrupoMB.form_id_formula}">
-					<f:selectItem itemLabel="Seleccione un tipo de calculo"
-						itemValue="-1" />
-					<f:selectItems value="#{GrupoMB.formulasCalculo}" var="formula"
-						itemLabel="JG:#{formula.jg} - JE:#{formula.je} - JP:#{formula.jp}" itemValue="#{formula.id_formula_calculo}" />
-				</h:selectOneMenu>
-				<p></p>
-				<p:commandButton value="#{msgs.gr_crear}"
-					action="#{GrupoMB.crearGrupo}" icon="ui-icon-check"
-					style="margin-top:15" ajax="false" />
-			</p:fieldset>
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
+						
+					<p:commandButton id="buttonMostrarGrupos" value="Mostrar grupos" ajax="true" style="margin-bottom:5px;"
+						action="#{GrupoMB.mostrarGrupos}" update="grupos" />
 
-		</h:form>
+					<p:dataTable id="grupos" var="grupo" value="#{GrupoMB.listGrupos}"
+						paginator="true" rows="5" editable="true" rowKey="#{grupo.id_grupo}" selection="#{GrupoMB.selectedGrupo}"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15">
+
+						<p:ajax event="rowEdit" listener="#{GrupoMB.onEdit}" />
+
+						<p:ajax event="rowEditCancel" listener="#{GrupoMB.onCancel}" />
+
+						<p:column style="width:3%">
+							<f:facet name="header">
+								<h:outputText value="Categoria" />
+							</f:facet>
+							<h:outputText value="#{grupo.nomCategoria}" />
+						</p:column>
+
+						<p:column style="width:3%">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{grupo.nombre}" />
+								</f:facet>
+								<f:facet name="input">
+									<h:inputText value="#{grupo.nombre}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="Editar" style="width:4%">
+							<p:rowEditor />
+						</p:column>
+
+						<p:column style="width:4%">
+							<f:facet name="header">
+								<h:outputText value="Borrar" />
+							</f:facet>
+
+							<h:panelGroup style="white-space: nowrap">
+								<p:commandButton icon="ui-icon-trash"
+									title="#{msgs.gr_del_gr}" action="#{GrupoMB.eliminarGrupo}"
+									update="grupos">
+									<f:setPropertyActionListener value="#{grupo}"
+										target="#{GrupoMB.selectedGrupo}" />
+								</p:commandButton>
+							</h:panelGroup>
+
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+		</p:accordionPanel>
 	</p:panel>
 	<ui:include src="/public/footer.xhtml"></ui:include>
 

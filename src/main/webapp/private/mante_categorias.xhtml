@@ -44,11 +44,8 @@
 		</h:form>
 	</p:panel>
 
-	<p:panel header="#{msgs.cat_dispon}"
-		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
-
+	<p:panel header="#{msgs.cat_dispon}" style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
 		<h:form id="form">
-
 			<p:messages id="messages" showDetail="true" autoUpdate="true"
 				closable="true" />
 
@@ -57,7 +54,7 @@
 				update="categorias" />
 				
 			<p:dataTable id="categorias" var="cat" widgetVar="catsForm"
-				value="#{CategoriaMB.listCategorias}" paginator="true" rows="10"
+				value="#{CategoriaMB.listCategorias}" paginator="true" rows="5"
 				editable="true" selection="#{CategoriaMB.selectedCategoria}"
 				rowKey="#{cat.id_categoria}"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

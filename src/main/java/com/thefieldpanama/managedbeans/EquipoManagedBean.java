@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+import org.primefaces.event.RowEditEvent;
 
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
@@ -48,10 +49,65 @@ public class EquipoManagedBean extends AncientManagedBean implements Serializabl
 
 	@PostConstruct
 	public void init() {
+		listEquipos = new ArrayList<Equipo>();
 		this.getListCategorias();
 		listCategoriasFiltradas = new ArrayList<Categoria>();
 	}
 
+	public void agregarEquipo() {
+		try {
+			Equipo e = new Equipo();
+			e.setCategoria(categoriaService.getCategoriaById(this.getForm_id_categoria()));
+			e.setLocalidad(this.getForm_localidad());
+			e.setNom_equipo(this.getForm_nom_equipo());
+			//Al parecer no tomaba como valido un registro de db con id = 0, por eso se cambio el id a 100
+			e.setGrupo(grupoService.getById(100)); 
+			equipoService.addEquipo(e);
+			mostrarEquipos();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							this.getProvider().getValue("msg_add"), this.getForm_nom_equipo()));
+		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
+		}
+	}
+
+	public void eliminarEquipo() {
+		try {
+			equipoService.removeEquipo((selectedEquipo.getId_equipo()));
+			mostrarEquipos();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							this.getProvider().getValue("msg_del"), selectedEquipo
+									.getNom_equipo()));
+		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL,
+							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
+		}
+	}
+
+	public void onEdit(RowEditEvent event) { 
+		Equipo edited = (Equipo) event.getObject();
+		equipoService.updateEquipo(edited); 
+        FacesMessage msg = new FacesMessage("Registro editado",((Equipo) event.getObject()).getNom_equipo()); 
+        FacesContext.getCurrentInstance().addMessage(null, msg); 
+    } 
+       
+    public void onCancel(RowEditEvent event) { 
+//        FacesMessage msg = new FacesMessage("Edicion cancelada");  
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+    	System.out.println("Edicion cancelada");
+    }  
+    
 	public List<Categoria> getListCategoriasFiltradas() {
 		return listCategoriasFiltradas;
 	}
@@ -77,7 +133,7 @@ public class EquipoManagedBean extends AncientManagedBean implements Serializabl
 		this.form_filter_id_liga = form_filter_id_liga;
 	}
 
-	public List<Liga> getListLigas() {
+	public List<Liga> getListLigas() throws Exception{
 		listLigas = new ArrayList<Liga>();
 		listLigas.addAll(ligaService.listLigas());
 		return listLigas;
@@ -95,66 +151,9 @@ public class EquipoManagedBean extends AncientManagedBean implements Serializabl
 		this.form_id_categoria = form_id_categoria;
 	}
 
-	public void agregarEquipo() {
-		try {
-			Equipo e = new Equipo();
-			e.setCategoria(categoriaService.getCategoriaById(this.getForm_id_categoria()));
-			e.setLocalidad(this.getForm_localidad());
-			e.setNom_equipo(this.getForm_nom_equipo());
-			//Al parecer no tomaba como valido un registro de db con id = 0, por eso se cambio el id a 100
-			e.setGrupo(grupoService.getById(100)); 
-			equipoService.addEquipo(e);
-			
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							this.getProvider().getValue("msg_add"), this.getForm_nom_equipo()));
-		} catch (Exception e) {
-			log.info(Utilities.stringStackTrace(e));
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
-		}
-	}
-
-	public void editarEquipo() {
-		try {
-			FacesContext.getCurrentInstance()
-					.addMessage(
-							null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO,
-									this.getProvider().getValue("msg_upt"), selectedEquipo
-											.getNom_equipo()));
-		} catch (Exception e) {
-			log.info(Utilities.stringStackTrace(e));
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
-		}
-	}
-
-	public void eliminarEquipo() {
-		try {
-			equipoService.removeEquipo((selectedEquipo.getId_equipo()));
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							this.getProvider().getValue("msg_del"), selectedEquipo
-									.getNom_equipo()));
-		} catch (Exception e) {
-			log.info(Utilities.stringStackTrace(e));
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_FATAL,
-							this.getProvider().getValue("msg_sys_err"), e.getMessage()));
-		}
-	}
-
 	public List<Equipo> getListEquipos() {
-		listEquipos = new ArrayList<Equipo>();
-		listEquipos.addAll(equipoService.listEquipos());
+//		listEquipos = new ArrayList<Equipo>();
+//		listEquipos.addAll(equipoService.listEquipos());
 		return listEquipos;
 	}
 
@@ -247,5 +246,10 @@ public class EquipoManagedBean extends AncientManagedBean implements Serializabl
 
 	public void setGrupoService(GruposService grupoService) {
 		this.grupoService = grupoService;
+	}
+	
+	public void mostrarEquipos() {
+		listEquipos.clear();
+		listEquipos.addAll(equipoService.listEquipos());
 	}
 }

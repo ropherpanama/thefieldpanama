@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "grupos")
@@ -21,10 +22,10 @@ public class Grupos implements Serializable{
 	private static final long serialVersionUID = -7594983741145877810L;
 	private int id_grupo;
 	private String nombre;
-//	private Integer formula_calculo;
 	private int id_categoria;
 	private Set<Equipo> equipos = new HashSet<Equipo>(0);
 	private FormulasCalculo formula;
+	private String nomCategoria;
 
 	@Id
 	@Column(name = "id_grupo")
@@ -72,5 +73,14 @@ public class Grupos implements Serializable{
 
 	public void setFormula(FormulasCalculo formula) {
 		this.formula = formula;
+	}
+
+	@Transient 
+	public String getNomCategoria() {
+		return nomCategoria;
+	}
+
+	public void setNomCategoria(String nomCategoria) {
+		this.nomCategoria = nomCategoria;
 	}
 }

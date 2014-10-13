@@ -61,7 +61,7 @@
 				update="ligas" />
 
 			<p:dataTable id="ligas" var="liga" value="#{LigaMB.listLigas}"
-				paginator="true" rows="10" resizableColumns="true"
+				paginator="true" rows="5" resizableColumns="true"
 				draggableColumns="true" editable="true" rowKey="#{liga.id}"
 				selection="#{LigaMB.selectedLiga}"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

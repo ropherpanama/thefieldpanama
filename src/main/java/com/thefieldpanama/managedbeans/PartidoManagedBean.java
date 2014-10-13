@@ -249,7 +249,7 @@ public class PartidoManagedBean extends AncientManagedBean implements Serializab
 		this.listCategoriasFiltradas = listCategoriasFiltradas;
 	}
 
-	public List<Liga> getListLigas() {
+	public List<Liga> getListLigas(){
 		listLigas = new ArrayList<Liga>();
 		listLigas.addAll(ligaService.listLigas());
 		return listLigas;

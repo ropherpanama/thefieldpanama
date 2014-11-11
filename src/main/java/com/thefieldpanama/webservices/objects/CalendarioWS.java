@@ -26,6 +26,7 @@ public class CalendarioWS implements Serializable {
 	private int idPartido;
 	private String pts1;
 	private String pts2;
+	private String marcadorFinal;
 
 	@JsonSerialize(using=JSONDateSerializer.class) 
 	public Date getFecha() {
@@ -106,5 +107,13 @@ public class CalendarioWS implements Serializable {
 
 	public void setPts2(String pts2) {
 		this.pts2 = pts2;
+	}
+
+	public String getMarcadorFinal() {
+		return marcadorFinal;
+	}
+
+	public void setMarcadorFinal(String marcadorFinal) {
+		this.marcadorFinal = marcadorFinal;
 	}
 }

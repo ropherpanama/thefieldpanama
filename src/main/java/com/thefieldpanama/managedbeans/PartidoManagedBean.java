@@ -15,6 +15,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+import org.primefaces.event.RowEditEvent;
 
 import com.thefieldpanama.beans.Categoria;
 import com.thefieldpanama.beans.Equipo;
@@ -448,4 +449,23 @@ public class PartidoManagedBean extends AncientManagedBean implements Serializab
 	public void setPlayOff(boolean playOff) {
 		this.playOff = playOff;
 	}
+	
+	public void onEdit(RowEditEvent event) { 
+		Partido edited = (Partido) event.getObject();
+		
+		if(this.getForm_hora() != null) {//Indica que el usuario modifico la hora del partido
+			edited.setHora(formatter.format(this.getForm_hora()));
+			this.setForm_hora(null);//Resetear campo para que no afecte otros cambios 
+		}
+		
+		partidoService.updatePartido(edited); 
+        FacesMessage msg = new FacesMessage("Registro editado",edited.getEquipo1().getNom_equipo() + " vs " + edited.getEquipo2().getNom_equipo()); 
+        FacesContext.getCurrentInstance().addMessage(null, msg); 
+    } 
+       
+    public void onCancel(RowEditEvent event) { 
+//        FacesMessage msg = new FacesMessage("Edicion cancelada");  
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+    	System.out.println("Edicion cancelada");
+    } 
 }

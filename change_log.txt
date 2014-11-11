@@ -1,0 +1,8 @@
+05-11-2014
+1. Se eliminan los AcordeonPanels de la aplicacion, todo se basa en Panels normales
+2. Se agregan los servicios web que fueron eliminados, esto para mantener la funcionalidad de la version 1 del app
+3. Se agrega status de request AJAX para la informacion del usuario sobre el estado de su petición en la webapp
+4. Se designa el contenido de los grupos creados a otra pagina, para nno recargar una sola pagina con demasiado contenido
+5. Se añade validacion de largo de campo para el registro de nuevas Ligas, ya que estaba permitiendo guardar registros vacios.
+6. Se habilita la edicion en tiempo real para la sección de Partidos, campos lugar, fecha y hora de partido.
+7. 

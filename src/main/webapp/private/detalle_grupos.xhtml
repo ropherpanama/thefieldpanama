@@ -1,0 +1,86 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>#{msgs.gr_title}</title>
+	<h:outputStylesheet name="graphics/css/style.css" />
+</h:head>
+<h:body>
+	<ui:include src="/public/menu.xhtml"></ui:include>
+	
+	<!-- 	Muestra la barra de carga -->
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+		<p:graphicImage library="graphics" name="ajaxloadingbar.gif"/>
+	</p:dialog>
+	<!-- 	Muestra la barra de carga -->
+	
+	<p:panel header="Grupos creados"
+		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
+
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" autoUpdate="true"
+				closable="true" />
+
+			<p:commandButton id="buttonMostrarGrupos" value="Mostrar grupos"
+				ajax="true" style="margin-bottom:5px;"
+				action="#{GrupoMB.mostrarGrupos}" update="grupos" />
+
+			<h:link style="margin-left:15" value="Volver"
+				outcome="mante_grupos.xhtml" />
+
+			<p:dataTable id="grupos" var="grupo" value="#{GrupoMB.listGrupos}"
+				paginator="true" rows="5" editable="true" rowKey="#{grupo.id_grupo}"
+				selection="#{GrupoMB.selectedGrupo}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:ajax event="rowEdit" listener="#{GrupoMB.onEdit}" />
+
+				<p:ajax event="rowEditCancel" listener="#{GrupoMB.onCancel}" />
+
+				<p:column style="width:3%">
+					<f:facet name="header">
+						<h:outputText value="Categoria" />
+					</f:facet>
+					<h:outputText value="#{grupo.nomCategoria}" />
+				</p:column>
+
+				<p:column style="width:3%">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{grupo.nombre}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:inputText value="#{grupo.nombre}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Editar" style="width:4%">
+					<p:rowEditor />
+				</p:column>
+
+				<p:column style="width:4%">
+					<f:facet name="header">
+						<h:outputText value="Borrar" />
+					</f:facet>
+
+					<h:panelGroup style="white-space: nowrap">
+						<p:commandButton icon="ui-icon-trash" title="#{msgs.gr_del_gr}"
+							action="#{GrupoMB.eliminarGrupo}" update="grupos">
+							<f:setPropertyActionListener value="#{grupo}"
+								target="#{GrupoMB.selectedGrupo}" />
+						</p:commandButton>
+					</h:panelGroup>
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</p:panel>
+	<ui:include src="/public/footer.xhtml"></ui:include>
+
+</h:body>
+</html>

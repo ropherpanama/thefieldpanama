@@ -11,218 +11,72 @@
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
 
+	<!-- 	Muestra la barra de carga -->
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+		<p:graphicImage library="graphics" name="ajaxloadingbar.gif"/>
+	</p:dialog>
+	<!-- 	Muestra la barra de carga -->
+	
 	<p:panel id="panel1" header="#{msgs.par_header}"
 		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
-		<p:accordionPanel>
-			<p:tab title="#{msgs.par_add}">
-				<h:form id="first_form" prependId="false" styleClass="cmxform">
-					<p:messages id="messages" showDetail="true" autoUpdate="true"
-						closable="true" />
-					<fieldset>
-						<legend>#{msgs.msg_fill_all}</legend>
-						<table>
-							<tr>
-								<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
-								<td><h:selectOneMenu id="selectLiga"
-										value="#{PartidoMB.form_filter_id_liga}">
-										<p:ajax listener="#{PartidoMB.onLigasChange}"
-											update="selectCategoria" />
-										<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
-											itemValue="-1" />
-										<f:selectItems value="#{PartidoMB.listLigas}" var="model"
-											itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
-									</h:selectOneMenu></td>
-							</tr>
-							<tr>
-								<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
-								<td><h:selectOneMenu id="selectCategoria"
-										value="#{PartidoMB.form_filter_id_categoria}">
-										<p:ajax listener="#{PartidoMB.onCategoriasChange}"
-											update="selectEquipo1" />
-										<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}"
-											itemValue="-1" />
-										<f:selectItems value="#{PartidoMB.listCategoriasFiltradas}"
-											var="model" itemLabel="#{model.nom_categoria}"
-											itemValue="#{model.id_categoria}" />
-									</h:selectOneMenu></td>
-							</tr>
 
-							<tr>
-								<td><h:outputLabel value="#{msgs.par_header_eq1}" /></td>
-								<td><h:selectOneMenu id="selectEquipo1"
-										value="#{PartidoMB.form_filter_eq1}">
-										<p:ajax listener="#{PartidoMB.onPrimerEquipoElegido}"
-											update="selectEquipo2" />
-										<f:selectItem itemLabel="#{msgs.par_selector_eq_default}"
-											itemValue="-1" />
-										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
-											var="model" itemLabel="#{model.nom_equipo}"
-											itemValue="#{model.id_equipo}" />
-									</h:selectOneMenu></td>
-
-								<td><h:outputLabel value="#{msgs.par_header_eq2}" /></td>
-								<td><h:selectOneMenu id="selectEquipo2"
-										value="#{PartidoMB.form_filter_eq2}">
-										<f:selectItem itemLabel="#{msgs.par_selector_eq_default}"
-											itemValue="-1" />
-										<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
-											var="model" itemLabel="#{model.nom_equipo}"
-											itemValue="#{model.id_equipo}" />
-									</h:selectOneMenu></td>
-							</tr>
-
-							<tr>
-								<td><h:outputLabel for="fecha"
-										value="#{msgs.par_header_fecha}" /></td>
-								<td><p:calendar id="fecha" pattern="dd-MM-yyyy"
-										effect="fold" mode="popup" value="#{PartidoMB.form_fecha}" /></td>
-							</tr>
-
-							<tr>
-								<td><h:outputLabel value="#{msgs.par_header_hora}" /></td>
-								<td><p:calendar id="hora" value="#{PartidoMB.form_hora}"
-										pattern="hh:mm a" timeOnly="true" effect="fold" /></td>
-							</tr>
-
-							<tr>
-								<td><h:outputLabel value="#{msgs.par_header_lugar}" /></td>
-								<td><p:inputText id="lugar" value="#{PartidoMB.form_lugar}">
-									</p:inputText> <h:message for="lugar" style="color:red" /></td>
-							</tr>
-							
-							<tr>
-								<td><h:outputLabel value="¿Partido de Playoffs?" /></td>
-								<td><p:selectBooleanCheckbox value="#{PartidoMB.playOff}" /></td>
-							</tr>
-
-							<tr>
-								<td><p:commandButton id="agregarPartido"
-										value="#{msgs.par_button_add}"
-										action="#{PartidoMB.agregarPartido}" ajax="false" /></td>
-							</tr>
-						</table>
-					</fieldset>
-				</h:form>
-			</p:tab>
-			<p:tab title="#{msgs.par_dispon}">
-
-				<h:form id="form">
-
-					<p:panel>
-						<p:commandButton id="buttonDelDia" value="Partidos del dia" ajax="false" 
-						action="#{PartidoMB.listarPartidosDelDia}" update="partidos"/>
-
-						<p:commandButton id="buttonDelTodos" value="Todos los partidos" ajax="false" 
-						action="#{PartidoMB.listarTodosLosPartidos}" update="partidos"/>
-					</p:panel>
-
-					<p:dataTable id="partidos" var="p"
-						value="#{PartidoMB.listPartidos}" paginator="true" rows="5"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						rowsPerPageTemplate="5,10,15">
-
-						<p:column style="width:3%">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.col_header_id}" />
-							</f:facet>
-							<h:outputText value="#{p.id_partido}" />
-						</p:column>
-
-						<p:column filterBy="#{p.equipo1.categoria.liga.nom_liga}"
-							footerText="" filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.cat_header_liga}" />
-							</f:facet>
-							<h:outputText value="#{p.equipo1.categoria.liga.nom_liga}" />
-						</p:column>
-
-						<p:column filterBy="#{p.equipo1.categoria.nom_categoria}"
-							footerText="" filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.cat_header_categoria}" />
-							</f:facet>
-							<h:outputText value="#{p.equipo1.categoria.nom_categoria}" />
-						</p:column>
-
-						<p:column filterBy="#{p.equipo1.nom_equipo}" footerText=""
-							filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.par_header_eq1}" />
-							</f:facet>
-							<h:outputText value="#{p.equipo1.nom_equipo}" />
-						</p:column>
-
-						<p:column filterBy="#{p.equipo2.nom_equipo}" footerText=""
-							filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.par_header_eq2}" />
-							</f:facet>
-							<h:outputText value="#{p.equipo2.nom_equipo}" />
-						</p:column>
-
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="#{msgs.par_header_lugar}" />
-							</f:facet>
-							<h:outputText value="#{p.lugar}" />
-						</p:column>
-
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="#{msgs.par_header_fecha}" />
-							</f:facet>
-							<h:outputText value="#{p.fecha}" />
-						</p:column>
-
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="#{msgs.par_header_hora_par}" />
-							</f:facet>
-							<h:outputText value="#{p.hora}" />
-						</p:column>
-
-						<p:column style="width:7%">
-							<f:facet name="header">
-								<h:outputText value="#{msgs.col_header_opc}" />
-							</f:facet>
-
-							<h:panelGroup style="white-space: nowrap">
-								<p:commandButton icon="ui-icon-pencil"
-									title="#{msgs.par_edit_par}"
-									oncomplete="PF('dlg_edit').show();"
-									update=":edit_form:dlg_edit">
-									<f:setPropertyActionListener value="#{p}"
-										target="#{PartidoMB.selectedPartido}" />
-								</p:commandButton>
-								<p:commandButton icon="ui-icon-trash"
-									title="#{msgs.par_del_par}"
-									action="#{PartidoMB.eliminarPartido}" update="partidos">
-									<f:setPropertyActionListener value="#{p}"
-										target="#{PartidoMB.selectedPartido}" />
-								</p:commandButton>
-							</h:panelGroup>
-
-						</p:column>
-
-					</p:dataTable>
-				</h:form>
-			</p:tab>
-		</p:accordionPanel>
-	</p:panel>
-
-	<!-- 	Dialogo para edicion de registro -->
-	<h:form id="edit_form">
-		<p:dialog header="#{msgs.par_dlg_title}" id="dlg_edit"
-			widgetVar="dlg_edit" modal="true" showEffect="explode"
-			hideEffect="bounce" style="height: 'auto';">
-			<p:panel style="text-align:center;"
-				header="#{PartidoMB.selectedPartido.equipo1.nom_equipo} vs #{PartidoMB.selectedPartido.equipo2.nom_equipo}">
+		<h:form id="first_form" prependId="false" styleClass="cmxform">
+			<p:messages id="messages" showDetail="true" autoUpdate="true"
+				closable="true" />
+			<fieldset>
+				<legend>#{msgs.msg_fill_all}</legend>
 				<table>
 					<tr>
-						<td><h:outputLabel value="#{msgs.par_header_lugar}" /></td>
-						<td><p:inputText id="lugar" value="#{PartidoMB.form_lugar}">
-							</p:inputText></td>
+						<td><h:outputLabel value="#{msgs.cat_sel_lig}" /></td>
+						<td><h:selectOneMenu id="selectLiga"
+								value="#{PartidoMB.form_filter_id_liga}">
+								<p:ajax listener="#{PartidoMB.onLigasChange}"
+									update="selectCategoria" />
+								<f:selectItem itemLabel="#{msgs.cat_selector_liga_default}"
+									itemValue="-1" />
+								<f:selectItems value="#{PartidoMB.listLigas}" var="model"
+									itemLabel="#{model.nom_liga}" itemValue="#{model.id}" />
+							</h:selectOneMenu></td>
 					</tr>
+					<tr>
+						<td><h:outputLabel value="#{msgs.eq_select_cat}" /></td>
+						<td><h:selectOneMenu id="selectCategoria"
+								value="#{PartidoMB.form_filter_id_categoria}">
+								<p:ajax listener="#{PartidoMB.onCategoriasChange}"
+									update="selectEquipo1" />
+								<f:selectItem itemLabel="#{msgs.eq_selector_cat_default}"
+									itemValue="-1" />
+								<f:selectItems value="#{PartidoMB.listCategoriasFiltradas}"
+									var="model" itemLabel="#{model.nom_categoria}"
+									itemValue="#{model.id_categoria}" />
+							</h:selectOneMenu></td>
+					</tr>
+
+					<tr>
+						<td><h:outputLabel value="#{msgs.par_header_eq1}" /></td>
+						<td><h:selectOneMenu id="selectEquipo1"
+								value="#{PartidoMB.form_filter_eq1}">
+								<p:ajax listener="#{PartidoMB.onPrimerEquipoElegido}"
+									update="selectEquipo2" />
+								<f:selectItem itemLabel="#{msgs.par_selector_eq_default}"
+									itemValue="-1" />
+								<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
+									var="model" itemLabel="#{model.nom_equipo}"
+									itemValue="#{model.id_equipo}" />
+							</h:selectOneMenu></td>
+
+						<td><h:outputLabel value="#{msgs.par_header_eq2}" /></td>
+						<td><h:selectOneMenu id="selectEquipo2"
+								value="#{PartidoMB.form_filter_eq2}">
+								<f:selectItem itemLabel="#{msgs.par_selector_eq_default}"
+									itemValue="-1" />
+								<f:selectItems value="#{PartidoMB.listEquiposFiltrados}"
+									var="model" itemLabel="#{model.nom_equipo}"
+									itemValue="#{model.id_equipo}" />
+							</h:selectOneMenu></td>
+					</tr>
+
 					<tr>
 						<td><h:outputLabel for="fecha"
 								value="#{msgs.par_header_fecha}" /></td>
@@ -235,17 +89,152 @@
 						<td><p:calendar id="hora" value="#{PartidoMB.form_hora}"
 								pattern="hh:mm a" timeOnly="true" effect="fold" /></td>
 					</tr>
+
+					<tr>
+						<td><h:outputLabel value="#{msgs.par_header_lugar}" /></td>
+						<td><p:inputText id="lugar" value="#{PartidoMB.form_lugar}">
+							</p:inputText> <h:message for="lugar" style="color:red" /></td>
+					</tr>
+
+					<tr>
+						<td><h:outputLabel value="¿Partido de Playoffs?" /></td>
+						<td><p:selectBooleanCheckbox value="#{PartidoMB.playOff}" /></td>
+					</tr>
+
+					<tr>
+						<td><p:commandButton id="agregarPartido"
+								value="#{msgs.par_button_add}"
+								action="#{PartidoMB.agregarPartido}" ajax="true" /></td>
+					</tr>
 				</table>
+			</fieldset>
+		</h:form>
+	</p:panel>
+	<p:panel
+		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
+		<!-- 			<p:tab title="#{msgs.par_dispon}"> -->
 
-				<p:commandButton icon="ui-icon-circle-check"
-					action="#{PartidoMB.editarPartido}"
-					oncomplete="PF('dlg_edit').hide();" />
+		<h:form id="form">
 
-				<p:commandButton icon="ui-icon-circle-close"
-					oncomplete="PF('dlg_edit').hide();" />
+			<p:panel>
+				<p:commandButton id="buttonDelDia" value="Partidos del dia"
+					ajax="true" action="#{PartidoMB.listarPartidosDelDia}"
+					update="partidos" />
+
+				<p:commandButton id="buttonDelTodos" value="Todos los partidos"
+					ajax="true" action="#{PartidoMB.listarTodosLosPartidos}"
+					update="partidos" />
 			</p:panel>
-		</p:dialog>
-	</h:form>
+
+			<p:dataTable id="partidos" var="p" value="#{PartidoMB.listPartidos}"
+				paginator="true" rows="5"
+				editable="true" rowKey="#{p.id_partido}" selection="#{PartidoMB.selectedPartido}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+				
+			<p:ajax event="rowEdit" listener="#{PartidoMB.onEdit}" />
+			<p:ajax event="rowEditCancel" listener="#{PartidoMB.onCancel}" />
+
+				<p:column style="width:3%">
+					<f:facet name="header">
+						<h:outputText value="#{msgs.col_header_id}" />
+					</f:facet>
+					<h:outputText value="#{p.id_partido}" />
+				</p:column>
+
+				<p:column filterBy="#{p.equipo1.categoria.liga.nom_liga}"
+					footerText="" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{msgs.cat_header_liga}" />
+					</f:facet>
+					<h:outputText value="#{p.equipo1.categoria.liga.nom_liga}" />
+				</p:column>
+
+				<p:column filterBy="#{p.equipo1.categoria.nom_categoria}"
+					footerText="" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{msgs.cat_header_categoria}" />
+					</f:facet>
+					<h:outputText value="#{p.equipo1.categoria.nom_categoria}" />
+				</p:column>
+
+				<p:column filterBy="#{p.equipo1.nom_equipo}" footerText=""
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{msgs.par_header_eq1}" />
+					</f:facet>
+					<h:outputText value="#{p.equipo1.nom_equipo}" />
+				</p:column>
+
+				<p:column filterBy="#{p.equipo2.nom_equipo}" footerText=""
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{msgs.par_header_eq2}" />
+					</f:facet>
+					<h:outputText value="#{p.equipo2.nom_equipo}" />
+				</p:column>
+
+				<p:column headerText="#{msgs.par_header_lugar}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{p.lugar}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:inputText value="#{p.lugar}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="#{msgs.par_header_fecha}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{p.fecha}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar pattern="yyyy-MM-dd" value="#{p.fecha}" />
+							<h:outputText value="#{p.fecha}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="#{msgs.par_header_hora_par}" style="width:5%">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{p.hora}">
+								<f:convertDateTime pattern="hh:mm a" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar pattern="hh:mm a" value="#{PartidoMB.form_hora}" timeOnly="true"/>
+							<h:outputText value="#{PartidoMB.form_hora}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Editar" style="width:4%">
+					<p:rowEditor />
+				</p:column>
+				
+				<p:column style="width:4%">
+					<f:facet name="header">
+						<h:outputText value="Borrar" />
+					</f:facet>
+
+					<h:panelGroup style="white-space: nowrap">
+						<p:commandButton icon="ui-icon-trash" title="#{msgs.par_del_par}"
+							action="#{PartidoMB.eliminarPartido}" update="partidos">
+							<f:setPropertyActionListener value="#{p}"
+								target="#{PartidoMB.selectedPartido}" />
+						</p:commandButton>
+					</h:panelGroup>
+
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+	</p:panel>
 
 	<ui:include src="/public/footer.xhtml"></ui:include>
 

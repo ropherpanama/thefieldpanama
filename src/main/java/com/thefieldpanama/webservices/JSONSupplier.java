@@ -29,6 +29,7 @@ import com.thefieldpanama.webservices.objects.CategoriasWS;
 import com.thefieldpanama.webservices.objects.EquiposWS;
 import com.thefieldpanama.webservices.objects.LigasWS;
 import com.thefieldpanama.webservices.objects.PosicionWS;
+import com.thefieldpanama.webservices.objects.ResultadosWS;
 import com.thefieldpanama.webservices.objects.TablaPosiciones;
 
 /**
@@ -40,13 +41,13 @@ import com.thefieldpanama.webservices.objects.TablaPosiciones;
 @Component
 @Path("app")
 public class JSONSupplier extends JSONCore {
-
 	private List<CategoriasWS> catsWs = new ArrayList<CategoriasWS>();
 	private List<LigasWS> listWs = new ArrayList<LigasWS>();
 	private List<Liga> ligas = new ArrayList<Liga>();
 	private List<EquiposWS> equiposWs = new ArrayList<EquiposWS>();
 	private List<Partido> partidos = new ArrayList<Partido>();
 	private List<CalendarioWS> calendWs = new ArrayList<CalendarioWS>();
+	private List<ResultadosWS> scoresWs = new ArrayList<ResultadosWS>();
 	private List<Scores> todayScoresWS = new ArrayList<Scores>();
 	private List<TablaPosiciones> tabla = new ArrayList<TablaPosiciones>();
 	private Logger log = Logger.getLogger(this.getClass());
@@ -121,7 +122,7 @@ public class JSONSupplier extends JSONCore {
 	public String equipos() {
 		try {
 			equiposWs.clear();
-			
+
 			for (Liga l : ligas) {
 				Iterator<Categoria> it = l.getCategoriasDeLiga().iterator();
 
@@ -161,7 +162,7 @@ public class JSONSupplier extends JSONCore {
 	public String calendario() {
 		try {
 			calendWs.clear();
-//			scoresWs.clear();
+			scoresWs.clear();
 			partidos = this.getPartidoService().listPartidos();
 			// Se cargan los datos del calendario a partir del listado de
 			// partidos disponible
@@ -175,48 +176,49 @@ public class JSONSupplier extends JSONCore {
 				cws.setFecha(p.getFecha());
 				cws.setHora(p.getHora());
 				cws.setLugar(p.getLugar());
-				cws.setIdPartido(p.getId_partido()); 
-//				calendWs.add(cws);
-				
-				//Inicializar data de scores
-//				ResultadosWS rws = new ResultadosWS();//Por cada partido creas un objeto score
-//				ArrayList<String> periodos = new ArrayList<String>();
-				
-//				rws.setCategoria(p.getEquipo1().getCategoria().getNom_categoria());
-//				rws.setLiga(p.getEquipo1().getCategoria().getLiga().getNom_liga());
-//				rws.setNomEquipo1(p.getEquipo1().getNom_equipo()); 
-//				rws.setNomEquipo2(p.getEquipo2().getNom_equipo());
-//				rws.setIdPartido(p.getId_partido());
-				
+				cws.setIdPartido(p.getId_partido());
+				// calendWs.add(cws);
+
+				// Inicializar data de scores
+				ResultadosWS rws = new ResultadosWS();// Por cada partido creas
+														// un objeto score
+				ArrayList<String> periodos = new ArrayList<String>();
+				rws.setCategoria(p.getEquipo1().getCategoria().getNom_categoria());
+				rws.setLiga(p.getEquipo1().getCategoria().getLiga().getNom_liga());
+				rws.setNomEquipo1(p.getEquipo1().getNom_equipo());
+				rws.setNomEquipo2(p.getEquipo2().getNom_equipo());
+				rws.setIdPartido(p.getId_partido());
+
 				int total1 = 0;
 				int total2 = 0;
-//				
+
 				Iterator<Periodo> it = p.getPeriodosPartido().iterator();
-				
-				while(it.hasNext()) {
+
+				while (it.hasNext()) {
 					Periodo pd = it.next();
-//					String str = String.format("%1$s : %2$-4d - %3$s : %4$d", p.getEquipo1().getNom_equipo(), pd.getPts_equipo_1(), p.getEquipo2().getNom_equipo(), pd.getPts_equipo_2());
-//					periodos.add(str);
-					
+					String str = String.format("%1$s : %2$-4d - %3$s : %4$d", p.getEquipo1().getNom_equipo(), pd.getPts_equipo_1(), p.getEquipo2().getNom_equipo(), pd.getPts_equipo_2());
+					periodos.add(str);
+
 					total1 += pd.getPts_equipo_1();
 					total2 += pd.getPts_equipo_2();
-					
+
 					matchHasPts = true;
 				}
-//				
-//				rws.setPeriodos(periodos);
-//				rws.setTotalPtsEquipo1(total1);
-//				rws.setTotalPtsEquipo2(total2); 
-//				
-//				scoresWs.add(rws);
+
+				rws.setPeriodos(periodos);
+				rws.setTotalPtsEquipo1(total1);
+				rws.setTotalPtsEquipo2(total2);
+
+				scoresWs.add(rws);
 				
-				if(matchHasPts) {
-//					cws.setMarcadorFinal(total1 + " - " + total2);
+				//Marcadorfinal atiende a la app version 1
+				//Pts1 y Pts2 son de la app version 2
+				if (matchHasPts) {
+					cws.setMarcadorFinal(total1 + " - " + total2);
 					cws.setPts1(String.valueOf(total1));
 					cws.setPts2(String.valueOf(total2));
-				} 
-				else{
-//					cws.setMarcadorFinal("");
+				}else {
+					cws.setMarcadorFinal("");
 					cws.setPts1("");
 					cws.setPts2("");
 				}
@@ -229,27 +231,29 @@ public class JSONSupplier extends JSONCore {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Este metodo retorna la informacion de los scores
-	 * NOTA: Este servicio ya no era requerido, se reemplazo
+	 * Este metodo retorna la informacion de los scores NOTA: Este servicio ya
+	 * no era requerido, se reemplazo
+	 * 
 	 * @return scores
 	 */
-//	@GET
-//	@Path("scores")
-//	@Produces({ MediaType.APPLICATION_JSON })
-//	public String scores() {
-//		try {
-//			return this.getMapper().writeValueAsString(scoresWs);
-//		} catch (Exception e) {
-//			log.info(Utilities.stringStackTrace(e));
-//			return null;
-//		}
-//	}
-	
+	@GET
+	@Path("scores")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String scores() {
+		try {
+			return this.getMapper().writeValueAsString(scoresWs);
+		} catch (Exception e) {
+			log.info(Utilities.stringStackTrace(e));
+			return null;
+		}
+	}
+
 	/**
-	 * Este servicio retorna solo los resultados de los partidos del dia
-	 * Para el tab Scores de la Android App
+	 * Este servicio retorna solo los resultados de los partidos del dia Para el
+	 * tab Scores de la Android App
+	 * 
 	 * @return today scores
 	 */
 	@GET
@@ -259,10 +263,10 @@ public class JSONSupplier extends JSONCore {
 		try {
 			todayScoresWS.clear();
 			List<Scores> temp = this.getPeriodoService().getTodayScores();
-			
-//			log.info("TAMAÑO DE LA LISTA DE SCORES RETORNADO ::: " + temp.size()); 
-				
-			
+
+			// log.info("TAMAÑO DE LA LISTA DE SCORES RETORNADO ::: " +
+			// temp.size());
+
 			for (Scores sc : temp) {
 				if (Utilities.compareHours(sc.getHora()) == 1)
 					sc.setStatus(sc.getHora());
@@ -272,48 +276,46 @@ public class JSONSupplier extends JSONCore {
 					sc.setStatus("FT");
 				else
 					sc.setStatus("Sin informacion");
-				
+
 				todayScoresWS.add(sc);
 			}
-			
+
 			return this.getMapper().writeValueAsString(todayScoresWS);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			log.info(Utilities.stringStackTrace(e));
 			return null;
 		}
 	}
-	
+
 	@GET
 	@Path("posiciones")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String posiciones() {
-		try{
+		try {
 			tabla.clear();
-			//Paso 1. Buscar los grupos registrados
+			// Paso 1. Buscar los grupos registrados
 			List<Grupos> grupos = this.getGrupoService().list();
-			
-			if(grupos.size() == 0)
+
+			if (grupos.size() == 0)
 				return null;
 			else {
-				//Paso 2. Ya que tenemos los grupos, buscamos los equipos para cada uno
-				for(Grupos g : grupos) {
+				// Paso 2. Ya que tenemos los grupos, buscamos los equipos para cada uno
+				for (Grupos g : grupos) {
 					String nombreGrupo = g.getNombre();
-					FormulasCalculo formula = g.getFormula(); //Se obtiene la forma de calculo para el grupo
+					FormulasCalculo formula = g.getFormula(); // Se obtiene la forma de calculo para el grupo
 					List<Equipo> equipos = this.getEquipoService().getEquipoByGrupo(g.getId_grupo());
-					
 					List<PosicionWS> posWs = new ArrayList<PosicionWS>();
 					TablaPosiciones t = new TablaPosiciones();
 					t.setIdCategoria(g.getId_categoria());
 					t.setNombreGrupo(nombreGrupo);
-					
-					if(equipos.size() == 0)
+
+					if (equipos.size() == 0)
 						return null;
-					
+
 					else {
-						//Paso 3. Teniendo los equipos se procede a buscar sus partidos
-						//y calcular sus puntos
+						// Paso 3. Teniendo los equipos se procede a buscar sus partidos y calcular sus puntos
 						List<List<ResumenEquipo>> posiciones = this.getGrupoService().getResumenResultados(equipos);
-						
+
 						for (List<ResumenEquipo> lr : posiciones) {
 							int JG = 0;
 							int JE = 0;
@@ -326,10 +328,10 @@ public class JSONSupplier extends JSONCore {
 							int gContra = 0;
 
 							for (ResumenEquipo r : lr) {
-								
-								if(r.getPts1() > -1 && r.getPts2() > -1)
-									cantJuegos++;//Solo sumo los juegos si se han jugado	
-								
+
+								if (r.getPts1() > -1 && r.getPts2() > -1)
+									cantJuegos++;// Solo sumo los juegos si se han jugado
+
 								equipoActual = r.getNombreEquipo();
 								categoria = r.getIdCategoria();
 
@@ -345,8 +347,8 @@ public class JSONSupplier extends JSONCore {
 										gFavor += r.getPts1();
 										gContra += r.getPts2();
 									} else {
-										if(r.getPts1() == -1 || r.getPts2() == -1)
-											continue;//No sumo nada
+										if (r.getPts1() == -1 || r.getPts2() == -1)
+											continue;// No sumo nada
 										else {
 											JE++;
 											pts += formula.getJe();
@@ -366,8 +368,8 @@ public class JSONSupplier extends JSONCore {
 										gFavor += r.getPts2();
 										gContra += r.getPts1();
 									} else {
-										if(r.getPts1() == -1 || r.getPts2() == -1)
-											continue;//No sumo nada
+										if (r.getPts1() == -1 || r.getPts2() == -1)
+											continue;// No sumo nada
 										else {
 											JE++;
 											pts += formula.getJe();
@@ -378,12 +380,9 @@ public class JSONSupplier extends JSONCore {
 								}
 							}
 
-//							log.info("NOMBRE DEL EQUIPO [" + equipoActual + "]");
-//							log.info("GOLES A FAVOR: " + gFavor + "\tGOLES CONTRA: " + gContra); 
-//							log.info("DIFERENCIA: " + (gFavor - gContra));
 							PosicionWS p = new PosicionWS();
 							p.setNombreEquipo(equipoActual);
-							p.setNombreGrupo(nombreGrupo); 
+							p.setNombreGrupo(nombreGrupo);
 							p.setCantJG(JG);
 							p.setCantJP(JP);
 							p.setCantJE(JE);
@@ -392,21 +391,21 @@ public class JSONSupplier extends JSONCore {
 							p.setIdCategoria(categoria);
 							p.setgContra(gContra);
 							p.setgFavor(gFavor);
-							p.setDiferencia(gFavor - gContra); 
+							p.setDiferencia(gFavor - gContra);
 							posWs.add(p);
 						}
 					}
-					
+
 					Collections.sort(posWs);
-					t.setPosiciones(posWs); 
+					t.setPosiciones(posWs);
 					tabla.add(t);
 				}
 			}
-			
-			Collections.sort(tabla);//No me sirve el ordenamiento por nombre Quirtarlo en el futuro 
+
+			Collections.sort(tabla);// No me sirve el ordenamiento por nombre quirtarlo en el futuro
 
 			return this.getMapper().writeValueAsString(tabla);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			log.info(Utilities.stringStackTrace(e));
 			return null;
 		}

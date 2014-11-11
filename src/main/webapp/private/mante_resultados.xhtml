@@ -11,9 +11,17 @@
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
 
+	<!-- 	Muestra la barra de carga -->
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+		<p:graphicImage library="graphics" name="ajaxloadingbar.gif"/>
+	</p:dialog>
+	<!-- 	Muestra la barra de carga -->
+	
 	<p:panel id="panel1" header="#{msgs.res_header}"
 		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
 		<h:form id="formFiltros">
+		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 			<p:commandButton id="buttonDelDia" value="Partidos del dia"
 				ajax="true" action="#{ResultadosMB.listarPartidosDelDia}"
 				update=":form:partidos" />

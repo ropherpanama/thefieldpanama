@@ -10,6 +10,13 @@
 <h:body>
 
 	<ui:include src="/public/menu.xhtml"></ui:include>
+	
+	<!-- 	Muestra la barra de carga -->
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+		<p:graphicImage library="graphics" name="ajaxloadingbar.gif"/>
+	</p:dialog>
+	<!-- 	Muestra la barra de carga -->
 
 	<p:panel header="#{msgs.eq_header}"
 		style="margin-bottom:10px;margin-left:10px;margin-top:10px;margin-right:10px;">
